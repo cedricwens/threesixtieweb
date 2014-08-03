@@ -12,16 +12,16 @@ DROP TABLE IF EXISTS user;
 CREATE TABLE user(
 	ID int NOT NULL AUTO_INCREMENT,
 	Name varchar(255) NOT NULL,
-	Username varchar(255) NOT NULL,
-	Password varchar(255) NOT NULL,
-	Email varchar(255) NOT NULL,
+	Username varchar(255),
+	Password varchar(255),
+	Email varchar(255),
 	PRIMARY KEY (ID)
 );
 
 CREATE TABLE department(
 	ID int NOT NULL AUTO_INCREMENT,
 	Name varchar(255) NOT NULL,
-	Manager int NOT NULL,
+	Manager int,
 	PRIMARY KEY (ID),
 	FOREIGN KEY (Manager)
 		REFERENCES user(ID)
@@ -29,8 +29,8 @@ CREATE TABLE department(
 
 CREATE TABLE user_department(
 	ID int NOT NULL AUTO_INCREMENT,
-	UserID int NOT NULL,
-	DepartmentID int NOT NULL,
+	UserID int,
+	DepartmentID int,
 	PRIMARY KEY (ID),
 	FOREIGN KEY (UserID)
 		REFERENCES user(ID),
