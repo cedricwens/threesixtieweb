@@ -1,13 +1,7 @@
 /* Creatie van Database en tabellen */
-CREATE DATABASE IF NOT EXISTS threesixtyweb;
-
-DROP TABLE IF EXISTS answer;
-DROP TABLE IF EXISTS question;
-DROP TABLE IF EXISTS category;
-DROP TABLE IF EXISTS poll;
-DROP TABLE IF EXISTS user_department;
-DROP TABLE IF EXISTS department;
-DROP TABLE IF EXISTS user;
+DROP DATABASE IF EXISTS threesixtyweb;
+CREATE DATABASE threesixtyweb;
+USE threesixtyweb;
 
 CREATE TABLE user(
 	ID int NOT NULL AUTO_INCREMENT,
@@ -15,6 +9,7 @@ CREATE TABLE user(
 	Username varchar(255),
 	Password varchar(255),
 	Email varchar(255),
+	Department int NOT NULL,
 	PRIMARY KEY (ID)
 );
 
@@ -22,20 +17,7 @@ CREATE TABLE department(
 	ID int NOT NULL AUTO_INCREMENT,
 	Name varchar(255) NOT NULL,
 	Manager int,
-	PRIMARY KEY (ID),
-	FOREIGN KEY (Manager)
-		REFERENCES user(ID)
-);
-
-CREATE TABLE user_department(
-	ID int NOT NULL AUTO_INCREMENT,
-	UserID int,
-	DepartmentID int,
-	PRIMARY KEY (ID),
-	FOREIGN KEY (UserID)
-		REFERENCES user(ID),
-	FOREIGN KEY (DepartmentID)
-		REFERENCES department(ID)
+	PRIMARY KEY (ID)
 );
 
 CREATE TABLE poll(
@@ -44,12 +26,8 @@ CREATE TABLE poll(
 	Reviewee int NOT NULL,
 	Comment text,
 	Status int NOT NULL,
-	Time timestamp,
-	PRIMARY KEY (ID),
-	FOREIGN KEY (Reviewer)
-		REFERENCES user(ID),
-	FOREIGN KEY (Reviewee)
-		REFERENCES user(ID)
+	Time datetime,
+	PRIMARY KEY (ID)
 );
 
 CREATE TABLE category(
@@ -60,23 +38,54 @@ CREATE TABLE category(
 
 CREATE TABLE question(
 	ID int NOT NULL AUTO_INCREMENT,
-	CategoryID int NOT NULL,
+	Category int NOT NULL,
 	Question text NOT NULL,
 	Comment text,
-	PRIMARY KEY (ID),
-	FOREIGN KEY (CategoryID)
-		REFERENCES category(ID)
+	PRIMARY KEY (ID)
 );
 
 CREATE TABLE answer(
 	ID int NOT NULL AUTO_INCREMENT,
-	PollID int NOT NULL,
-	QuestionID int NOT NULL,
+	Poll int NOT NULL,
+	Question int NOT NULL,
 	Answer text NOT NULL,
 	Time timestamp,
-	PRIMARY KEY (ID),
-	FOREIGN KEY (PollID)
-		REFERENCES poll(ID),
-	FOREIGN KEY (QuestionID)
-		REFERENCES question(ID)
+	PRIMARY KEY (ID)
 );
+
+CREATE TABLE preferred_poll(
+	ID int NOT NULL AUTO_INCREMENT,
+	Reviewer int NOT NULL,
+	Reviewee int NOT NULL,
+	PRIMARY KEY (ID)
+);
+
+ALTER TABLE user 
+	ADD CONSTRAINT fk_department FOREIGN KEY (Department)
+		REFERENCES department(ID);
+
+ALTER TABLE department
+	ADD CONSTRAINT fk_manager 	FOREIGN KEY (Manager)
+		REFERENCES user(ID);
+
+ALTER TABLE poll
+	ADD CONSTRAINT fk_reviewerpoll FOREIGN KEY (Reviewer)
+		REFERENCES user(ID),
+	ADD CONSTRAINT fk_revieweepoll FOREIGN KEY (Reviewee)
+		REFERENCES user(ID);
+
+ALTER TABLE question
+	ADD CONSTRAINT fk_category FOREIGN KEY (Category)
+		REFERENCES category(ID);
+
+ALTER TABLE answer
+	ADD CONSTRAINT fk_poll	FOREIGN KEY (Poll)
+		REFERENCES poll(ID),
+	ADD CONSTRAINT fk_question FOREIGN KEY (Question)
+		REFERENCES question(ID);
+
+ALTER TABLE choice
+	ADD CONSTRAINT fk_reviewerchoice FOREIGN KEY (Reviewer)
+		REFERENCES user(ID),
+	ADD CONSTRAINT fk_revieweechoice FOREIGN KEY (Reviewee)
+		REFERENCES user(ID);
