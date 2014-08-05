@@ -57,6 +57,7 @@ CREATE TABLE preferred_poll(
 	ID int NOT NULL AUTO_INCREMENT,
 	Reviewer int NOT NULL,
 	Reviewee int NOT NULL,
+	User int NOT NULL,
 	PRIMARY KEY (ID)
 );
 
@@ -84,8 +85,10 @@ ALTER TABLE answer
 	ADD CONSTRAINT fk_question FOREIGN KEY (Question)
 		REFERENCES question(ID);
 
-ALTER TABLE choice
-	ADD CONSTRAINT fk_reviewerchoice FOREIGN KEY (Reviewer)
+ALTER TABLE preferred_poll
+	ADD CONSTRAINT fk_reviewerpreferred_poll FOREIGN KEY (Reviewer)
 		REFERENCES user(ID),
-	ADD CONSTRAINT fk_revieweechoice FOREIGN KEY (Reviewee)
+	ADD CONSTRAINT fk_revieweepreferred_poll FOREIGN KEY (Reviewee)
+		REFERENCES user(ID),
+	ADD CONSTRAINT fk_revieweruserpreferred_poll FOREIGN KEY (User)
 		REFERENCES user(ID);

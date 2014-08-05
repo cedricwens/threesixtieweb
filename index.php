@@ -1,14 +1,4 @@
-<?php
-require('core/init.php');
-	?>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>ThreeSixtyWeb</title>
-	<link rel="stylesheet" type="text/css" href="main.css">
-</head>
-<body>
-	<header><h1>ThreeSixtyWeb</h1></header>
+<?php require('includes/header.php'); ?>
 	<table>
 		<tr>
 			<td>
@@ -76,7 +66,7 @@ require('core/init.php');
 				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
 					<label for="me">Ik ben: </label>
 						<select name="me">
-							<option value="0">Kies een gebruiker</option>
+							<option value="">Kies een gebruiker</option>
 							<?php
 								$users = get_users();
 								$departments = get_departments();
@@ -86,7 +76,7 @@ require('core/init.php');
 										<?php
 										foreach ($users as $user) {
 											if($user['Department'] == $department['ID']){
-												?><option value="<?php echo $user['ID']; ?>"><?php echo $user['Name']; ?></option>
+												?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
 											<?php
 											}
 										}
@@ -99,7 +89,7 @@ require('core/init.php');
 						<br />
 					<label for="reviewer">Deze persoon mag vragen over mij beantwoorden: </label>
 						<select name="reviewer">
-							<option value="0">Kies een gebruiker</option>
+							<option value="">Kies een gebruiker</option>
 							<?php
 								$users = get_users();
 								$departments = get_departments();
@@ -109,7 +99,7 @@ require('core/init.php');
 										<?php
 										foreach ($users as $user) {
 											if($user['Department'] == $department['ID']){
-												?><option value="<?php echo $user['ID']; ?>"><?php echo $user['Name']; ?></option>
+												?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
 											<?php
 											}
 										}
@@ -122,7 +112,7 @@ require('core/init.php');
 						<br />
 					<label for="reviewee">Ik wil vragen over deze persoon beantwoorden: </label>
 						<select name="reviewee">
-							<option value="0">Kies gebruiker</option>
+							<option value="">Kies gebruiker</option>
 							<?php
 								$users = get_users();
 								$departments = get_departments();
@@ -132,7 +122,7 @@ require('core/init.php');
 										<?php
 										foreach ($users as $user) {
 											if($user['Department'] == $department['ID']){
-												?><option value="<?php echo $user['ID']; ?>"><?php echo $user['Name']; ?></option>
+												?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
 											<?php
 											}
 										}
@@ -169,11 +159,11 @@ require('core/init.php');
 		$me = $_POST['me'];
 		$reviewer = $_POST['reviewer'];
 		$reviewee = $_POST['reviewee'];
-		if($me != 0){
-			if ($reviewer == 0 && $reviewee != 0) {
-				add_preferred($me, $reviewee);
-			}else if ($reviewer != 0 && $reviewee == 0) {
-				add_preferred($reviewer, $me);
+		if(!empty($me)){
+			if (empty($reviewer) && !empty($reviewee)) {
+				add_preferred($me, $reviewee, $me);
+			}else if (!empty($reviewer) && empty($reviewee)) {
+				add_preferred($reviewer, $me, $me);
 			}
 		}
 	}
@@ -251,8 +241,4 @@ require('core/init.php');
 		echo $user['Department'].": ".$user['Name']."<br />";
 	}*/
 ?>
-
-
-
-</body>
-</html>
+<?php require('includes/footer.php') ?>

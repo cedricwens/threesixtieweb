@@ -83,3 +83,56 @@ UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Dave') WHERE 
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Maarten') WHERE Name = 'Development';
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Philipdb') WHERE Name = 'Management';
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Peter') WHERE Name = 'Finance/HR';
+
+/* Poll toevoegen aan database */
+INSERT INTO poll (Reviewer, Reviewee, Comment, Status, Time) VALUES
+((SELECT ID FROM user WHERE Name = 'Johanh'), (SELECT ID FROM user WHERE Name = 'Leander'), NULL, 0, '2014-08-04 11:30:32'),
+((SELECT ID FROM user WHERE Name = 'Johanh'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 11:44:21'),
+((SELECT ID FROM user WHERE Name = 'Peter'), (SELECT ID FROM user WHERE Name = 'Maarten'), NULL, 0, '2014-08-04 11:44:40'),
+((SELECT ID FROM user WHERE Name = 'Helga'), (SELECT ID FROM user WHERE Name = 'Karen'), NULL, 0, '2014-08-04 11:44:53'),
+((SELECT ID FROM user WHERE Name = 'Johanh'), (SELECT ID FROM user WHERE Name = 'Lut'), NULL, 0, '2014-08-04 13:06:30'),
+((SELECT ID FROM user WHERE Name = 'Johanh'), (SELECT ID FROM user WHERE Name = 'Peter'), NULL, 0, '2014-08-04 13:31:39'),
+((SELECT ID FROM user WHERE Name = 'Karen'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 15:55:09'),
+((SELECT ID FROM user WHERE Name = 'Kathleen'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 15:55:31'),
+((SELECT ID FROM user WHERE Name = 'Dave'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 15:55:45'),
+((SELECT ID FROM user WHERE Name = 'Loesje'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 15:55:53'),
+((SELECT ID FROM user WHERE Name = 'Helga'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 15:56:03'),
+((SELECT ID FROM user WHERE Name = 'Maarten'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 16:25:17'),
+((SELECT ID FROM user WHERE Name = 'Peter'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 16:39:56'),
+((SELECT ID FROM user WHERE Name = 'Philipdb'), (SELECT ID FROM user WHERE Name = 'Maarten'), NULL, 0, '2014-08-05 09:47:50'),
+((SELECT ID FROM user WHERE Name = 'Dave'), (SELECT ID FROM user WHERE Name = 'Maarten'), NULL, 0, '2014-08-05 09:49:00');
+
+/* Antwoorden toevoegen aan database */
+/*INSERT INTO answer (Poll, Question, Answer, Time) VALUES
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 1, '5', '2014-08-04 11:41:46'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 2, '3', '2014-08-04 11:54:59'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 3, '4', '2014-08-04 11:55:05'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 4, '5', '2014-08-04 11:55:09'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 5, '2', '2014-08-04 11:55:17'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 6, '4', '2014-08-04 11:55:41'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 7, '4', '2014-08-04 12:06:48'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 8, '4', '2014-08-04 12:06:54'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 9, '4', '2014-08-04 12:06:59'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 10, '4', '2014-08-04 12:07:04'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 11, '4', '2014-08-04 12:07:09'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 13, '4', '2014-08-04 12:07:15'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 12, '4', '2014-08-04 12:07:32'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 14, '4', '2014-08-04 12:07:51'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 15, '4', '2014-08-04 12:07:58'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 17, '4', '2014-08-04 12:08:03'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 18, '4', '2014-08-04 12:08:16'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 16, '3', '2014-08-04 12:08:38'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 19, '4', '2014-08-04 12:09:54'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 20, '4', '2014-08-04 12:10:01'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 21, '4', '2014-08-04 12:10:07'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 22, '4', '2014-08-04 12:10:14'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 23, '4', '2014-08-04 12:10:20'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 24, '4', '2014-08-04 12:10:26'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 26, '2', '2014-08-04 12:10:36'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 25, '1', '2014-08-04 12:11:08'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 27, '2', '2014-08-04 12:11:15'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 28, '2', '2014-08-04 12:11:24'),
+((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 29, '1', '2014-08-04 12:11:36'),
+((SELECT ID FROM poll WHERE Reviewer = 'Karen' AND Reviewee = 'Johanh'), 1, '5', '2014-08-04 12:14:12'),
+((SELECT ID FROM poll WHERE Reviewer = 'Karen' AND Reviewee = 'Johanh'), 2, '1', '2014-08-04 12:14:31'),
+((SELECT ID FROM poll WHERE Reviewer = 'Karen' AND Reviewee = 'Johanh'), 3, '5', '2014-08-04 12:15:56');*/
