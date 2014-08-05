@@ -12,13 +12,30 @@
 			return false;
 		}else{
 			while ($row = mysql_fetch_assoc($query)) {
-				$users[] = array(
+				$managers[] = array(
 					stripslashes('Department') => $row['Department'],
 					stripslashes('Name') => $row['Name']
 				);
 			}
-			return $users;
+			return $managers;
 		}
+	}
+
+	function get_users(){
+			$query = mysql_query("SELECT * FROM user");
+			if(!$query || mysql_num_rows($query) <=0) {
+				echo mysql_error();
+				return false;
+			}else{
+				while ($row = mysql_fetch_assoc($query)) {
+					$users[] = array(
+						'ID' => $row['ID'],
+						stripslashes('Name') => $row['Name'],
+						stripslashes('Department') => $row['Department']
+					);
+				}
+				return $users;
+			}
 	}
 
 	function create_poll($reviewer, $reviewee, $status){
@@ -138,6 +155,39 @@
 				);
 			}
 			return $categories;
+		}
+	}
+
+	function get_departments(){
+		$query = mysql_query("SELECT * FROM department");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$categories[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Name') => $row['Name'],
+					'Manager' => 'Manager'
+				);
+			}
+			return $categories;
+		}
+	}
+
+	function add_preferred($reviewer, $reviewee){
+		$query = mysql_query("SELECT * FROM preferred_poll WHERE (Reviewer = $reviewer AND Reviewee = $reviewee) OR (Reviewer = $reviewee AND Reviewee = $reviewer)");
+		if(!$query || mysql_num_rows($query) < 0){
+				echo mysql_error();
+		}else if(mysql_num_rows($query) == 0){
+			$query = mysql_query("INSERT INTO preferred_poll (Reviewer, Reviewee) VALUES ($reviewer, $reviewee) ON DUPLICATE KEY UPDATE reviewer=$reviewer, reviewee=$reviewee");
+			if(!$query){
+					echo mysql_error();
+			}else{
+					echo 'Voorkeur toegevoegd';
+			}
+		}else if(mysql_num_rows($query) > 0){
+			echo "Deze voorkeur werd al ingegeven";
 		}
 	}
 ?>

@@ -1,10 +1,18 @@
 <?php
 require('core/init.php');
 	?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ThreeSixtyWeb</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+	<header><h1>ThreeSixtyWeb</h1></header>
 	<table>
 		<tr>
 			<td>
-				<h1>Poll toevoegen</h1>
+				<h2>Poll toevoegen</h2>
 				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
 					<label for="reviewer">Reviewer: </label><input type="text" name="reviewer" /><br />
 					<label for="reviewee">Reviewee: </label><input type="text" name="reviewee" /><br />
@@ -19,7 +27,7 @@ require('core/init.php');
 				</form>
 			</td>
 			<td>
-				<h1>Antwoorden toevoegen</h1>
+				<h2>Antwoorden toevoegen</h2>
 				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
 					<label for="question">Vraag: </label>
 						<select name="question">
@@ -63,11 +71,83 @@ require('core/init.php');
 					<input type="submit" value="Beantwoord" name="answer_question"/>
 				</form>
 			</td>
+			<td>
+				<h2>Voorkeuren</h2>
+				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
+					<label for="me">Ik ben: </label>
+						<select name="me">
+							<option value="0">Kies een gebruiker</option>
+							<?php
+								$users = get_users();
+								$departments = get_departments();
+								foreach ($departments as $department) {
+									?>
+									<optgroup label="<?php echo $department['Name']; ?>">
+										<?php
+										foreach ($users as $user) {
+											if($user['Department'] == $department['ID']){
+												?><option value="<?php echo $user['ID']; ?>"><?php echo $user['Name']; ?></option>
+											<?php
+											}
+										}
+									?>
+									</optgroup>
+									<?php
+								}
+								?>
+						</select>
+						<br />
+					<label for="reviewer">Deze persoon mag vragen over mij beantwoorden: </label>
+						<select name="reviewer">
+							<option value="0">Kies een gebruiker</option>
+							<?php
+								$users = get_users();
+								$departments = get_departments();
+								foreach ($departments as $department) {
+									?>
+									<optgroup label="<?php echo $department['Name']; ?>">
+										<?php
+										foreach ($users as $user) {
+											if($user['Department'] == $department['ID']){
+												?><option value="<?php echo $user['ID']; ?>"><?php echo $user['Name']; ?></option>
+											<?php
+											}
+										}
+									?>
+									</optgroup>
+									<?php
+								}
+							?>
+						</select>
+						<br />
+					<label for="reviewee">Ik wil vragen over deze persoon beantwoorden: </label>
+						<select name="reviewee">
+							<option value="0">Kies gebruiker</option>
+							<?php
+								$users = get_users();
+								$departments = get_departments();
+								foreach ($departments as $department) {
+									?>
+									<optgroup label="<?php echo $department['Name']; ?>">
+										<?php
+										foreach ($users as $user) {
+											if($user['Department'] == $department['ID']){
+												?><option value="<?php echo $user['ID']; ?>"><?php echo $user['Name']; ?></option>
+											<?php
+											}
+										}
+									?>
+									</optgroup>
+									<?php
+								}
+							?>
+						</select>
+						<br />
+					<input type="submit" value="Voeg toe" name="add_preferred" />
+				</form>
+			</td>
 		</tr>
 	</table>
-
-
-
 
 
 	<?php
@@ -84,8 +164,21 @@ require('core/init.php');
 		$answer = $_POST['answer'];
 		answer($poll, $question, $answer);
 	}
+
+	if(isset($_POST['add_preferred'])){
+		$me = $_POST['me'];
+		$reviewer = $_POST['reviewer'];
+		$reviewee = $_POST['reviewee'];
+		if($me != 0){
+			if ($reviewer == 0 && $reviewee != 0) {
+				add_preferred($me, $reviewee);
+			}else if ($reviewer != 0 && $reviewee == 0) {
+				add_preferred($reviewer, $me);
+			}
+		}
+	}
 	?>
-		<h1>Polls:</h1>
+		<h2>Polls:</h2>
 			<table style="text-align:center;">
 				<tr>
 					<th>ID</th>
@@ -158,3 +251,8 @@ require('core/init.php');
 		echo $user['Department'].": ".$user['Name']."<br />";
 	}*/
 ?>
+
+
+
+</body>
+</html>
