@@ -93,64 +93,37 @@ INSERT INTO status (Name) VALUES
 	('Ingestuurd');
 
 /* Polls toevoegen aan database */
-INSERT INTO poll (Reviewer, Reviewee, Comment, Status, Time_Created) VALUES
-	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Leander'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:30:32'),
-	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:21'),
-	((SELECT ID FROM user WHERE Name = 'Peter'), 	(SELECT ID FROM user WHERE Name = 'Maarten'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:40'),
-	((SELECT ID FROM user WHERE Name = 'Helga'), 	(SELECT ID FROM user WHERE Name = 'Karen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:53'),
-	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Lut'), 		NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:06:30'),
-	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Peter'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:31:39'),
-	((SELECT ID FROM user WHERE Name = 'Karen'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:09'),
-	((SELECT ID FROM user WHERE Name = 'Kathleen'), (SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:31'),
-	((SELECT ID FROM user WHERE Name = 'Dave'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:45'),
-	((SELECT ID FROM user WHERE Name = 'Loesje'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:53'),
-	((SELECT ID FROM user WHERE Name = 'Helga'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:56:03'),
-	((SELECT ID FROM user WHERE Name = 'Maarten'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:25:17'),
-	((SELECT ID FROM user WHERE Name = 'Peter'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:39:56'),
-	((SELECT ID FROM user WHERE Name = 'Philipdb'), (SELECT ID FROM user WHERE Name = 'Maarten'),	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:47:50'),
-	((SELECT ID FROM user WHERE Name = 'Dave'), 	(SELECT ID FROM user WHERE Name = 'Maarten'),	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00');
+INSERT INTO poll (Reviewer, Reviewee, Comment, Status, Time_Created, Last_Update) VALUES
+	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Leander'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:30:32', '2014-08-05 11:30:32'),
+	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:21', '2014-08-05 11:44:21'),
+	((SELECT ID FROM user WHERE Name = 'Peter'), 	(SELECT ID FROM user WHERE Name = 'Maarten'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:40', '2014-08-05 11:44:40'),
+	((SELECT ID FROM user WHERE Name = 'Helga'), 	(SELECT ID FROM user WHERE Name = 'Karen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:53', '2014-08-05 11:44:53'),
+	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Lut'), 		NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:06:30', '2014-08-05 13:06:30'),
+	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Peter'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:31:39', '2014-08-05 13:31:39'),
+	((SELECT ID FROM user WHERE Name = 'Karen'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:09', '2014-08-05 15:55:09'),
+	((SELECT ID FROM user WHERE Name = 'Kathleen'), (SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:31', '2014-08-05 15:55:31'),
+	((SELECT ID FROM user WHERE Name = 'Dave'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:45', '2014-08-05 15:55:45'),
+	((SELECT ID FROM user WHERE Name = 'Loesje'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:53', '2014-08-05 15:55:53'),
+	((SELECT ID FROM user WHERE Name = 'Helga'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:56:03', '2014-08-05 15:56:03'),
+	((SELECT ID FROM user WHERE Name = 'Maarten'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:25:17', '2014-08-05 16:25:17'),
+	((SELECT ID FROM user WHERE Name = 'Peter'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:39:56', '2014-08-05 16:39:56'),
+	((SELECT ID FROM user WHERE Name = 'Philipdb'), (SELECT ID FROM user WHERE Name = 'Maarten'),	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:47:50', '2014-08-06 09:47:50'),
+	((SELECT ID FROM user WHERE Name = 'Dave'), 	(SELECT ID FROM user WHERE Name = 'Maarten'),	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00');
 
 /* Parameters toevoegen aan database */
-INSERT INTO parameter (Name) VALUES
-	('Aantal reviews gegeven'),
-	('Aantal reviews gekregen'),
-	('Maximum aantal reviews door (niet eigen) manager'),
-	('Minimaal aantal reviews dat reviewer geeft aan gebruikers die hij heeft geselecteerd'),
-	('Maximum aantal reviews uit eigen departement'),
-	('Minimum aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd');
+INSERT INTO parameter (Name, Value) VALUES
+	('Aantal reviews geven', 5),
+	('Aantal reviews krijgen', 5),
+	('Maximum aantal reviews door (niet eigen) manager', 1),
+	('Minimaal aantal reviews dat reviewer geeft aan gebruikers die hij heeft geselecteerd', 3),
+	('Maximum aantal reviews uit eigen departement', 2),
+	('Minimum aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd', 2);
 
-
-/* Antwoorden toevoegen aan database */
-/*INSERT INTO answer (Poll, Question, Answer, Time) VALUES
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 1, '5', '2014-08-04 11:41:46'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 2, '3', '2014-08-04 11:54:59'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 3, '4', '2014-08-04 11:55:05'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 4, '5', '2014-08-04 11:55:09'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 5, '2', '2014-08-04 11:55:17'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 6, '4', '2014-08-04 11:55:41'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 7, '4', '2014-08-04 12:06:48'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 8, '4', '2014-08-04 12:06:54'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 9, '4', '2014-08-04 12:06:59'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 10, '4', '2014-08-04 12:07:04'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 11, '4', '2014-08-04 12:07:09'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 13, '4', '2014-08-04 12:07:15'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 12, '4', '2014-08-04 12:07:32'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 14, '4', '2014-08-04 12:07:51'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 15, '4', '2014-08-04 12:07:58'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 17, '4', '2014-08-04 12:08:03'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 18, '4', '2014-08-04 12:08:16'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 16, '3', '2014-08-04 12:08:38'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 19, '4', '2014-08-04 12:09:54'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 20, '4', '2014-08-04 12:10:01'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 21, '4', '2014-08-04 12:10:07'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 22, '4', '2014-08-04 12:10:14'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 23, '4', '2014-08-04 12:10:20'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 24, '4', '2014-08-04 12:10:26'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 26, '2', '2014-08-04 12:10:36'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 25, '1', '2014-08-04 12:11:08'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 27, '2', '2014-08-04 12:11:15'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 28, '2', '2014-08-04 12:11:24'),
-((SELECT ID FROM poll WHERE Reviewer = 'Johanh' AND Reviewee = 'Leander'), 29, '1', '2014-08-04 12:11:36'),
-((SELECT ID FROM poll WHERE Reviewer = 'Karen' AND Reviewee = 'Johanh'), 1, '5', '2014-08-04 12:14:12'),
-((SELECT ID FROM poll WHERE Reviewer = 'Karen' AND Reviewee = 'Johanh'), 2, '1', '2014-08-04 12:14:31'),
-((SELECT ID FROM poll WHERE Reviewer = 'Karen' AND Reviewee = 'Johanh'), 3, '5', '2014-08-04 12:15:56');*/
+/* Antwoord mogelijkheden toevoegen aan database */
+INSERT INTO answer_enum (Short_desc, Long_desc) VALUES
+	('Heel Slecht'),
+	('Slecht'),
+	('Niet goed en niet slecht'),
+	('Goed'),
+	('Zeer goed'),
+	('Niet van toepassing');

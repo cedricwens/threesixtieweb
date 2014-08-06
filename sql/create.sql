@@ -24,7 +24,7 @@ CREATE TABLE poll(
 	ID int NOT NULL AUTO_INCREMENT,
 	Reviewer int NOT NULL,
 	Reviewee int NOT NULL,
-	Comment text,
+	Comment varchar(255),
 	Status int,
 	Time_Created datetime,
 	Last_Update datetime,
@@ -41,8 +41,8 @@ CREATE TABLE category(
 CREATE TABLE question(
 	ID int NOT NULL AUTO_INCREMENT,
 	Category int NOT NULL,
-	Question text NOT NULL,
-	Comment text,
+	Question varchar(255) NOT NULL,
+	Comment varchar(255),
 	PRIMARY KEY (ID)
 );
 
@@ -50,7 +50,7 @@ CREATE TABLE answer(
 	ID int NOT NULL AUTO_INCREMENT,
 	Poll int NOT NULL,
 	Question int NOT NULL,
-	Answer text NOT NULL,
+	Answer int NOT NULL,
 	Time_Created datetime,
 	Last_Update datetime,
 	PRIMARY KEY (ID)
@@ -67,22 +67,38 @@ CREATE TABLE preferred_poll(
 
 CREATE TABLE status(
 	ID int NOT NULL AUTO_INCREMENT,
-	Name text NOT NULL,
+	Name varchar(255) NOT NULL,
 	PRIMARY KEY (ID)
 );
 
 CREATE TABLE parameter(
 	ID int NOT NULL AUTO_INCREMENT,
-	Name text NOT NULL,
+	Name varchar(255) NOT NULL,
+	Value int NOT NULL,
+	Comment varchar(255),
+	PRIMARY KEY (ID)
+);
+
+CREATE TABLE batch(
+	ID int NOT NULL AUTO_INCREMENT,
+	Init_date datetime, 
+	Running_date datetime,
+	Finished_date datetime,
+	Status int NOT NULL,
+	Comment varchar(255),
 	PRIMARY KEY (ID)
 );
 
 CREATE TABLE batch_status(
 	ID int NOT NULL AUTO_INCREMENT,
-	Init_date datetime, 
-	Running_date datetime,
-	Finished_date datetime,
-	Comment text,
+	Name varchar(255),
+	Description varchar(255),
+	PRIMARY KEY (ID)
+);
+
+CREATE TABLE answer_enum(
+	ID int NOT NULL AUTO_INCREMENT,
+	Name varchar(255) NOT NULL,
 	PRIMARY KEY (ID)
 );
 
@@ -100,8 +116,10 @@ ALTER TABLE poll
 		REFERENCES user(ID),
 	ADD CONSTRAINT fk_revieweepoll FOREIGN KEY (Reviewee)
 		REFERENCES user(ID),
+	ADD CONSTRAINT fk_statuspoll FOREIGN KEY (Status)
+		REFERENCES status(ID),
 	ADD CONSTRAINT fk_batchpoll FOREIGN KEY (Batch)
-		REFERENCES batch_status(ID),
+		REFERENCES batch(ID),
 	ADD CONSTRAINT fk_uniquepoll UNIQUE (Reviewer, Reviewee, Batch);
 
 ALTER TABLE question
@@ -113,7 +131,8 @@ ALTER TABLE answer
 		REFERENCES poll(ID),
 	ADD CONSTRAINT fk_question FOREIGN KEY (Question)
 		REFERENCES question(ID),
-	ADD CONSTRAINT ch_value CHECK (Answer < 6),
+	ADD CONSTRAINT fk_answer FOREIGN KEY (Answer)
+		REFERENCES answer_enum(ID),
 	ADD CONSTRAINT un_poll UNIQUE (Poll, Question);
 
 ALTER TABLE preferred_poll
@@ -124,5 +143,19 @@ ALTER TABLE preferred_poll
 	ADD CONSTRAINT fk_revieweruserpreferred_poll FOREIGN KEY (User)
 		REFERENCES user(ID),
 	ADD CONSTRAINT fk_batchpreferred_poll FOREIGN KEY (Batch)
-		REFERENCES batch_status(ID),
+		REFERENCES batch(ID),
 	ADD CONSTRAINT fk_uniquepoll UNIQUE (Reviewer, Reviewee, Batch);
+
+ALTER TABLE parameter
+	ADD CONSTRAINT un_parameter UNIQUE(Name);
+
+ALTER TABLE answer_enum
+	ADD CONSTRAINT ch_answer_enum CHECK (ID < 7),
+	ADD CONSTRAINT un_answer_enum UNIQUE(Name);
+
+ALTER TABLE batch
+	ADD CONSTRAINT fk_batch FOREIGN KEY (Status)
+		REFERENCES batch_status(ID);
+
+ALTER TABLE batch_status
+	ADD CONSTRAINT ch_batch_status CHECK (ID < 6);
