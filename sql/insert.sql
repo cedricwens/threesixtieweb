@@ -120,7 +120,7 @@ INSERT INTO parameter (Name, Value) VALUES
 	('Minimum aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd', 2);
 
 /* Antwoord mogelijkheden toevoegen aan database */
-INSERT INTO answer_enum (Short_desc, Long_desc) VALUES
+INSERT INTO answer_enum (Name) VALUES
 	('Heel Slecht'),
 	('Slecht'),
 	('Niet goed en niet slecht'),

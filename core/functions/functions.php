@@ -4,6 +4,32 @@
 		$date = date("Y-m-d H:i:s", $time);
 		return $date;
 	}
+	function get_text($name){
+		$query = mysql_query("SELECT Text FROM text_nl WHERE Name = '$name'");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_text_info($name){
+		$query = mysql_query("SELECT * FROM text_nl WHERE Name = '$name'");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$questions[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Name') => $row['Name'],
+					stripslashes('Text') => $row['Text'],
+					stripslashes('Comment') => $row['Comment']
+				);
+			}
+			return $questions;
+		}
+	}
 	function get_managers(){
 		$query = mysql_query("SELECT d.Name AS Department, u.Name FROM user u INNER JOIN department d ON u.ID = d.Manager");
 		if(!$query || mysql_num_rows($query) <=0) {
@@ -45,7 +71,7 @@
 				echo mysql_error();
 			}
 		}else{
-			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Last_Update) VALUES ((SELECT ID FROM user WHERE Name = '$reviewer'),(SELECT ID FROM user WHERE Name = '$reviewee'), $status, '$date')");
+			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created) VALUES ((SELECT ID FROM user WHERE Name = '$reviewer'),(SELECT ID FROM user WHERE Name = '$reviewee'), $status, '$date')");
 			if(!$query) {
 				echo mysql_error();
 			}else{
@@ -66,6 +92,7 @@
 					'Reviewee'		=> $row['Reviewee'],
 					'Comment'		=> $row['Comment'],
 					'Status'		=> $row['Status'],
+					'Time_Created'	=> $row['Time_Created'],
 					'Last_Update'	=> $row['Last_Update']
 				);
 			}
@@ -83,7 +110,7 @@
 	}
 	function get_questions(){
 		$query = mysql_query("SELECT * FROM question");
-				if(!$query || mysql_num_rows($query) <=0) {
+		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
 		}else{
@@ -107,7 +134,7 @@
 				echo mysql_error();
 			}
 		}else{
-			$query = mysql_query("INSERT INTO answer (Poll, Question, Answer, Last_Update) VALUES ($poll, $question, $answer, '$date')");
+			$query = mysql_query("INSERT INTO answer (Poll, Question, Answer, Time_Created) VALUES ($poll, $question, $answer, '$date')");
 			if(!$query) {
 				echo mysql_error();
 			}else{

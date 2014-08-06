@@ -8,4 +8,4 @@ require('core/init.php');
 	<link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
-	<header><h1>ThreeSixtyWeb</h1></header>
+	<header><h1><?php echo get_text('Title'); ?></h1></header>

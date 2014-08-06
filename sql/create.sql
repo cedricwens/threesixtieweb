@@ -102,6 +102,14 @@ CREATE TABLE answer_enum(
 	PRIMARY KEY (ID)
 );
 
+CREATE TABLE text_nl(
+	ID int NOT NULL AUTO_INCREMENT,
+	Name varchar(255) NOT NULL,
+	Text text NOT NULL,
+	Comment varchar(255),
+	PRIMARY KEY (ID)
+);
+
 ALTER TABLE user 
 	ADD CONSTRAINT fk_department FOREIGN KEY (Department)
 		REFERENCES department(ID),
@@ -146,16 +154,24 @@ ALTER TABLE preferred_poll
 		REFERENCES batch(ID),
 	ADD CONSTRAINT fk_uniquepoll UNIQUE (Reviewer, Reviewee, Batch);
 
+ALTER TABLE status
+	ADD CONSTRAINT un_status UNIQUE(Name),
+	ADD CONSTRAINT ch_status CHECK (ID < 4);
+
 ALTER TABLE parameter
 	ADD CONSTRAINT un_parameter UNIQUE(Name);
-
-ALTER TABLE answer_enum
-	ADD CONSTRAINT ch_answer_enum CHECK (ID < 7),
-	ADD CONSTRAINT un_answer_enum UNIQUE(Name);
 
 ALTER TABLE batch
 	ADD CONSTRAINT fk_batch FOREIGN KEY (Status)
 		REFERENCES batch_status(ID);
 
 ALTER TABLE batch_status
-	ADD CONSTRAINT ch_batch_status CHECK (ID < 6);
+	ADD CONSTRAINT ch_batch_status CHECK (ID < 6),
+	ADD CONSTRAINT un_batch_status UNIQUE (Name);
+
+ALTER TABLE answer_enum
+	ADD CONSTRAINT ch_answer_enum CHECK (ID < 7),
+	ADD CONSTRAINT un_answer_enum UNIQUE(Name);
+
+ALTER TABLE text_nl
+	ADD CONSTRAINT un_text UNIQUE (Name)

@@ -2,7 +2,7 @@
 	<table>
 		<tr>
 			<td>
-				<h2>Poll toevoegen</h2>
+				<h2><?php echo get_text('Add_poll'); ?></h2>
 				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
 					<label for="reviewer">Reviewer: </label><input type="text" name="reviewer" /><br />
 					<label for="reviewee">Reviewee: </label><input type="text" name="reviewee" /><br />
@@ -17,9 +17,9 @@
 				</form>
 			</td>
 			<td>
-				<h2>Antwoorden toevoegen</h2>
+				<h2><?php echo get_text('Add_answer'); ?></h2>
 				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
-					<label for="question">Vraag: </label>
+					<label for="question"><?php echo get_text('Question'); ?>: </label>
 						<select name="question">
 							<?php
 								$questions = get_questions();
@@ -42,7 +42,7 @@
 							?>
 						</select>
 					<br />
-					<label for="poll">Poll: </label>
+					<label for="poll"><?php echo get_text('Poll'); ?>: </label>
 						<select name="poll">
 							<?php
 								$polls = get_polls();
@@ -50,23 +50,23 @@
 									$reviewer = get_user_by_id($poll['Reviewer']);
 									$reviewee = get_user_by_id($poll['Reviewee']);
 									?>
-									<option value="<?php echo $poll['ID']; ?>"><?php echo $reviewer; ?> over <?php echo $reviewee; ?></option>
+									<option value="<?php echo $poll['ID']; ?>"><?php echo $reviewer.' '.strtolower(get_text('About')).' '.$reviewee; ?></option>
 									<?php
 								}
 							?>
 						</select>
 					<br />
-					<label for="answer">Antwoord: </label><input type="text" name="answer" /><br />
+					<label for="answer"><?php echo get_text('Answer'); ?>: </label><input type="text" name="answer" /><br />
 					
 					<input type="submit" value="Beantwoord" name="answer_question"/>
 				</form>
 			</td>
 			<td>
-				<h2>Voorkeuren</h2>
+				<h2><?php echo get_text('Preferences'); ?></h2>
 				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
 					<label for="me">Ik ben: </label>
 						<select name="me">
-							<option value="">Kies een gebruiker</option>
+							<option value=""><?php echo get_text('Choose_a').' '.strtolower(get_text('user')); ?></option>
 							<?php
 								$users = get_users();
 								$departments = get_departments();
@@ -87,9 +87,9 @@
 								?>
 						</select>
 						<br />
-					<label for="reviewer">Deze persoon mag vragen over mij beantwoorden: </label>
+					<label for="reviewer"><?php echo get_text('This_person_may_answer_my_poll'); ?>: </label>
 						<select name="reviewer">
-							<option value="">Kies een gebruiker</option>
+							<option value=""><?php echo get_text('Choose_a').' '.strtolower(get_text('user')); ?></option>
 							<?php
 								$users = get_users();
 								$departments = get_departments();
@@ -110,9 +110,9 @@
 							?>
 						</select>
 						<br />
-					<label for="reviewee">Ik wil vragen over deze persoon beantwoorden: </label>
+					<label for="reviewee"><?php echo get_text('I_want_to_answer_poll_about_this_person'); ?>: </label>
 						<select name="reviewee">
-							<option value="">Kies gebruiker</option>
+							<option value=""><?php echo get_text('Choose_a').' '.strtolower(get_text('user')); ?></option>
 							<?php
 								$users = get_users();
 								$departments = get_departments();
@@ -168,17 +168,20 @@
 		}
 	}
 	?>
-		<h2>Polls:</h2>
+		<h2><?php echo get_text('Polls'); ?>:</h2>				
+		<?php
+		$polls = get_polls();
+		if($polls){
+			?>
 			<table style="text-align:center;">
 				<tr>
-					<th>ID</th>
-					<th>Reviewer</th>
-					<th>Reviewee</th>
-					<th>Tijdstip</th>
-					<th>Bekijk antwoorden</th>
+					<th><?php echo get_text('ID'); ?></th>
+					<th><?php echo get_text('Reviewer'); ?></th>
+					<th><?php echo get_text('Reviewee'); ?></th>
+					<th><?php echo get_text('Time_Created'); ?></th>
+					<th><?php echo get_text('View').' '.strtolower(get_text('Answers')); ?></th>
 				</tr>
 				<?php
-				$polls = get_polls();
 				foreach ($polls as $poll) {
 					$reviewer = get_user_by_id($poll['Reviewer']);
 					$reviewee = get_user_by_id($poll['Reviewee']);
@@ -192,8 +195,11 @@
 					</tr>
 				<?php
 				}
-				?>
-			</table>
+			}else{
+				echo "Er zijn geen polls gevonden.";
+			}
+			?>
+		</table>
 	<br />
 	<?php
 	if(isset($_GET['view_answer'])){

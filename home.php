@@ -47,6 +47,8 @@
 	    									Ook hier is het mogelijk om de vragenlijst op te slaan, zodat u deze later nog kan aanpassen alvorens deze definitief te verzenden.
 	    								</li>
 	    							</ol>
+	    							<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1">Verder</a>
+	    							
 	    						<?php
 	    					}
 	    				?>
