@@ -5,6 +5,8 @@ DELETE FROM category;
 DELETE FROM poll;
 DELETE FROM user;
 DELETE FROM department;
+DELETE FROM status;
+DELETE FROM batch_status;
 
 
 /* Database opvullen */
@@ -84,23 +86,39 @@ UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Maarten') WHE
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Philipdb') WHERE Name = 'Management';
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Peter') WHERE Name = 'Finance/HR';
 
-/* Poll toevoegen aan database */
-INSERT INTO poll (Reviewer, Reviewee, Comment, Status, Time) VALUES
-((SELECT ID FROM user WHERE Name = 'Johanh'), (SELECT ID FROM user WHERE Name = 'Leander'), NULL, 0, '2014-08-04 11:30:32'),
-((SELECT ID FROM user WHERE Name = 'Johanh'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 11:44:21'),
-((SELECT ID FROM user WHERE Name = 'Peter'), (SELECT ID FROM user WHERE Name = 'Maarten'), NULL, 0, '2014-08-04 11:44:40'),
-((SELECT ID FROM user WHERE Name = 'Helga'), (SELECT ID FROM user WHERE Name = 'Karen'), NULL, 0, '2014-08-04 11:44:53'),
-((SELECT ID FROM user WHERE Name = 'Johanh'), (SELECT ID FROM user WHERE Name = 'Lut'), NULL, 0, '2014-08-04 13:06:30'),
-((SELECT ID FROM user WHERE Name = 'Johanh'), (SELECT ID FROM user WHERE Name = 'Peter'), NULL, 0, '2014-08-04 13:31:39'),
-((SELECT ID FROM user WHERE Name = 'Karen'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 15:55:09'),
-((SELECT ID FROM user WHERE Name = 'Kathleen'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 15:55:31'),
-((SELECT ID FROM user WHERE Name = 'Dave'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 15:55:45'),
-((SELECT ID FROM user WHERE Name = 'Loesje'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 15:55:53'),
-((SELECT ID FROM user WHERE Name = 'Helga'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 15:56:03'),
-((SELECT ID FROM user WHERE Name = 'Maarten'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 16:25:17'),
-((SELECT ID FROM user WHERE Name = 'Peter'), (SELECT ID FROM user WHERE Name = 'Johanh'), NULL, 0, '2014-08-04 16:39:56'),
-((SELECT ID FROM user WHERE Name = 'Philipdb'), (SELECT ID FROM user WHERE Name = 'Maarten'), NULL, 0, '2014-08-05 09:47:50'),
-((SELECT ID FROM user WHERE Name = 'Dave'), (SELECT ID FROM user WHERE Name = 'Maarten'), NULL, 0, '2014-08-05 09:49:00');
+/* Statussen toevoegen aan databank*/
+INSERT INTO status (Name) VALUES 
+	('Niet ingevuld'),
+	('Opgeslagen'),
+	('Ingestuurd');
+
+/* Polls toevoegen aan database */
+INSERT INTO poll (Reviewer, Reviewee, Comment, Status, Time_Created) VALUES
+	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Leander'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:30:32'),
+	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:21'),
+	((SELECT ID FROM user WHERE Name = 'Peter'), 	(SELECT ID FROM user WHERE Name = 'Maarten'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:40'),
+	((SELECT ID FROM user WHERE Name = 'Helga'), 	(SELECT ID FROM user WHERE Name = 'Karen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:53'),
+	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Lut'), 		NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:06:30'),
+	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Peter'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:31:39'),
+	((SELECT ID FROM user WHERE Name = 'Karen'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:09'),
+	((SELECT ID FROM user WHERE Name = 'Kathleen'), (SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:31'),
+	((SELECT ID FROM user WHERE Name = 'Dave'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:45'),
+	((SELECT ID FROM user WHERE Name = 'Loesje'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:53'),
+	((SELECT ID FROM user WHERE Name = 'Helga'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:56:03'),
+	((SELECT ID FROM user WHERE Name = 'Maarten'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:25:17'),
+	((SELECT ID FROM user WHERE Name = 'Peter'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:39:56'),
+	((SELECT ID FROM user WHERE Name = 'Philipdb'), (SELECT ID FROM user WHERE Name = 'Maarten'),	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:47:50'),
+	((SELECT ID FROM user WHERE Name = 'Dave'), 	(SELECT ID FROM user WHERE Name = 'Maarten'),	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00');
+
+/* Parameters toevoegen aan database */
+INSERT INTO parameter (Name) VALUES
+	('Aantal reviews gegeven'),
+	('Aantal reviews gekregen'),
+	('Maximum aantal reviews door (niet eigen) manager'),
+	('Minimaal aantal reviews dat reviewer geeft aan gebruikers die hij heeft geselecteerd'),
+	('Maximum aantal reviews uit eigen departement'),
+	('Minimum aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd');
+
 
 /* Antwoorden toevoegen aan database */
 /*INSERT INTO answer (Poll, Question, Answer, Time) VALUES

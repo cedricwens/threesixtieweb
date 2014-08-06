@@ -1,9 +1,72 @@
 *{
 	font-family: Verdana, Arial, sans-serif;
 }
+body{
+	background-color: white;
+	font-size: 10pt;
+}
+#container{
+	width: auto;
+	max-width: 980px;
+	margin: 0 auto;
+}
+#header_container{
+	height: 100px;
+	border-bottom: 1px solid black;
+}
 header{
 	text-align: center;
 }
 nav#menu ul li{
 	display: inline-block;
+}
+.content_wrapper { 
+  overflow:hidden;
+}
+
+.content_wrapper div {
+   min-height: 200px;
+   padding: 10px;
+}
+#aside {
+  background-color: #dddddd;
+  float: left; 
+  margin-right: 10px;
+  width: 175px;
+  border-right: 1px solid #000;
+}
+#content { 
+  background-color: white;
+  overflow: hidden;
+  margin: 10px;
+  min-height: 170px;
+}
+
+@media screen and (max-width: 600px) {
+	#aside { 
+		float: none;
+    	margin-right: 0;
+    	width: auto;
+    	border: 0;
+    	border-bottom: 1px solid #000;  
+    	height: 24px;  
+	}
+	#aside ol li{
+		display: inline-block;
+	}
+
+}
+#start a{
+	text-decoration: none;
+	text-align: center;
+	color: #777777;
+}
+#aside ol li{
+	font-size: 10pt;
+}
+#aside ol li:not(.active){
+	color: #aaaaaa;
+}
+.active{
+	font-weight: bold;
 }

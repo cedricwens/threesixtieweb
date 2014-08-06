@@ -187,7 +187,7 @@
 						<td><?php echo $poll['ID']; ?></td>
 						<td><?php echo $reviewer; ?></td>
 						<td><?php echo $reviewee; ?></td>
-						<td><?php echo $poll['Time']; ?></td>
+						<td><?php echo $poll['Last_Update']; ?></td>
 						<td><a href="?view_answer=<?php echo $poll['ID']; ?>">Bekijk</a></td>
 					</tr>
 				<?php
@@ -223,7 +223,7 @@
 					<td><?php echo $answer['Poll']; ?></td>
 					<td><?php echo $answer['Question']; ?></td>
 					<td><?php echo $answer['Answer']; ?></td>
-					<td><?php echo $answer['Time']; ?></td>
+					<td><?php echo $answer['Last_Update']; ?></td>
 				</tr>
 				<?php
 			}

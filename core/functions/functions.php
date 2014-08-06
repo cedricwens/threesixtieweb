@@ -45,7 +45,7 @@
 				echo mysql_error();
 			}
 		}else{
-			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time) VALUES ((SELECT ID FROM user WHERE Name = '$reviewer'),(SELECT ID FROM user WHERE Name = '$reviewee'), $status, '$date')");
+			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Last_Update) VALUES ((SELECT ID FROM user WHERE Name = '$reviewer'),(SELECT ID FROM user WHERE Name = '$reviewee'), $status, '$date')");
 			if(!$query) {
 				echo mysql_error();
 			}else{
@@ -61,12 +61,12 @@
 		}else{
 			while ($row = mysql_fetch_assoc($query)) {
 				$polls[] = array(
-					'ID'		=> $row['ID'],
-					'Reviewer' 	=> $row['Reviewer'],
-					'Reviewee'	=> $row['Reviewee'],
-					'Comment'	=> $row['Comment'],
-					'Status'	=> $row['Status'],
-					'Time'		=> $row['Time']
+					'ID'			=> $row['ID'],
+					'Reviewer' 		=> $row['Reviewer'],
+					'Reviewee'		=> $row['Reviewee'],
+					'Comment'		=> $row['Comment'],
+					'Status'		=> $row['Status'],
+					'Last_Update'	=> $row['Last_Update']
 				);
 			}
 			return $polls;
@@ -107,7 +107,7 @@
 				echo mysql_error();
 			}
 		}else{
-			$query = mysql_query("INSERT INTO answer (Poll, Question, Answer, Time) VALUES ($poll, $question, $answer, '$date')");
+			$query = mysql_query("INSERT INTO answer (Poll, Question, Answer, Last_Update) VALUES ($poll, $question, $answer, '$date')");
 			if(!$query) {
 				echo mysql_error();
 			}else{
@@ -127,7 +127,7 @@
 					'Poll' => $row['Poll'],
 					'Question' => $row['Question'],
 					stripslashes('Answer') => $row['Answer'],
-					'Time' => $row['Time']
+					'Last_Update' => $row['Last_Update']
 				);
 			}
 			return $answers;
@@ -206,9 +206,9 @@
 		$preferred_reviewees 	= get_preferred_reviewees($id);
 		$questions 				= get_questions();
 		echo "
-			Reviews geschreven: <b>$reviews_given</b>
+			Heeft <b>$reviews_given</b> review geschreven.
 			<br />
-			Reviews gekregen: <b>$reviews_received</b>
+			Krijgt <b>$reviews_received</b> reviews.
 			<br />
 			Krijgt review(s) van <b>$teammember_reviews</b> teamleden.
 			<br />
