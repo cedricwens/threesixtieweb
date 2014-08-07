@@ -3,6 +3,8 @@
 	<head>
 		<title>ThreeSixtyWeb</title>
 		<link rel="stylesheet" type="text/css" href="main.css">
+		<!-- consider adding a logo here /somewhere on the page
+				dnsbelgium.png (please ask for the file)-->
 	</head>
 	<body>
 		<div id="container">
