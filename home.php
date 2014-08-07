@@ -24,7 +24,7 @@ if(isset($_GET['Start'])){
 					<ol>
 						<li>Tijdens de eerste stap moet je je eigen vragenlijst invullen. Zodra deze vragenlijst is ingevuld, kan je deze insturen. Het is ook mogelijk om de vragenlijst op te slaan, zodat je deze later nog kan aanpassen. Zodra je de antwoorden op de vragenlijst heb doorgestuurd, is het niet meer mogelijk om deze aan te passen.</li>
 						<li>Zodra je je eigen vragenlijst hebt doorgestuurd, kom je op een nieuw scherm terecht. Op dit scherm dient u medewerkers te selecteren waarvan u graag hebt dat zijn dezelfde vragenlijst over u invullen.</li>
-						<li>Op het laatste venster dien je tenslotte medewerkers te selecteren waarvan u graag de vragen lijst invult</li>
+						<li>Op het laatste venster dien je tenslotte medewerkers te selecteren waarvan u graag de vragenlijst invult</li>
 						De selecties die u hebt gemaakt in stap 1 en 2 worden gebruikt om de bepalen welke vragenlijsten u uiteindelijk mag invullen, en welke medewerkers u vragenlijst zullen invullen.
 					</ol>
 				</li>
@@ -37,13 +37,17 @@ if(isset($_GET['Start'])){
 
 			<?php
 		}else{
-			if(isset($_POST['answer_own_questions'])){
+			if(isset($_POST['answer_own_questions']) || isset($_POST['save_own_questions'])){
 				$poll = get_poll_by_reviewer_reviewee($_SESSION['user_id'],$_SESSION['user_id']);	
 				for ($question=1; $question < 30; $question++) {
 					$answer = $_POST[$question];
 					answer($poll, $question, $answer);
 				}
-				change_poll_status($poll, 'Ingestuurd');
+				if(isset($_POST['answer_own_questions'])){
+					change_poll_status($poll, 'Ingestuurd');
+				}else if(isset($_POST['save_own_questions'])){
+					change_poll_status($poll, 'Opgeslagen');
+				}
 				?>
 					<p>Je vragenlijst is succesvol doorgestuurd.</p>
 					<p>Klik op Volgende om naar de volgende stap te gaan.</p>
@@ -113,7 +117,18 @@ if(isset($_GET['Start'])){
 						}
 						?>
 					</table>
-					<input type="submit" value="Versturen" name="answer_own_questions">
+					<?php
+						if($poll_status == get_poll_status_id('Ingestuurd')){
+							?>
+							<a href="<?php $_SERVER['PHP_SELF'];?>?Start&Step=2">Verder</a>
+							<?php
+						}else{
+							?>
+							<input type="submit" value="Versturen" name="answer_own_questions" />
+							<input type="submit" value="Opslaan" name="save_own_questions" />
+							<?php
+						}
+						?>
 				</form>
 				<?php
 			}

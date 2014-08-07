@@ -80,7 +80,7 @@ INSERT INTO user (Firstname, Lastname, Department) VALUES
 	('David',		'Goelen',		(SELECT ID FROM department WHERE Name = 'Management'));
 
 /* Username genereren */
-
+UPDATE user SET Username = REPLACE(CONCAT_WS('.',Lastname, Firstname), ' ','');
 
 /* Managers toevoegen aan department*/
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Lut' AND Lastname = 'Goedhuys') WHERE Name = 'Support/Communication';

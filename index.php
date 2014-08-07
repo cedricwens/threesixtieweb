@@ -71,8 +71,9 @@
 								<?php
 								foreach ($users as $user) {
 									if($user['Department'] == $department['ID']){
-										?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
-									<?php
+										?>
+										<option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
+										<?php
 									}
 								}
 							?>
@@ -92,8 +93,9 @@
 								<?php
 								foreach ($users as $user) {
 									if($user['Department'] == $department['ID']){
-										?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
-									<?php
+										?>
+										<option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
+										<?php
 									}
 								}
 							?>
@@ -113,8 +115,9 @@
 								<?php
 								foreach ($users as $user) {
 									if($user['Department'] == $department['ID']){
-										?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
-									<?php
+										?>
+										<option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
+										<?php
 									}
 								}
 							?>

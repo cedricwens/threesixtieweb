@@ -9,8 +9,8 @@ CREATE OR REPLACE VIEW reviews_given_view AS
 SELECT p.Reviewer AS Reviewer, count(*) AS Aantal_Reviews
 FROM poll p
 WHERE
-        p.Status = 2
-		/*this state dentes completed invariant poll */
+        p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd')
+		/*this state dentes completed invariant poll -- QUERY CHANGED */
     AND
         p.Reviewer != p.Reviewee
 GROUP BY p.Reviewer;

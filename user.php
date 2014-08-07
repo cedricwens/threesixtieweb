@@ -12,7 +12,7 @@
 						<?php
 						foreach ($users as $user) {
 							if($user['Department'] == $department['ID']){
-								?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
+								?><option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
 							<?php
 							}
 						}
@@ -34,6 +34,7 @@ if (isset($_POST['user'])) {
 	}else{
 		$user = $_POST['user'];
 		$id = get_user_id($user);
+		$name = get_user_name($id);
 		echo "<h2>".get_text('Information')." ".strtolower(get_text('About')).": $user</h2>";
 		get_user_info($id);
 	}

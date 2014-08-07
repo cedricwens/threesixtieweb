@@ -57,7 +57,9 @@
 					'ID' => $row['ID'],
 					stripslashes('Firstname') => $row['Firstname'],
 					stripslashes('Lastname') => $row['Lastname'],
-					stripslashes('Department') => $row['Department']
+					stripslashes('Username') => $row['Username'],
+					stripslashes('Department') => $row['Department'],
+					stripslashes('Job_Title') => $row['Job_Title']
 				);
 			}
 			return $users;
@@ -155,22 +157,12 @@
 		}
 	}
 	function answer($poll, $question, $answer){
-
 		$date = create_date();
-		$query = mysql_query("SELECT * FROM answer WHERE Poll = $poll AND Question = $question");
-		if(!$query || mysql_num_rows($query)>0 || mysql_num_rows($query) < 0){
-			if(mysql_num_rows($query) > 0) {
-				//echo get_text('Question_already_answered');
-			}else{
-				echo mysql_error();
-			}
+		$query = mysql_query("INSERT INTO answer (Poll, Question, Answer, Time_Created, Last_Update) VALUES ($poll, $question, $answer, '$date', '$date') ON DUPLICATE KEY UPDATE Answer = $answer, Last_Update = '$date'");
+		if(!$query) {
+			echo mysql_error();
 		}else{
-			$query = mysql_query("INSERT INTO answer (Poll, Question, Answer, Time_Created) VALUES ($poll, $question, $answer, '$date')");
-			if(!$query) {
-				echo mysql_error();
-			}/*else{
-				echo get_text('Question').' '.strtolower(get_text('Answered'));
-			}*/
+			/*echo get_text('Question').' '.strtolower(get_text('Answered'));*/
 		}
 	}
 	function get_answers($poll){
@@ -287,7 +279,7 @@
 		}
 	}
 	function get_all_poll_statuses(){
-		$query = mysql_query("SELECT * FROM answer_enum");
+		$query = mysql_query("SELECT * FROM poll_status ORDER BY ID");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
@@ -303,6 +295,15 @@
 	}
 	function change_poll_status($poll, $status){
 		$query = mysql_query("UPDATE poll SET Status = (SELECT ID FROM poll_status WHERE Name = '$status') WHERE ID = $poll");
+	}
+	function get_user_name($id){
+		$query = mysql_query("SELECT Firstname, Lastname FROM user WHERE ID = $id");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
 	}
 
 	function login($username, $password){
