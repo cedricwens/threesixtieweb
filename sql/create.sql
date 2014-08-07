@@ -10,7 +10,7 @@ CREATE TABLE user(
 	Password varchar(255),
 	Email varchar(255),
 	Department int NOT NULL,
-	/*add columns Full Name here */
+	/*add columns Full Name /Family Name here */
 	/*add column job title here */
 	/*consider adding a manager of
 	PRIMARY KEY (ID)
@@ -148,6 +148,7 @@ ALTER TABLE answer
 	ADD CONSTRAINT fk_answer FOREIGN KEY (Answer)
 		REFERENCES answer_enum(ID),
 	ADD CONSTRAINT un_poll UNIQUE (Poll, Question);
+	/* this constraint is good and replaces (semantically) the check constraint on answer column in answer table */
 
 ALTER TABLE preferred_poll
 	ADD CONSTRAINT fk_reviewerpreferred_poll FOREIGN KEY (Reviewer)
@@ -180,6 +181,7 @@ ALTER TABLE answer_enum
 	/*ADD CONSTRAINT ch_answer_enum CHECK (ID < 7),*/
 	/*since there is referencial integrity with foreign keys, the above check constraint is deprecated */
 	/* auto increment may conflict with check constraint */
+	/* we make sure there will be no more than a given number of rows in the enumeration */
 	ADD CONSTRAINT un_answer_enum UNIQUE(Name);
 
 ALTER TABLE text_nl
