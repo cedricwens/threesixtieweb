@@ -1,15 +1,18 @@
 <?php require('includes/header.php'); ?>
 	<div>
 		<h2><?php echo get_text('Add_poll'); ?></h2>
-		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
+		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 			<label for="reviewer">Reviewer: </label><input type="text" name="reviewer" /><br />
 			<label for="reviewee">Reviewee: </label><input type="text" name="reviewee" /><br />
 			<label for="status">Status: </label>
 				<select name="status">
-					<option value="0">Niet ingevuld</option>
-					<option value="1">Opgeslagen</option>
-					<option value="2">Ingestuurd</option>
-				</select>
+				<?php
+					foreach ($poll_statuses as $poll_status) {
+						?>
+							<option value="<?php echo $poll_status['Name']; ?>"><?php echo $poll_status['Name']; ?></option>
+						<?php
+					}
+				?>
 			<br />
 			<input type="submit" value="Voeg toe" name="add_poll" />
 		</form>

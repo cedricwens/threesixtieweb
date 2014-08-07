@@ -7,7 +7,7 @@
 	}
 	function get_text($name){
 		$query = mysql_query("SELECT Text FROM text_nl WHERE Name = '$name'");
-		if(!$query || mysql_num_rows($query) <=0) {
+		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
 		}else{
@@ -47,21 +47,21 @@
 		}
 	}
 	function get_users(){
-			$query = mysql_query("SELECT * FROM user");
-			if(!$query || mysql_num_rows($query) <=0) {
-				echo mysql_error();
-				return false;
-			}else{
-				while ($row = mysql_fetch_assoc($query)) {
-					$users[] = array(
-						'ID' => $row['ID'],
-						stripslashes('Firstname') => $row['Firstname'],
-						stripslashes('Lastname') => $row['Lastname'],
-						stripslashes('Department') => $row['Department']
-					);
-				}
-				return $users;
+		$query = mysql_query("SELECT * FROM user");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$users[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Firstname') => $row['Firstname'],
+					stripslashes('Lastname') => $row['Lastname'],
+					stripslashes('Department') => $row['Department']
+				);
 			}
+			return $users;
+		}
 	}
 	function create_poll($reviewer, $reviewee, $status){
 		$date = create_date();
@@ -71,9 +71,10 @@
 				echo get_text('Poll_already_exists');
 			}else{
 				echo mysql_error();
+
 			}
 		}else{
-			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created) VALUES ((SELECT ID FROM user WHERE Username = '$reviewer'),(SELECT ID FROM user WHERE Username = '$reviewee'), $status, '$date')");
+			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created) VALUES ((SELECT ID FROM user WHERE Username = '$reviewer'),(SELECT ID FROM user WHERE Username = '$reviewee'), (SELECT ID FROM poll_status WHERE Name = '$status'), '$date')");
 			if(!$query) {
 				echo mysql_error();
 			}else{
@@ -101,9 +102,27 @@
 			return $polls;
 		}
 	}
+	function get_poll_status($poll){
+		$query = mysql_query("SELECT Status FROM poll WHERE ID = $poll");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_poll_status_id($poll_status){
+		$query = mysql_query("SELECT ID FROM poll_status WHERE Name = '$poll_status'");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
 	function get_user_by_id($id){
 		$query = mysql_query("SELECT Firstname, Lastname FROM user WHERE ID = $id");
-		if(!$query || mysql_num_rows($query) <=0) {
+		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
 		}else{
@@ -112,7 +131,7 @@
 	}
 	function get_id_by_username($username){
 		$query = mysql_query("SELECT ID FROM user WHERE Username = $username");
-		if(!$query || mysql_num_rows($query) <=0) {
+		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
 		}else{
@@ -136,11 +155,12 @@
 		}
 	}
 	function answer($poll, $question, $answer){
+
 		$date = create_date();
 		$query = mysql_query("SELECT * FROM answer WHERE Poll = $poll AND Question = $question");
 		if(!$query || mysql_num_rows($query)>0 || mysql_num_rows($query) < 0){
 			if(mysql_num_rows($query) > 0) {
-				echo get_text('Question_already_answered');
+				//echo get_text('Question_already_answered');
 			}else{
 				echo mysql_error();
 			}
@@ -148,9 +168,9 @@
 			$query = mysql_query("INSERT INTO answer (Poll, Question, Answer, Time_Created) VALUES ($poll, $question, $answer, '$date')");
 			if(!$query) {
 				echo mysql_error();
-			}else{
+			}/*else{
 				echo get_text('Question').' '.strtolower(get_text('Answered'));
-			}
+			}*/
 		}
 	}
 	function get_answers($poll){
@@ -169,6 +189,15 @@
 				);
 			}
 			return $answers;
+		}
+	}
+	function get_answer($poll, $question){
+		$query = mysql_query("SELECT Answer FROM answer WHERE Poll = $poll AND Question = $question");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
 		}
 	}
 	function get_categories(){
@@ -223,35 +252,57 @@
 	}
 	function get_user_id($user){
 		$query = mysql_query("SELECT ID FROM user WHERE Username = '$user'");
-		if(!$query || mysql_num_rows($query) <= 0){
+		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
+			return false;
 		}else{
 			return mysql_result($query,0);
 		}
 	}
 	function get_answer_name($value){
 		$query = mysql_query("SELECT Name FROM answer_enum WHERE ID = $value");
-		if(!$query || mysql_num_rows($query) <= 0){
+		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
+			return false;
 		}else{
 			return mysql_result($query,0);
 		}
 	}
 	function get_answer_value_by_name($name){
 		$query = mysql_query("SELECT ID FROM answer_enum WHERE Name = '$name'");
-		if(!$query || mysql_num_rows($query) <= 0){
+		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
+			return false;
 		}else{
 			return mysql_result($query,0);
 		}
 	}
 	function get_poll_by_reviewer_reviewee($reviewer, $reviewee){
-		$query = mysql_query("SELECT ID FROM poll WHERE Reviewer = '$reviewer' AND Reviewee = '$reviewee'");
-		if(!$query || mysql_num_rows($query) <= 0){
+		$query = mysql_query("SELECT ID FROM poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee");
+		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
+			return false;
 		}else{
 			return mysql_result($query,0);
 		}
+	}
+	function get_all_poll_statuses(){
+		$query = mysql_query("SELECT * FROM answer_enum");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$statuses[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Name') => $row['Name']
+				);
+			}
+			return $statuses;
+		}
+	}
+	function change_poll_status($poll, $status){
+		$query = mysql_query("UPDATE poll SET Status = (SELECT ID FROM poll_status WHERE Name = '$status') WHERE ID = $poll");
 	}
 
 	function login($username, $password){
@@ -459,5 +510,5 @@
 	$polls = get_polls();
 	$users = get_users();
 	$departments = get_departments();
-
+	$poll_statuses = get_all_poll_statuses();
 ?>

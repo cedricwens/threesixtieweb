@@ -20,7 +20,7 @@ require('core/init.php');
 				<?php
 				if(logged_in()){
 					?>
-					<li><a href="logout.php">Logout</li>
+					<li><a href="logout.php">Logout</a></li>
 					<?php
 				}
 				?>

@@ -1,5 +1,5 @@
 /* Nederlandse tekst toevoegen aan database */
-DELETE FROM text_nl;
+TRUNCATE TABLE text_nl;
 /* you can consider truncating tables in this kind of operations, suggestion */
 INSERT INTO text_nl (Name, Text) VALUES
 	('Title', 		'ThreeSixtyWeb'),

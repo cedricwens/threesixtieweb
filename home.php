@@ -37,7 +37,13 @@ if(isset($_GET['Start'])){
 
 			<?php
 		}else{
-			if(isset($_POST['answer_own_questions'])){	
+			if(isset($_POST['answer_own_questions'])){
+				$poll = get_poll_by_reviewer_reviewee($_SESSION['user_id'],$_SESSION['user_id']);	
+				for ($question=1; $question < 30; $question++) {
+					$answer = $_POST[$question];
+					answer($poll, $question, $answer);
+				}
+				change_poll_status($poll, 'Ingestuurd');
 				?>
 					<p>Je vragenlijst is succesvol doorgestuurd.</p>
 					<p>Klik op Volgende om naar de volgende stap te gaan.</p>
@@ -61,6 +67,8 @@ if(isset($_GET['Start'])){
 						</tr>
 						<?php
 						$number = 1;
+						$poll = get_poll_by_reviewer_reviewee($_SESSION['user_id'],$_SESSION['user_id']);
+						$poll_status = get_poll_status($poll);
 						foreach ($categories as $category) {
 							?>
 							<td colspan="7"><b><?php echo $category['Name']; ?></b></td>
@@ -71,10 +79,30 @@ if(isset($_GET['Start'])){
 									<tr>
 										<td><?php echo $number.'. '.$question['Question']; ?></td>
 										<?php
-										for ($value=1; $value < 7; $value++) {
-											?>
-											<td style="text-align:center;"><input type="radio" name="<?php echo $question['ID']; ?>" <?php if($value == get_answer_value_by_name('Neutraal')){echo 'checked';} ?>/></td>
-											<?php
+										if($poll_status == get_poll_status_id('Niet ingevuld')){
+											for ($value=1; $value < 7; $value++) {
+												?>
+												<td style="text-align:center;">
+													<input type="radio" name="<?php echo $question['ID']; ?>" value="<?php echo $value; ?>" <?php if($value == get_answer_value_by_name('Neutraal')){echo 'checked';} ?>/>
+												</td>
+												<?php
+											}
+										}else if($poll_status == get_poll_status_id('Opgeslagen')){
+											for ($value=1; $value < 7; $value++) {
+												?>
+												<td style="text-align:center;">
+													<input type="radio" name="<?php echo $question['ID']; ?>" value="<?php echo $value; ?>" <?php if($value == get_answer($poll, $question['ID'])){echo 'checked';} ?>/>
+												</td>
+												<?php
+											}
+										}else if($poll_status == get_poll_status_id('Ingestuurd')){
+											for ($value=1; $value < 7; $value++) {
+												?>
+												<td style="text-align:center;">
+													<input type="radio" name="<?php echo $question['ID']; ?>" value="<?php echo $value; ?>" <?php if($value == get_answer($poll, $question['ID'])){echo 'checked';} ?> disabled />
+												</td>
+												<?php
+											}
 										}
 										?>
 									</tr>

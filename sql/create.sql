@@ -11,9 +11,10 @@ CREATE TABLE user(
 	Password varchar(255),
 	Email varchar(255),
 	Department int NOT NULL,
+	Job_Title varchar(255),
 	/*add columns Full Name /Family Name here */
 	/*add column job title here */
-	/*consider adding a manager of
+	/*consider adding a manager of*/
 	PRIMARY KEY (ID)
 );
 
@@ -24,6 +25,14 @@ CREATE TABLE department(
 	/*consider - non mandatory -  moving the manager value to usertable this will mitigate the circular dependency in an initial state */
 	PRIMARY KEY (ID)
 );
+
+/* Moet nog worden toegevoegd aan de databse. Hierdoor moeten views ook aangepast worden. */
+/*CREATE TABLE user_department{
+	ID int NOT NULL AUTO_INCREMENT,
+	User int NOT NULL,
+	Department int NOT NULL,
+	PRIMARY KEY (ID)
+}*/
 
 CREATE TABLE poll(
 	ID int NOT NULL AUTO_INCREMENT,
@@ -71,7 +80,7 @@ CREATE TABLE preferred_poll(
 	PRIMARY KEY (ID)
 );
 
-CREATE TABLE status(
+CREATE TABLE poll_status(
 	ID int NOT NULL AUTO_INCREMENT,
 	Name varchar(255) NOT NULL,
 	PRIMARY KEY (ID)
@@ -132,7 +141,7 @@ ALTER TABLE poll
 	ADD CONSTRAINT fk_revieweepoll FOREIGN KEY (Reviewee)
 		REFERENCES user(ID),
 	ADD CONSTRAINT fk_statuspoll FOREIGN KEY (Status)
-		REFERENCES status(ID),
+		REFERENCES poll_status(ID),
 	ADD CONSTRAINT fk_batchpoll FOREIGN KEY (Batch)
 		REFERENCES batch(ID),
 	ADD CONSTRAINT fk_uniquepoll UNIQUE (Reviewer, Reviewee, Batch);
@@ -162,7 +171,7 @@ ALTER TABLE preferred_poll
 		REFERENCES batch(ID),
 	ADD CONSTRAINT fk_uniquepoll UNIQUE (Reviewer, Reviewee, Batch);
 
-ALTER TABLE status
+ALTER TABLE poll_status
 	ADD CONSTRAINT un_status UNIQUE(Name);
 	/*ADD CONSTRAINT ch_status CHECK (ID < 4);*/
 
@@ -187,3 +196,11 @@ ALTER TABLE answer_enum
 
 ALTER TABLE text_nl
 	ADD CONSTRAINT un_text UNIQUE (Name)
+
+
+
+/*ALTER TABLE user_department
+	ADD CONSTRAINT fk_user_user_department FOREIGN KEY (User)
+		REFERENCES user(ID),
+	ADD CONSTRAINT fk_department_user_department FOREIGN KEY (Department)
+		REFERENCES department(ID);*/
