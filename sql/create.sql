@@ -48,6 +48,7 @@ CREATE TABLE question(
 	Question varchar(255) NOT NULL,
 	Comment varchar(255),
 	PRIMARY KEY (ID)
+	/* future improvement - non mandatory - add a column referring to BATCH*/
 );
 
 CREATE TABLE answer(
@@ -103,6 +104,7 @@ CREATE TABLE batch_status(
 CREATE TABLE answer_enum(
 	ID int NOT NULL AUTO_INCREMENT,
 	Name varchar(255) NOT NULL,
+	Description varchar(255),
 	PRIMARY KEY (ID)
 );
 
@@ -170,11 +172,14 @@ ALTER TABLE batch
 		REFERENCES batch_status(ID);
 
 ALTER TABLE batch_status
-	ADD CONSTRAINT ch_batch_status CHECK (ID < 6),
+	/*ADD CONSTRAINT ch_batch_status CHECK (ID < 6),*/
+	/*since there is referencial integrity with foreign keys, the above check constraint is deprecated */
 	ADD CONSTRAINT un_batch_status UNIQUE (Name);
 
 ALTER TABLE answer_enum
-	ADD CONSTRAINT ch_answer_enum CHECK (ID < 7),
+	/*ADD CONSTRAINT ch_answer_enum CHECK (ID < 7),*/
+	/*since there is referencial integrity with foreign keys, the above check constraint is deprecated */
+	/* auto increment may conflict with check constraint */
 	ADD CONSTRAINT un_answer_enum UNIQUE(Name);
 
 ALTER TABLE text_nl
