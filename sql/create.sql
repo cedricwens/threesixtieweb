@@ -163,8 +163,8 @@ ALTER TABLE preferred_poll
 	ADD CONSTRAINT fk_uniquepoll UNIQUE (Reviewer, Reviewee, Batch);
 
 ALTER TABLE status
-	ADD CONSTRAINT un_status UNIQUE(Name),
-	ADD CONSTRAINT ch_status CHECK (ID < 4);
+	ADD CONSTRAINT un_status UNIQUE(Name);
+	/*ADD CONSTRAINT ch_status CHECK (ID < 4);*/
 
 ALTER TABLE parameter
 	ADD CONSTRAINT un_parameter UNIQUE(Name);

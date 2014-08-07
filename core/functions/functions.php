@@ -1,4 +1,5 @@
 <?php
+	ob_start();
 	function create_date(){
 		$time = time();
 		$date = date("Y-m-d H:i:s", $time);
@@ -101,7 +102,16 @@
 		}
 	}
 	function get_user_by_id($id){
-		$query = mysql_query("SELECT Firstname, LasteName FROM user WHERE ID = $id");
+		$query = mysql_query("SELECT Firstname, Lastname FROM user WHERE ID = $id");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_id_by_username($username){
+		$query = mysql_query("SELECT ID FROM user WHERE Username = $username");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
@@ -241,6 +251,37 @@
 			echo mysql_error();
 		}else{
 			return mysql_result($query,0);
+		}
+	}
+
+	function login($username, $password){
+		$query = mysql_query("SELECT ID, Password FROM user WHERE Username = '$username'");
+		if(!$query || mysql_num_rows($query) <= 0){
+			echo mysql_error();
+		}else{
+			$user = mysql_fetch_row($query);
+			if(password_verify($password, $user['1'])){
+				echo "Aangemeld";
+			}else{
+				echo "Foutief wachtwoord";
+			}
+			$_SESSION['user_id'] = $user['0'];
+			header('Location: home.php');
+		}
+	}
+	function logged_in_redirect(){
+		if(logged_in() === true){
+			header('Location: home.php');
+			exit();
+		}
+	}
+	function logged_in(){
+		return (isset($_SESSION['user_id'])) ? true : false;
+	}
+	function protect_page(){
+		if(logged_in() === false){
+			header('Location: login.php');
+			exit();
 		}
 	}
 

@@ -6,6 +6,8 @@ require('core/init.php');
 <head>
 	<title>ThreeSixtyWeb</title>
 	<link rel="stylesheet" type="text/css" href="main.css">
+	<!-- consider adding a logo here /somewhere on the page
+				dnsbelgium.png (please ask for the file)-->
 </head>
 <body>
 	<div id="container">
@@ -15,6 +17,13 @@ require('core/init.php');
 			<ul>
 				<li><a href="index.php">Home</a></li>
 				<li><a href="user.php">User</a></li>
+				<?php
+				if(logged_in()){
+					?>
+					<li><a href="logout.php">Logout</li>
+					<?php
+				}
+				?>
 			</ul>
 		</nav>
 	</div>

@@ -1,4 +1,7 @@
-<?php require('includes/header.php') ?>
+<?php
+	require('includes/header.php');
+	protect_page();
+?>
 <?php
 if(isset($_GET['Start'])){
 	?>
