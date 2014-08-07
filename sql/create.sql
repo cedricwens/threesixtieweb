@@ -10,6 +10,9 @@ CREATE TABLE user(
 	Password varchar(255),
 	Email varchar(255),
 	Department int NOT NULL,
+	/*add columns Full Name here */
+	/*add column job title here */
+	/*consider adding a manager of
 	PRIMARY KEY (ID)
 );
 
@@ -17,6 +20,7 @@ CREATE TABLE department(
 	ID int NOT NULL AUTO_INCREMENT,
 	Name varchar(255) NOT NULL,
 	Manager int,
+	/*consider - non mandatory -  moving the manager value to usertable this will mitigate the circular dependency in an initial state */
 	PRIMARY KEY (ID)
 );
 
