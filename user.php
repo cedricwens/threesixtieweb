@@ -1,13 +1,11 @@
 <?php require('includes/header.php'); ?>
 
-<h2>Informatie over specifieke gebruiker</h2>
+<h2><?php echo get_text('Information').' '.strtolower(get_text('About')).' '.strtolower(get_text('User')); ?></h2>
 <form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
-	<label for="user">Selecteer gebruiker: </label>
+	<label for="user"><?php echo get_text('Select_a').' '.strtolower(get_text('User')); ?>: </label>
 		<select name="user">
-			<option value="">Kies een gebruiker</option>
+			<option value=""><?php echo get_text('Choose_a').' '.strtolower(get_text('User')); ?></option>
 			<?php
-				$users = get_users();
-				$departments = get_departments();
 				foreach ($departments as $department) {
 					?>
 					<optgroup label="<?php echo $department['Name']; ?>">
@@ -25,16 +23,20 @@
 				?>
 		</select>
 		<br />
-	<input type="submit" value="Bekijk" name="view_user_info" />
+	<input type="submit" value="<?php echo get_text('View'); ?>" name="view_user_info" />
 </form>
 
 
 <?php
-if (isset($_POST['user']) && !empty($_POST['user'])) {
-	$user = $_POST['user'];
-	$id = get_user_id($user);
-	echo "<h2>Informatie over: $user</h2>";
-	get_user_info($id);
+if (isset($_POST['user'])) {
+	if(empty($_POST['user'])){
+		echo get_text('Please_choose_a_user');
+	}else{
+		$user = $_POST['user'];
+		$id = get_user_id($user);
+		echo "<h2>".get_text('Information')." ".strtolower(get_text('About')).": $user</h2>";
+		get_user_info($id);
+	}
 }
 ?>
 

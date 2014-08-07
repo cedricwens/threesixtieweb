@@ -17,8 +17,12 @@ body{
 header{
 	text-align: center;
 }
-nav#menu ul li{
+#menu ul li{
 	display: inline-block;
+}
+#menu ul li a{
+	text-decoration: none;
+	color: black;
 }
 .content_wrapper { 
   overflow:hidden;
@@ -69,4 +73,16 @@ nav#menu ul li{
 }
 .active{
 	font-weight: bold;
+}
+.questions{
+	border-collapse: collapse;
+}
+.questions tr{
+	border-bottom: 1px solid #dddddd;
+}
+.questions tr td{
+	padding: 10px;
+}
+.questions tr td:not(:first-child){
+	width: 50px;
 }

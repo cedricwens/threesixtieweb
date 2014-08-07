@@ -1,71 +1,102 @@
-<!DOCTYPE>
-<html>
-	<head>
-		<title>ThreeSixtyWeb</title>
-		<link rel="stylesheet" type="text/css" href="main.css">
-		<!-- consider adding a logo here /somewhere on the page
-				dnsbelgium.png (please ask for the file)-->
-	</head>
-	<body>
-		<div id="container">
-			<div id="header_container">
-				<header><h1>ThreeSixtyWeb</h1></header>
-				<nav id="menu">
-					<ul>
-						<li><a href="index.php">Home</a></li>
-						<li><a href="user.php">User</a></li>
-					</ul>
-				</nav>
-			</div>
-			<div class="content_wrapper">
+<?php require('includes/header.php') ?>
+<?php
+if(isset($_GET['Start'])){
+	?>
+	<div id="aside">
+		<ol>
+			<li class="<?php if(!isset($_GET['Step'])){ echo 'active';} ?>">Start</li>
+			<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 1){ echo 'active';} ?>">Vragenlijst invullen</li>
+			<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 2){ echo 'active';} ?>">Keuze: Jouw vragenlijst</li>
+			<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 3){ echo 'active';} ?>">Keuze: Andere vragenlijst</li>
+		</ol>
+	</div>
+	<div id="content">
+		<?php
+		if(!isset($_GET['Step'])){
+			?>
+			Het ThreeSixtyWeb evalutieproject bestaat uit twee fasen:
+			<ol>
+				<li>
+					Fase 1 gaat over je eigen vragenlijst. Deze fase bestaat op zijn beurt weer uit 3 stappen:
+					<ol>
+						<li>Tijdens de eerste stap moet je je eigen vragenlijst invullen. Zodra deze vragenlijst is ingevuld, kan je deze insturen. Het is ook mogelijk om de vragenlijst op te slaan, zodat je deze later nog kan aanpassen. Zodra je de antwoorden op de vragenlijst heb doorgestuurd, is het niet meer mogelijk om deze aan te passen.</li>
+						<li>Zodra je je eigen vragenlijst hebt doorgestuurd, kom je op een nieuw scherm terecht. Op dit scherm dient u medewerkers te selecteren waarvan u graag hebt dat zijn dezelfde vragenlijst over u invullen.</li>
+						<li>Op het laatste venster dien je tenslotte medewerkers te selecteren waarvan u graag de vragen lijst invult</li>
+						De selecties die u hebt gemaakt in stap 1 en 2 worden gebruikt om de bepalen welke vragenlijsten u uiteindelijk mag invullen, en welke medewerkers u vragenlijst zullen invullen.
+					</ol>
+				</li>
+				<li>
+					Zodra alle gebruikers fase 1 hebben afgerond, wordt fase 2 gestart. Tijdens deze fase dient u de vragenlijsten in te vullen van een aantal medewerkers.
+					Ook hier is het mogelijk om de vragenlijst op te slaan, zodat u deze later nog kan aanpassen alvorens deze definitief te verzenden.
+				</li>
+			</ol>
+			<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1">Verder</a>
+
+			<?php
+		}else{
+			if(isset($_POST['answer_own_questions'])){	
+				?>
+					<p>Je vragenlijst is succesvol doorgestuurd.</p>
+					<p>Klik op Volgende om naar de volgende stap te gaan.</p>
+					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=1">Vorige</a>
+					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2">Volgende</a>
+					
 				<?php
-				if(isset($_GET['Start'])){
-    			?>
-	    			<div id="aside">
-	    				<ol>
-							<li class="<?php if(!isset($_GET['Step'])){ echo 'active';} ?>">Start</li>
-							<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 1){ echo 'active';} ?>">Vragenlijst invullen</li>
-							<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 2){ echo 'active';} ?>">Keuze: Jouw vragenlijst</li>
-							<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 3){ echo 'active';} ?>">Keuze: Andere vragenlijst</li>
-						</ol>
-					</div>
-	    			<div id="content">
-	    				<?php
-	    					if(!isset($_GET['Step'])){
-	    						?>
-	    							Het ThreeSixtyWeb evalutieproject bestaat uit twee fasen:
-	    							<ol>
-	    								<li>
-	    									Fase 1 gaat over je eigen vragenlijst. Deze fase bestaat op zijn beurt weer uit 3 stappen:
-	    									<ol>
-	    										<li>Tijdens de eerste stap moet je je eigen vragenlijst invullen. Zodra deze vragenlijst is ingevuld, kan je deze insturen. Het is ook mogelijk om de vragenlijst op te slaan, zodat je deze later nog kan aanpassen. Zodra je de antwoorden op de vragenlijst heb doorgestuurd, is het niet meer mogelijk om deze aan te passen.</li>
-	    										<li>Zodra je je eigen vragenlijst hebt doorgestuurd, kom je op een nieuw scherm terecht. Op dit scherm dient u medewerkers te selecteren waarvan u graag hebt dat zijn dezelfde vragenlijst over u invullen.</li>
-	    										<li>Op het laatste venster dien je tenslotte medewerkers te selecteren waarvan u graag de vragen lijst invult</li>
-	    										De selecties die u hebt gemaakt in stap 1 en 2 worden gebruikt om de bepalen welke vragenlijsten u uiteindelijk mag invullen, en welke medewerkers u vragenlijst zullen invullen.
-	    									</ol>
-	    								</li>
-	    								<li>
-	    									Zodra alle gebruikers fase 1 hebben afgerond, wordt fase 2 gestart. Tijdens deze fase dient u de vragenlijsten in te vullen van een aantal medewerkers.
-	    									Ook hier is het mogelijk om de vragenlijst op te slaan, zodat u deze later nog kan aanpassen alvorens deze definitief te verzenden.
-	    								</li>
-	    							</ol>
-	    							<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1">Verder</a>
-	    							
-	    						<?php
-	    					}
-	    				?>
-					</div>
+			}else if($_GET['Step'] == 1){
+				?>
+				<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=1">
+					<table class="questions">
+						<tr>
+							<th><?php get_text('Question'); ?></th>
+							<?php
+							for ($value=1; $value < 7; $value++) { 
+								?>
+								<th><?php echo get_answer_name($value); ?></th>
+								<?php
+							}
+							?>
+						</tr>
+						<?php
+						$number = 1;
+						foreach ($categories as $category) {
+							?>
+							<td colspan="7"><b><?php echo $category['Name']; ?></b></td>
+							<?php
+							foreach ($questions as $question) {
+								if($category['ID'] == $question['Category']){
+									?>
+									<tr>
+										<td><?php echo $number.'. '.$question['Question']; ?></td>
+										<?php
+										for ($value=1; $value < 7; $value++) {
+											?>
+											<td style="text-align:center;"><input type="radio" name="<?php echo $question['ID']; ?>" <?php if($value == get_answer_value_by_name('Neutraal')){echo 'checked';} ?>/></td>
+											<?php
+										}
+										?>
+									</tr>
+									<?php
+									$number++;
+								}
+							}
+						}
+						?>
+					</table>
+					<input type="submit" value="Versturen" name="answer_own_questions">
+				</form>
 				<?php
-				}else{
-					?>
-					Welkom bij het ThreeSixtyWeb evaluatieproject.
-					<br />
-					Klik op <b>Start</b> om de vragenlijsten in te vullen.
-					<span id="start"><a href="?Start"><h1>Start >></h1></a></span>
-	    			<?php
-    			}
-    			?>
-  			</div>
-		</div>
-	</body>
-</html>
+			}
+		}
+		?>
+	</div>
+	<?php
+}else{
+	?>
+	Welkom bij het ThreeSixtyWeb evaluatieproject.
+	<br />
+	Klik op <b>Start</b> om de vragenlijsten in te vullen.
+	<span id="start"><a href="?Start"><h1>Start >></h1></a></span>
+	<?php
+}
+?>
+<?php require('includes/footer.php'); ?>

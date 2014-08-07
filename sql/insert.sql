@@ -64,27 +64,30 @@ INSERT INTO department (Name) VALUES
 	('Finance/HR');
 
 /* Users toevoegen aan databank*/
-INSERT INTO user (Name, Department) VALUES
-	('Johanh',	(SELECT ID FROM department WHERE Name = 'Development')),
-	('Loesje',	(SELECT ID FROM department WHERE Name = 'Development')),
-	('Leander',	(SELECT ID FROM department WHERE Name = 'Operations')),
-	('Kristof',	(SELECT ID FROM department WHERE Name = 'Operations')),
-	('Kevin',	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-	('Kathleen',(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-	('Karen',	(SELECT ID FROM department WHERE Name = 'Finance/HR')),
-	('Helga',	(SELECT ID FROM department WHERE Name = 'Finance/HR')),
-	('Philipdb',(SELECT ID FROM department WHERE Name = 'Management')),
-	('Maarten',	(SELECT ID FROM department WHERE Name = 'Management')),
-	('Lut',		(SELECT ID FROM department WHERE Name = 'Management')),
-	('Peter',	(SELECT ID FROM department WHERE Name = 'Management')),
-	('Dave',	(SELECT ID FROM department WHERE Name = 'Management'));
+INSERT INTO user (Firstname, Lastname, Department) VALUES
+	('Johan',		'Heylen',		(SELECT ID FROM department WHERE Name = 'Development')),
+	('Loesje',		'Hermans',		(SELECT ID FROM department WHERE Name = 'Development')),
+	('Leander',		'Dierckx',		(SELECT ID FROM department WHERE Name = 'Operations')),
+	('Kristof',		'Tuyteleers',	(SELECT ID FROM department WHERE Name = 'Operations')),
+	('Kevin',		'Jacquemyn',	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
+	('Kathleen',	'Buffels',		(SELECT ID FROM department WHERE Name = 'Support/Communication')),
+	('Karen',		'Van Rillaer',	(SELECT ID FROM department WHERE Name = 'Finance/HR')),
+	('Helga',		'Parijs',		(SELECT ID FROM department WHERE Name = 'Finance/HR')),
+	('Philip',		'Du Bois',		(SELECT ID FROM department WHERE Name = 'Management')),
+	('Maarten',		'Bosteels',		(SELECT ID FROM department WHERE Name = 'Management')),
+	('Lut',			'Goedhuys',		(SELECT ID FROM department WHERE Name = 'Management')),
+	('Peter',		'Vergote',		(SELECT ID FROM department WHERE Name = 'Management')),
+	('David',		'Goelen',		(SELECT ID FROM department WHERE Name = 'Management'));
+
+/* Username genereren */
+
 
 /* Managers toevoegen aan department*/
-UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Lut') WHERE Name = 'Support/Communication';
-UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Dave') WHERE Name = 'Operations';
-UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Maarten') WHERE Name = 'Development';
-UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Philipdb') WHERE Name = 'Management';
-UPDATE department SET Manager = (SELECT ID FROM user WHERE Name = 'Peter') WHERE Name = 'Finance/HR';
+UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Lut' AND Lastname = 'Goedhuys') WHERE Name = 'Support/Communication';
+UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'David' AND Lastname = 'Goelen') WHERE Name = 'Operations';
+UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Maarten' AND Lastname = 'Bosteels') WHERE Name = 'Development';
+UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Philip' AND Lastname = 'Du Bois') WHERE Name = 'Management';
+UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Peter' AND Lastname = 'Vergote') WHERE Name = 'Finance/HR';
 
 /* Statussen toevoegen aan databank*/
 INSERT INTO status (Name) VALUES 
@@ -94,21 +97,21 @@ INSERT INTO status (Name) VALUES
 
 /* Polls toevoegen aan database */
 INSERT INTO poll (Reviewer, Reviewee, Comment, Status, Time_Created, Last_Update) VALUES
-	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Leander'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:30:32', '2014-08-05 11:30:32'),
-	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:21', '2014-08-05 11:44:21'),
-	((SELECT ID FROM user WHERE Name = 'Peter'), 	(SELECT ID FROM user WHERE Name = 'Maarten'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:40', '2014-08-05 11:44:40'),
-	((SELECT ID FROM user WHERE Name = 'Helga'), 	(SELECT ID FROM user WHERE Name = 'Karen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:53', '2014-08-05 11:44:53'),
-	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Lut'), 		NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:06:30', '2014-08-05 13:06:30'),
-	((SELECT ID FROM user WHERE Name = 'Johanh'), 	(SELECT ID FROM user WHERE Name = 'Peter'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:31:39', '2014-08-05 13:31:39'),
-	((SELECT ID FROM user WHERE Name = 'Karen'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:09', '2014-08-05 15:55:09'),
-	((SELECT ID FROM user WHERE Name = 'Kathleen'), (SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:31', '2014-08-05 15:55:31'),
-	((SELECT ID FROM user WHERE Name = 'Dave'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:45', '2014-08-05 15:55:45'),
-	((SELECT ID FROM user WHERE Name = 'Loesje'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:53', '2014-08-05 15:55:53'),
-	((SELECT ID FROM user WHERE Name = 'Helga'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:56:03', '2014-08-05 15:56:03'),
-	((SELECT ID FROM user WHERE Name = 'Maarten'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:25:17', '2014-08-05 16:25:17'),
-	((SELECT ID FROM user WHERE Name = 'Peter'), 	(SELECT ID FROM user WHERE Name = 'Johanh'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:39:56', '2014-08-05 16:39:56'),
-	((SELECT ID FROM user WHERE Name = 'Philipdb'), (SELECT ID FROM user WHERE Name = 'Maarten'),	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:47:50', '2014-08-06 09:47:50'),
-	((SELECT ID FROM user WHERE Name = 'Dave'), 	(SELECT ID FROM user WHERE Name = 'Maarten'),	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00');
+	((SELECT ID FROM user WHERE Firstname = 'Johan' 	AND Lastname='Heylen'), 	(SELECT ID FROM user WHERE Firstname = 'Leander' 	AND Lastname='Dierckx'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:30:32', '2014-08-05 11:30:32'),
+	((SELECT ID FROM user WHERE Firstname = 'Johan' 	AND Lastname='Heylen'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:21', '2014-08-05 11:44:21'),
+	((SELECT ID FROM user WHERE Firstname = 'Peter' 	AND Lastname='Vergote'), 	(SELECT ID FROM user WHERE Firstname = 'Maarten' 	AND Lastname='Bosteels'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:40', '2014-08-05 11:44:40'),
+	((SELECT ID FROM user WHERE Firstname = 'Helga' 	AND Lastname='Parijs'), 	(SELECT ID FROM user WHERE Firstname = 'Karen' 		AND Lastname='Van Rillaer'),NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:53', '2014-08-05 11:44:53'),
+	((SELECT ID FROM user WHERE Firstname = 'Johan' 	AND Lastname='Heylen'), 	(SELECT ID FROM user WHERE Firstname = 'Lut' 		AND Lastname='Goedhuys'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:06:30', '2014-08-05 13:06:30'),
+	((SELECT ID FROM user WHERE Firstname = 'Johan' 	AND Lastname='Heylen'), 	(SELECT ID FROM user WHERE Firstname = 'Peter' 		AND Lastname='Vergote'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:31:39', '2014-08-05 13:31:39'),
+	((SELECT ID FROM user WHERE Firstname = 'Karen' 	AND Lastname='Van Rillaer'),(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:09', '2014-08-05 15:55:09'),
+	((SELECT ID FROM user WHERE Firstname = 'Kathleen' 	AND Lastname='Buffels'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:31', '2014-08-05 15:55:31'),
+	((SELECT ID FROM user WHERE Firstname = 'David' 	AND Lastname='Goelen'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:45', '2014-08-05 15:55:45'),
+	((SELECT ID FROM user WHERE Firstname = 'Loesje' 	AND Lastname='Hermans'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:53', '2014-08-05 15:55:53'),
+	((SELECT ID FROM user WHERE Firstname = 'Helga' 	AND Lastname='Parijs'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:56:03', '2014-08-05 15:56:03'),
+	((SELECT ID FROM user WHERE Firstname = 'Maarten' 	AND Lastname='Bosteels'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:25:17', '2014-08-05 16:25:17'),
+	((SELECT ID FROM user WHERE Firstname = 'Peter' 	AND Lastname='Vergote'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:39:56', '2014-08-05 16:39:56'),
+	((SELECT ID FROM user WHERE Firstname = 'Philip'	AND Lastname='Du Bois'), 	(SELECT ID FROM user WHERE Firstname = 'Maarten' 	AND Lastname='Bosteels'),	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:47:50', '2014-08-06 09:47:50'),
+	((SELECT ID FROM user WHERE Firstname = 'David'		AND Lastname='Goelen'), 	(SELECT ID FROM user WHERE Firstname = 'Maarten' 	AND Lastname='Bosteels'),	NULL, (SELECT ID FROM status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00');
 
 /* Parameters toevoegen aan database */
 INSERT INTO parameter (Name, Value) VALUES
@@ -123,7 +126,7 @@ INSERT INTO parameter (Name, Value) VALUES
 INSERT INTO answer_enum (Name) VALUES
 	('Heel Slecht'),
 	('Slecht'),
-	('Niet goed en niet slecht'),
+	('Neutraal'),
 	('Goed'),
 	('Zeer goed'),
-	('Niet van toepassing');
+	('N.v.t');

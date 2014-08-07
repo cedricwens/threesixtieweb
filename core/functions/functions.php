@@ -54,7 +54,8 @@
 				while ($row = mysql_fetch_assoc($query)) {
 					$users[] = array(
 						'ID' => $row['ID'],
-						stripslashes('Name') => $row['Name'],
+						stripslashes('Firstname') => $row['Firstname'],
+						stripslashes('Lastname') => $row['Lastname'],
 						stripslashes('Department') => $row['Department']
 					);
 				}
@@ -63,19 +64,19 @@
 	}
 	function create_poll($reviewer, $reviewee, $status){
 		$date = create_date();
-		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = (SELECT ID FROM user WHERE Name = '$reviewer') AND Reviewee = (SELECT ID FROM user WHERE Name = '$reviewee')");
+		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer') AND Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee')");
 		if(!$query || mysql_num_rows($query)>0 || mysql_num_rows($query) < 0){
 			if(mysql_num_rows($query) > 0) {
-				echo "Deze poll bestaat al";
+				echo get_text('Poll_already_exists');
 			}else{
 				echo mysql_error();
 			}
 		}else{
-			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created) VALUES ((SELECT ID FROM user WHERE Name = '$reviewer'),(SELECT ID FROM user WHERE Name = '$reviewee'), $status, '$date')");
+			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created) VALUES ((SELECT ID FROM user WHERE Username = '$reviewer'),(SELECT ID FROM user WHERE Username = '$reviewee'), $status, '$date')");
 			if(!$query) {
 				echo mysql_error();
 			}else{
-				echo 'Poll aangemaakt';
+				echo get_text('Poll').' '.strtolower(get_text('Created'));
 			}
 		}
 	}
@@ -100,7 +101,7 @@
 		}
 	}
 	function get_user_by_id($id){
-		$query = mysql_query("SELECT Name FROM user WHERE ID = $id");
+		$query = mysql_query("SELECT Firstname, LasteName FROM user WHERE ID = $id");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
@@ -129,7 +130,7 @@
 		$query = mysql_query("SELECT * FROM answer WHERE Poll = $poll AND Question = $question");
 		if(!$query || mysql_num_rows($query)>0 || mysql_num_rows($query) < 0){
 			if(mysql_num_rows($query) > 0) {
-				echo "Deze vraag is al beantwoord";
+				echo get_text('Question_already_answered');
 			}else{
 				echo mysql_error();
 			}
@@ -138,7 +139,7 @@
 			if(!$query) {
 				echo mysql_error();
 			}else{
-				echo 'Vraag Beantwoord';
+				echo get_text('Question').' '.strtolower(get_text('Answered'));
 			}
 		}
 	}
@@ -193,17 +194,17 @@
 	}
 	function add_preferred($reviewer, $reviewee, $user){
 		if($reviewer == $reviewee){
-			echo "Het is niet toegestaan om als voorkeur 2 keer uw eigen naam te selecteren.";
+			echo get_text('Prohibited_to_prefer_yourself');
 		}else{
-			$query = mysql_query("SELECT * FROM preferred_poll WHERE (Reviewer = (SELECT ID FROM user WHERE Name = '$reviewer') AND Reviewee = (SELECT ID FROM user WHERE Name = '$reviewee') AND User = (SELECT ID FROM user WHERE Name = '$user'))");
+			$query = mysql_query("SELECT * FROM preferred_poll WHERE (Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer') AND Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee') AND User = (SELECT ID FROM user WHERE Username = '$user'))");
 			if(!$query || mysql_num_rows($query) < 0){
 				echo mysql_error();
 			}else if(mysql_num_rows($query) == 0){
-				$query = mysql_query("INSERT INTO preferred_poll (Reviewer, Reviewee, User) VALUES ((SELECT ID FROM user WHERE Name = '$reviewer'), (SELECT ID FROM user WHERE Name = '$reviewee'), (SELECT ID FROM user WHERE Name = '$user')) ON DUPLICATE KEY UPDATE Reviewer = (SELECT ID FROM user WHERE Name = '$reviewer'), Reviewee = (SELECT ID FROM user WHERE Name = '$reviewee'), User = (SELECT ID FROM user WHERE Name ='$user')");
+				$query = mysql_query("INSERT INTO preferred_poll (Reviewer, Reviewee, User) VALUES ((SELECT ID FROM user WHERE Username = '$reviewer'), (SELECT ID FROM user WHERE Username = '$reviewee'), (SELECT ID FROM user WHERE Username = '$user')) ON DUPLICATE KEY UPDATE Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer'), Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee'), User = (SELECT ID FROM user WHERE Username ='$user')");
 				if(!$query){
 						echo mysql_error();
 				}else{
-						echo 'Voorkeur toegevoegd';
+						echo get_Text('Preference').' '.strtolower('Added');
 				}
 			}else if(mysql_num_rows($query) > 0){
 				echo "Deze voorkeur werd al ingegeven";
@@ -211,14 +212,37 @@
 		}
 	}
 	function get_user_id($user){
-		$query = mysql_query("SELECT ID FROM user WHERE Name = '$user'");
+		$query = mysql_query("SELECT ID FROM user WHERE Username = '$user'");
 		if(!$query || mysql_num_rows($query) <= 0){
 			echo mysql_error();
 		}else{
 			return mysql_result($query,0);
 		}
 	}
-
+	function get_answer_name($value){
+		$query = mysql_query("SELECT Name FROM answer_enum WHERE ID = $value");
+		if(!$query || mysql_num_rows($query) <= 0){
+			echo mysql_error();
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_answer_value_by_name($name){
+		$query = mysql_query("SELECT ID FROM answer_enum WHERE Name = '$name'");
+		if(!$query || mysql_num_rows($query) <= 0){
+			echo mysql_error();
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_poll_by_reviewer_reviewee($reviewer, $reviewee){
+		$query = mysql_query("SELECT ID FROM poll WHERE Reviewer = '$reviewer' AND Reviewee = '$reviewee'");
+		if(!$query || mysql_num_rows($query) <= 0){
+			echo mysql_error();
+		}else{
+			return mysql_result($query,0);
+		}
+	}
 
 
 	function get_user_info($id){
@@ -274,8 +298,7 @@
 					}
 				?>
 			</table>
-			<?php
-			
+			<?php	
 	}
 	function get_reviews_given($id){
 		$query = mysql_query("SELECT Aantal_Reviews FROM reviews_given_view WHERE Reviewer = $id");
@@ -385,4 +408,15 @@
 			return mysql_result($query, 0);
 		}
 	}
+
+
+
+
+
+	$questions = get_questions();
+	$categories = get_categories();
+	$polls = get_polls();
+	$users = get_users();
+	$departments = get_departments();
+
 ?>

@@ -1,143 +1,129 @@
 <?php require('includes/header.php'); ?>
-	<table>
-		<tr>
-			<td>
-				<h2><?php echo get_text('Add_poll'); ?></h2>
-				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
-					<label for="reviewer">Reviewer: </label><input type="text" name="reviewer" /><br />
-					<label for="reviewee">Reviewee: </label><input type="text" name="reviewee" /><br />
-					<label for="status">Status: </label>
-						<select name="status">
-							<option value="0">Niet ingevuld</option>
-							<option value="1">Opgeslagen</option>
-							<option value="2">Ingestuurd</option>
-						</select>
-					<br />
-					<input type="submit" value="Voeg toe" name="add_poll" />
-				</form>
-			</td>
-			<td>
-				<h2><?php echo get_text('Add_answer'); ?></h2>
-				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
-					<label for="question"><?php echo get_text('Question'); ?>: </label>
-						<select name="question">
-							<?php
-								$questions = get_questions();
-								$categories = get_categories();
-								foreach ($categories as $category) {
-									?>
-									<optgroup label="<?php echo $category['Name']; ?>">
-										<?php
-										foreach ($questions as $question) {
-											if($question['Category'] == $category['ID']){
-												?>
-												<option value="<?php echo $question['ID']; ?>"><?php echo $question['ID'].'. '.$question['Question']; ?></option>
-												<?php
-											}
-										}
+	<div>
+		<h2><?php echo get_text('Add_poll'); ?></h2>
+		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
+			<label for="reviewer">Reviewer: </label><input type="text" name="reviewer" /><br />
+			<label for="reviewee">Reviewee: </label><input type="text" name="reviewee" /><br />
+			<label for="status">Status: </label>
+				<select name="status">
+					<option value="0">Niet ingevuld</option>
+					<option value="1">Opgeslagen</option>
+					<option value="2">Ingestuurd</option>
+				</select>
+			<br />
+			<input type="submit" value="Voeg toe" name="add_poll" />
+		</form>
+	</div>
+	<div>
+		<h2><?php echo get_text('Add_answer'); ?></h2>
+		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
+			<label for="question"><?php echo get_text('Question'); ?>: </label>
+				<select name="question">
+					<?php
+						foreach ($categories as $category) {
+							?>
+							<optgroup label="<?php echo $category['Name']; ?>">
+								<?php
+								foreach ($questions as $question) {
+									if($question['Category'] == $category['ID']){
 										?>
-									</optgroup>
-									<?php
-								}
-							?>
-						</select>
-					<br />
-					<label for="poll"><?php echo get_text('Poll'); ?>: </label>
-						<select name="poll">
-							<?php
-								$polls = get_polls();
-								foreach ($polls as $poll) {
-									$reviewer = get_user_by_id($poll['Reviewer']);
-									$reviewee = get_user_by_id($poll['Reviewee']);
-									?>
-									<option value="<?php echo $poll['ID']; ?>"><?php echo $reviewer.' '.strtolower(get_text('About')).' '.$reviewee; ?></option>
-									<?php
-								}
-							?>
-						</select>
-					<br />
-					<label for="answer"><?php echo get_text('Answer'); ?>: </label><input type="text" name="answer" /><br />
-					
-					<input type="submit" value="Beantwoord" name="answer_question"/>
-				</form>
-			</td>
-			<td>
-				<h2><?php echo get_text('Preferences'); ?></h2>
-				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
-					<label for="me">Ik ben: </label>
-						<select name="me">
-							<option value=""><?php echo get_text('Choose_a').' '.strtolower(get_text('user')); ?></option>
-							<?php
-								$users = get_users();
-								$departments = get_departments();
-								foreach ($departments as $department) {
-									?>
-									<optgroup label="<?php echo $department['Name']; ?>">
+										<option value="<?php echo $question['ID']; ?>"><?php echo $question['ID'].'. '.$question['Question']; ?></option>
 										<?php
-										foreach ($users as $user) {
-											if($user['Department'] == $department['ID']){
-												?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
-											<?php
-											}
-										}
-									?>
-									</optgroup>
-									<?php
+									}
 								}
 								?>
-						</select>
-						<br />
-					<label for="reviewer"><?php echo get_text('This_person_may_answer_my_poll'); ?>: </label>
-						<select name="reviewer">
-							<option value=""><?php echo get_text('Choose_a').' '.strtolower(get_text('user')); ?></option>
+							</optgroup>
 							<?php
-								$users = get_users();
-								$departments = get_departments();
-								foreach ($departments as $department) {
-									?>
-									<optgroup label="<?php echo $department['Name']; ?>">
-										<?php
-										foreach ($users as $user) {
-											if($user['Department'] == $department['ID']){
-												?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
-											<?php
-											}
-										}
-									?>
-									</optgroup>
+						}
+					?>
+				</select>
+			<br />
+			<label for="poll"><?php echo get_text('Poll'); ?>: </label>
+				<select name="poll">
+					<?php
+						foreach ($polls as $poll) {
+							$reviewer = get_user_by_id($poll['Reviewer']);
+							$reviewee = get_user_by_id($poll['Reviewee']);
+							?>
+							<option value="<?php echo $poll['ID']; ?>"><?php echo $reviewer.' '.strtolower(get_text('About')).' '.$reviewee; ?></option>
+							<?php
+						}
+					?>
+				</select>
+			<br />
+			<label for="answer"><?php echo get_text('Answer'); ?>: </label><input type="text" name="answer" /><br />
+				<input type="submit" value="Beantwoord" name="answer_question"/>
+		</form>
+	</div>
+	<div>
+		<h2><?php echo get_text('Preferences'); ?></h2>
+		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
+			<label for="me">Ik ben: </label>
+				<select name="me">
+					<option value=""><?php echo get_text('Choose_a').' '.strtolower(get_text('user')); ?></option>
+					<?php
+						foreach ($departments as $department) {
+							?>
+							<optgroup label="<?php echo $department['Name']; ?>">
+								<?php
+								foreach ($users as $user) {
+									if($user['Department'] == $department['ID']){
+										?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
 									<?php
+									}
 								}
 							?>
-						</select>
-						<br />
-					<label for="reviewee"><?php echo get_text('I_want_to_answer_poll_about_this_person'); ?>: </label>
-						<select name="reviewee">
-							<option value=""><?php echo get_text('Choose_a').' '.strtolower(get_text('user')); ?></option>
+							</optgroup>
 							<?php
-								$users = get_users();
-								$departments = get_departments();
-								foreach ($departments as $department) {
-									?>
-									<optgroup label="<?php echo $department['Name']; ?>">
-										<?php
-										foreach ($users as $user) {
-											if($user['Department'] == $department['ID']){
-												?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
-											<?php
-											}
-										}
-									?>
-									</optgroup>
+						}
+						?>
+				</select>
+				<br />
+			<label for="reviewer"><?php echo get_text('This_person_may_answer_my_poll'); ?>: </label>
+				<select name="reviewer">
+					<option value=""><?php echo get_text('Choose_a').' '.strtolower(get_text('user')); ?></option>
+					<?php
+						foreach ($departments as $department) {
+							?>
+							<optgroup label="<?php echo $department['Name']; ?>">
+								<?php
+								foreach ($users as $user) {
+									if($user['Department'] == $department['ID']){
+										?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
 									<?php
+									}
 								}
 							?>
-						</select>
-						<br />
-					<input type="submit" value="Voeg toe" name="add_preferred" />
-				</form>
-			</td>
-		</tr>
-	</table>
+							</optgroup>
+							<?php
+						}
+					?>
+				</select>
+				<br />
+			<label for="reviewee"><?php echo get_text('I_want_to_answer_poll_about_this_person'); ?>: </label>
+				<select name="reviewee">
+					<option value=""><?php echo get_text('Choose_a').' '.strtolower(get_text('user')); ?></option>
+					<?php
+						foreach ($departments as $department) {
+							?>
+							<optgroup label="<?php echo $department['Name']; ?>">
+								<?php
+								foreach ($users as $user) {
+									if($user['Department'] == $department['ID']){
+										?><option value="<?php echo $user['Name']; ?>"><?php echo $user['Name']; ?></option>
+									<?php
+									}
+								}
+							?>
+							</optgroup>
+							<?php
+						}
+					?>
+				</select>
+				<br />
+			<input type="submit" value="Voeg toe" name="add_preferred" />
+		</form>
+	</div>
 
 
 	<?php
@@ -170,7 +156,6 @@
 	?>
 		<h2><?php echo get_text('Polls'); ?>:</h2>				
 		<?php
-		$polls = get_polls();
 		if($polls){
 			?>
 			<table style="text-align:center;">
@@ -242,9 +227,5 @@
 			<?php
 		}
 	}
-	/*$users = get_managers();
-	foreach($users as $user) {
-		echo $user['Department'].": ".$user['Name']."<br />";
-	}*/
 ?>
 <?php require('includes/footer.php') ?>

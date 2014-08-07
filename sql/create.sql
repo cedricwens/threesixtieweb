@@ -5,7 +5,8 @@ USE threesixtyweb;
 
 CREATE TABLE user(
 	ID int NOT NULL AUTO_INCREMENT,
-	Name varchar(255) NOT NULL,
+	Firstname varchar(255) NOT NULL,
+	Lastname varchar(255) NOT NULL,
 	Username varchar(255),
 	Password varchar(255),
 	Email varchar(255),
