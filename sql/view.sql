@@ -10,6 +10,7 @@ SELECT p.Reviewer AS Reviewer, count(*) AS Aantal_Reviews
 FROM poll p
 WHERE
         p.Status = 2
+		/*this state dentes completed invariant poll */
     AND
         p.Reviewer != p.Reviewee
 GROUP BY p.Reviewer;
@@ -19,6 +20,7 @@ SELECT p.Reviewee AS Reviewee, count(*) AS Aantal_Reviews
 FROM poll p
 WHERE
     p.Reviewee != p.Reviewer
+	/*the own review is not added here -- this is correct*/
 GROUP BY p.Reviewee;
 
 CREATE OR REPLACE VIEW teammember_view AS
@@ -35,6 +37,7 @@ WHERE
             FROM user
             WHERE ID = p.Reviewee
         )
+		/* this includes managers except your own */
     )
     AND
     p.Reviewer = ANY (
@@ -45,6 +48,7 @@ WHERE
             FROM user
             WHERE ID = p.Reviewee
         )
+		/* get reviewers being member of reviewee's department */
     )
 GROUP BY Reviewee;
 
@@ -57,6 +61,7 @@ WHERE
     p.Reviewer NOT IN (
         SELECT Manager
         FROM department
+		/*here you exclude all managers please explain this being complementary to above statement */
     )
     AND
     p.Reviewer NOT IN (
@@ -67,6 +72,7 @@ WHERE
             FROM user
             WHERE ID = p.Reviewee
         )
+		/*exclude members of your department regardless them being manager */
     )
 GROUP BY Reviewee;
 
@@ -110,6 +116,7 @@ SELECT User AS Reviewee, count(*) AS Aantal_Preferred_Reviewers
 FROM preferred_poll pf
 WHERE pf.Reviewer = ANY(SELECT Reviewer FROM poll WHERE Reviewee = pf.User)
 GROUP BY pf.Reviewee;
+/* explain why poll table is needed for this query */
 
 CREATE OR REPLACE VIEW preferred_reviewees_view AS
 SELECT Reviewer, count(*) AS Aantal_Preferred_Reviewees
@@ -119,3 +126,4 @@ WHERE
     AND
     	pf.User = pf.Reviewer
 GROUP BY pf.Reviewer;
+/* explain why poll table is needed for this query */
