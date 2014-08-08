@@ -130,6 +130,15 @@
 			return mysql_result($query,0);
 		}
 	}
+	function get_username_by_id($id){
+		$query = mysql_query("SELECT Username FROM user WHERE ID = $id");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
 	function get_id_by_username($username){
 		$query = mysql_query("SELECT ID FROM user WHERE Username = $username");
 		if(!$query || mysql_num_rows($query) <=0){
@@ -234,10 +243,10 @@
 				if(!$query){
 						echo mysql_error();
 				}else{
-						echo get_Text('Preference').' '.strtolower('Added');
+						//echo get_Text('Preference').' '.strtolower('Added');
 				}
 			}else if(mysql_num_rows($query) > 0){
-				echo "Deze voorkeur werd al ingegeven";
+				//echo "Deze voorkeur werd al ingegeven";
 			}
 		}
 	}
@@ -391,14 +400,14 @@
 
 	function get_user_info($id){
 		$user 					= get_user_by_id($id);
-		$reviews_given 			= get_reviews_given($id);
-		$reviews_received 		= get_reviews_received($id);
-		$teammember_reviews		= get_poll_team_members($id);
-		$notteammember_reviews 	= get_poll_not_team_members($id);
-		$teammanager_reviews 	= get_poll_team_manager($id);
-		$notteammanager_reviews = get_poll_not_team_manager($id);
-		$preferred_reviewers 	= get_preferred_reviewers($id);
-		$preferred_reviewees 	= get_preferred_reviewees($id);
+		$reviews_given 			= get_number_of_reviews_given($id);
+		$reviews_received 		= get_number_of_reviews_received($id);
+		$teammember_reviews		= get_number_of_poll_team_members($id);
+		$notteammember_reviews 	= get_number_of_poll_not_team_members($id);
+		$teammanager_reviews 	= get_number_of_poll_team_manager($id);
+		$notteammanager_reviews = get_number_of_poll_not_team_manager($id);
+		$preferred_reviewers 	= get_number_of_preferred_reviewers($id);
+		$preferred_reviewees 	= get_number_of_preferred_reviewees($id);
 		$questions 				= get_questions();
 		echo "
 			Heeft <b>$reviews_given</b> review geschreven.
@@ -444,7 +453,7 @@
 			</table>
 			<?php	
 	}
-	function get_reviews_given($id){
+	function get_number_of_reviews_given($id){
 		$query = mysql_query("SELECT Aantal_Reviews FROM reviews_given_view WHERE Reviewer = $id");
 		if(!$query || mysql_num_rows($query) <0) {
 			echo mysql_error();
@@ -456,7 +465,7 @@
 			return mysql_result($query, 0);
 		}
 	}
-	function get_reviews_received($id){
+	function get_number_of_reviews_received($id){
 		$query = mysql_query("SELECT Aantal_Reviews FROM reviews_received_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -468,7 +477,7 @@
 			return mysql_result($query, 0);
 		}
 	}
-	function get_poll_team_members($id){
+	function get_number_of_poll_team_members($id){
 		$query = mysql_query("SELECT Aantal_TeamLeden FROM teammember_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -480,7 +489,7 @@
 			return mysql_result($query, 0);
 		}
 	}
-	function get_poll_not_team_members($id){
+	function get_number_of_poll_not_team_members($id){
 		$query = mysql_query("SELECT Aantal_NietTeamLeden FROM notteammember_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -492,7 +501,7 @@
 			return mysql_result($query, 0);
 		}
 	}
-	function get_poll_team_manager($id){
+	function get_number_of_poll_team_manager($id){
 		$query = mysql_query("SELECT Aantal_TeamManagers FROM teammanager_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -504,7 +513,7 @@
 			return mysql_result($query, 0);
 		}
 	}
-	function get_poll_not_team_manager($id){
+	function get_number_of_poll_not_team_manager($id){
 		$query = mysql_query("SELECT Aantal_NietTeamManagers FROM notteammanager_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -516,7 +525,7 @@
 			return mysql_result($query, 0);
 		}
 	}
-	function get_preferred_reviewers($id){
+	function get_number_of_preferred_reviewers($id){
 		$query = mysql_query("SELECT Aantal_Preferred_Reviewers FROM preferred_reviewers_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -528,7 +537,7 @@
 			return mysql_result($query, 0);
 		}
 	}
-	function get_preferred_reviewees($id){
+	function get_number_of_preferred_reviewees($id){
 		$query = mysql_query("SELECT Aantal_Preferred_Reviewees FROM preferred_reviewees_view WHERE Reviewer = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -553,6 +562,15 @@
 		}
 	}
 
+	function is_preferred_reviewee($reviewer, $reviewee){
+		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee"), 0) == 1) ? true : false;
+	}
+	function is_preferred_reviewer($reviewee, $reviewer){
+		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee"), 0) == 1) ? true : false;
+	}
+	function sanitize($data) {
+		return htmlentities(strip_tags(mysql_real_escape_string($data)));
+	}
 
 
 

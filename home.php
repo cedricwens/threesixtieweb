@@ -61,6 +61,60 @@ if(isset($_GET['Start'])){
 					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2">Volgende</a>
 					
 				<?php
+			}else if(isset($_POST['add_preferred_reviewers'])){
+				if(isset($_POST['preferred_reviewer'])){
+					$preferred_reviewers = $_POST['preferred_reviewer'];
+					$reviewee = get_username_by_id($_SESSION['user_id']);
+
+					foreach ($preferred_reviewers as $preferred_reviewer){
+						add_preferred($preferred_reviewer, $reviewee, $reviewee);
+					}
+					$success = true;
+				}else{
+					echo "Gelieve minstens x gebruikers te selecteren.";
+					?>
+					<br />
+					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2">Vorige</a>
+					<?php
+					$success = false;
+				}
+				/*foreach ($preferred_reviewers as $preferred_reviewer) {
+					echo $preferred_reviewer;
+				}*/
+				if($success){
+				?>
+					<p>Klik op Volgende om naar de volgende stap te gaan.</p>
+					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2">Vorige</a>
+					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3">Volgende</a>
+					<?php
+				}
+			}else if(isset($_POST['add_preferred_reviewees'])){
+				if(isset($_POST['preferred_reviewee'])){
+					$preferred_reviewees = $_POST['preferred_reviewee'];
+					$reviewer = get_username_by_id($_SESSION['user_id']);
+
+					foreach ($preferred_reviewees as $preferred_reviewee){
+						add_preferred($reviewer, $preferred_reviewee, $reviewer);
+					}
+					$success = true;
+				}else{
+					echo "Gelieve minstens x gebruikers te selecteren.";
+					?>
+					<br />
+					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3">Vorige</a>
+					<?php
+					$success = false;
+				}
+				/*foreach ($preferred_reviewers as $preferred_reviewer) {
+					echo $preferred_reviewer;
+				}*/
+				if($success){
+				?>
+					<p>Klik op Volgende om naar de volgende stap te gaan.</p>
+					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3">Vorige</a>
+					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3">Volgende</a>
+					<?php
+				}
 			}else if($_GET['Step'] == 1){
 				?>
 				<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=1">
@@ -138,45 +192,47 @@ if(isset($_GET['Start'])){
 				</form>
 				<?php
 			}else if($_GET['Step'] == 2){
-				/*foreach ($users as $user) {
-					?>
-					<input name="<?php echo $user['Username']; ?>" type="checkbox" /><?php echo $user['Firstname'].' '.$user['Lastname']; ?><br />
-					<?php
-				}*/
 				?>
-				<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" name="moveList">
-
-					<table width="450">
-						<tr>
-							<td><b>Medewerkers</b></td>
-							<td></td>
-							<td><b>Mijn keuzes:</b></td>
-						</tr>
-						<tr>
-						    <td class="names_wrapper align_center">
-						    	<select name="namesLeft" size="<?php echo $number_of_users; ?>" multiple="multiple" id="namesLeft" class="names">
-							    	<?php
-							    	foreach ($users as $user) {
-										?>
-										<option name="<?php echo $user['Username']; ?>" ><?php echo $user['Lastname'].' '.$user['Firstname']; ?></option>
-										<?php
-									}
-							   	 	?>
-						    	</select>
-						    </td>
-						    
-						    <td class="align_center" >
-						    	<input name="" onclick="moveItem('namesRight', 'namesLeft');" type="button" value="<<" />
-								<input name="" onclick="moveItem('namesLeft','namesRight');" type="button" value=">>" />
-	    					</td>
-						    
-						    <td class="names_wrapper align_center">
-							    <select name="namesRight" size="<?php echo $number_of_users; ?>" multiple="multiple" id="namesRight" class="names">
-							    </select>
-							</td>
-						 </tr>
-					</table>
-
+				<h3>Welke medewerkers mogen de vragenlijst over jouw invullen?</h3>
+				<form action="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2" method="post">
+					<?php
+					foreach ($users as $user){
+						if($user['ID'] != $_SESSION['user_id']){
+							if(is_preferred_reviewer($_SESSION['user_id'], $user['ID'])){
+								?>
+								<input type="checkbox" name="preferred_reviewer[]" value="<?php echo $user['Username']; ?>" checked /><?php echo $user['Firstname'].' '.$user['Lastname']; ?><br />
+								<?php
+							}else{
+								?>
+								<input type="checkbox" name="preferred_reviewer[]" value="<?php echo $user['Username']; ?>" /><?php echo $user['Firstname'].' '.$user['Lastname']; ?><br />
+								<?php
+							}
+						}
+					}
+					?>
+					<input type="submit" value="Versturen" name="add_preferred_reviewers">
+				</form>
+				<?php
+			}else if($_GET['Step'] == 3){
+				?>
+				<h3>Van welke medewerkers wil jij de vragenlijst invullen?</h3>
+				<form action="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3" method="post">
+					<?php
+					foreach ($users as $user){
+						if($user['ID'] != $_SESSION['user_id']){
+							if(is_preferred_reviewee($_SESSION['user_id'], $user['ID'])){
+								?>
+								<input type="checkbox" name="preferred_reviewee[]" value="<?php echo $user['Username']; ?>" checked /><?php echo $user['Firstname'].' '.$user['Lastname']; ?><br />
+								<?php
+							}else{
+								?>
+								<input type="checkbox" name="preferred_reviewee[]" value="<?php echo $user['Username']; ?>" /><?php echo $user['Firstname'].' '.$user['Lastname']; ?><br />
+								<?php
+							}
+						}
+					}
+					?>
+					<input type="submit" value="Versturen" name="add_preferred_reviewees">
 				</form>
 				<?php
 			}

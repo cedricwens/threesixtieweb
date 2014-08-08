@@ -10,7 +10,6 @@ CREATE TABLE user(
 	Username varchar(255),
 	Password varchar(255) NOT NULL,
 	Email varchar(255),
-	/*Department int NOT NULL,*/
 	Job_Title varchar(255),
 	PRIMARY KEY (ID)
 );
@@ -42,10 +41,10 @@ CREATE TABLE poll(
 	Reviewer int NOT NULL,
 	Reviewee int NOT NULL,
 	Comment varchar(255),
-	Status int,
+	Status int NOT NULL,
 	Time_Created datetime,
 	Last_Update datetime,
-	Batch int /* NOT NULL */,
+	Batch int,
 	PRIMARY KEY (ID)
 );
 
@@ -60,6 +59,7 @@ CREATE TABLE question(
 	Category int NOT NULL,
 	Question varchar(255) NOT NULL,
 	Comment varchar(255),
+	Batch int NOT NULL,
 	PRIMARY KEY (ID)
 	/* future improvement - non mandatory - add a column referring to BATCH*/
 );
@@ -152,7 +152,8 @@ ALTER TABLE poll
 
 ALTER TABLE question
 	ADD CONSTRAINT fk_category FOREIGN KEY (Category)
-		REFERENCES category(ID);
+		REFERENCES category(ID),
+	ADD CONSTRAINT un_questionbatch UNIQUE (Question, Batch);
 
 ALTER TABLE answer
 	ADD CONSTRAINT fk_poll	FOREIGN KEY (Poll)
@@ -177,7 +178,6 @@ ALTER TABLE preferred_poll
 
 ALTER TABLE poll_status
 	ADD CONSTRAINT un_status UNIQUE(Name);
-	/*ADD CONSTRAINT ch_status CHECK (ID < 4);*/
 
 ALTER TABLE parameter
 	ADD CONSTRAINT un_parameter UNIQUE(Name);
@@ -187,15 +187,9 @@ ALTER TABLE batch
 		REFERENCES batch_status(ID);
 
 ALTER TABLE batch_status
-	/*ADD CONSTRAINT ch_batch_status CHECK (ID < 6),*/
-	/*since there is referencial integrity with foreign keys, the above check constraint is deprecated */
 	ADD CONSTRAINT un_batch_status UNIQUE (Name);
 
 ALTER TABLE answer_enum
-	/*ADD CONSTRAINT ch_answer_enum CHECK (ID < 7),*/
-	/*since there is referencial integrity with foreign keys, the above check constraint is deprecated */
-	/* auto increment may conflict with check constraint */
-	/* we make sure there will be no more than a given number of rows in the enumeration */
 	ADD CONSTRAINT un_answer_enum UNIQUE(Name);
 
 ALTER TABLE text_nl
