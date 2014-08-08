@@ -4,6 +4,7 @@ DELETE FROM question;
 DELETE FROM category;
 DELETE FROM poll;
 DELETE FROM user;
+DELETE FROM user_type;
 DELETE FROM department;
 DELETE FROM poll_status;
 DELETE FROM batch_status;
@@ -63,21 +64,26 @@ INSERT INTO department (Name) VALUES
 	('Management'),
 	('Finance/HR');
 
+INSERT INTO user_type(Name) VALUES
+	('Admin'),
+	('User');
+
 /* Users toevoegen aan databank*/
-INSERT INTO user (Firstname, Lastname) VALUES
-	('Johan',		'Heylen'),
-	('Loesje',		'Hermans'),
-	('Leander',		'Dierckx'),
-	('Kristof',		'Tuyteleers'),
-	('Kevin',		'Jacquemyn'),
-	('Kathleen',	'Buffels'),
-	('Karen',		'Van Rillaer'),
-	('Helga',		'Parijs'),
-	('Philip',		'Du Bois'),	
-	('Maarten',		'Bosteels'),
-	('Lut',			'Goedhuys'),
-	('Peter',		'Vergote'),
-	('David',		'Goelen');
+INSERT INTO user (Firstname, Lastname, Type, Password) VALUES
+	('Johan',		'Heylen',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Loesje',		'Hermans',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Leander',		'Dierckx',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kristof',		'Tuyteleers',	(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kevin',		'Jacquemyn',	(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kathleen',	'Buffels',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Karen',		'Van Rillaer',	(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Helga',		'Parijs',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Philip',		'Du Bois',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),	
+	('Maarten',		'Bosteels',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Lut',			'Goedhuys',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Peter',		'Vergote',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('David',		'Goelen',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Admin',		'Admin',		(SELECT ID FROM user_type WHERE Name = 'Admin'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO');
 
 /* Username genereren */
 UPDATE user SET Username = REPLACE(CONCAT_WS('.',Lastname, Firstname), ' ','');

@@ -1,4 +1,9 @@
-<?php require('includes/header.php'); ?>
+<?php
+require('includes/header.php');
+if(!has_access($_SESSION['user_id'],get_user_type_id('Admin'))){
+	header('Location:home.php');
+}
+?>
 	<div>
 		<h2><?php echo get_text('Add_poll'); ?></h2>
 		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">

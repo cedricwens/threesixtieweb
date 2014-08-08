@@ -313,11 +313,22 @@
 			return mysql_result($query,0);
 		}
 	}
+	function get_user_type_id($type){
+		$query = mysql_query("SELECT ID FROM user_type WHERE Name = '$type'");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+
 
 	function login($username, $password){
 		$query = mysql_query("SELECT ID, Password FROM user WHERE Username = '$username'");
 		if(!$query || mysql_num_rows($query) <= 0){
 			echo mysql_error();
+			echo "Er is een fout opgetreden. Heb je wel een account?";
 		}else{
 			$user = mysql_fetch_row($query);
 			if(password_verify($password, $user['1'])){
@@ -326,6 +337,7 @@
 				echo "Foutief wachtwoord";
 			}
 			$_SESSION['user_id'] = $user['0'];
+			echo 'aangemeld';
 			header('Location: home.php');
 		}
 	}
@@ -342,6 +354,19 @@
 		if(logged_in() === false){
 			header('Location: login.php');
 			exit();
+		}
+	}
+	function has_access($user, $type) {
+		$query = mysql_query("SELECT Type FROM user WHERE ID = $user");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			if(mysql_result($query,0) == $type){
+				return true;
+			}else{
+				return false;
+			}
 		}
 	}
 

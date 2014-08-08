@@ -1,6 +1,5 @@
 <?php
 require('core/init.php');
-protect_page();
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,9 +15,16 @@ protect_page();
 		<header><h1><?php echo get_Text('Title'); ?></h1></header>
 		<nav id="menu">
 			<ul>
-				<li><a href="index.php">Home</a></li>
+				<li><a href="home.php">Home</a></li>
 				<li><a href="user.php">User</a></li>
 				<?php
+				if(isset($_SESSION['user_id'])){
+					if(has_access($_SESSION['user_id'],get_user_type_id('Admin'))){
+						?>
+						<li><a href="admin.php">Admin</a></li>
+						<?php
+					}
+				}
 				if(logged_in()){
 					?>
 					<li><a href="logout.php">Logout</a></li>

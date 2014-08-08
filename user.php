@@ -1,4 +1,7 @@
-<?php require('includes/header.php'); ?>
+<?php
+require('includes/header.php'); 
+protect_page();
+?>
 
 <h2><?php echo get_text('Information').' '.strtolower(get_text('About')).' '.strtolower(get_text('User')); ?></h2>
 <form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">

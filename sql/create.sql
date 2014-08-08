@@ -12,6 +12,7 @@ CREATE TABLE user(
 	Email varchar(255),
 	/*Department int NOT NULL,*/
 	Job_Title varchar(255),
+	Type int NOT NULL,
 	/*add columns Full Name /Family Name here */
 	/*add column job title here */
 	/*consider adding a manager of*/
@@ -31,6 +32,12 @@ CREATE TABLE user_department(
 	ID int NOT NULL AUTO_INCREMENT,
 	User int NOT NULL,
 	Department int NOT NULL,
+	PRIMARY KEY (ID)
+);
+
+CREATE TABLE user_type(
+	ID int NOT NULL AUTO_INCREMENT,
+	Name varchar(255),
 	PRIMARY KEY (ID)
 );
 
@@ -127,11 +134,16 @@ CREATE TABLE text_nl(
 );
 
 ALTER TABLE user 
-	ADD uCONSTRAINT un_username UNIQUE (Username);
+	ADD CONSTRAINT un_username UNIQUE (Username),
+	ADD CONSTRAINT fk_usertype FOREIGN KEY (Type)
+		REFERENCES user_type(ID);
 
 ALTER TABLE department
-	ADD CONSTRAINT fk_manager 	FOREIGN KEY (Manager)
+	ADD CONSTRAINT fk_manager FOREIGN KEY (Manager)
 		REFERENCES user(ID);
+
+ALTER TABLE user_type
+	ADD CONSTRAINT un_type UNIQUE (Name);
 
 ALTER TABLE poll
 	ADD CONSTRAINT fk_reviewerpoll FOREIGN KEY (Reviewer)
@@ -194,8 +206,6 @@ ALTER TABLE answer_enum
 
 ALTER TABLE text_nl
 	ADD CONSTRAINT un_text UNIQUE (Name);
-
-
 
 ALTER TABLE user_department
 	ADD CONSTRAINT fk_user_user_department FOREIGN KEY (User)
