@@ -3,7 +3,8 @@ SELECT p.Reviewee AS Reviewee, a.Question AS Question, AVG(a.Answer) AS Average_
 FROM answer a
 JOIN poll p
 ON a.Poll = p.ID
-GROUP BY QUESTION, REVIEWEE;
+WHERE Reviewee != Reviewer
+GROUP BY Question, Reviewee;
 
 CREATE OR REPLACE VIEW reviews_given_view AS
 SELECT p.Reviewer AS Reviewer, count(*) AS Aantal_Reviews

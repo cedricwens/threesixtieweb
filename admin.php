@@ -5,7 +5,9 @@ if(!isset($_SESSION['admin_id'])){
 }
 ?>
 	<div>
-		Lijst van batches:
+
+		<h3>Lijst van batches:</h3>
+		Er kan maar 1 batch in 'Init' state zijn, en maar 1 batch in 'Running' state. Er staat geen limiet op het aantal batches in 'Finished' state.
 		<?php
 		$batches = get_batches();
 		?>
@@ -143,13 +145,13 @@ if(!isset($_SESSION['admin_id'])){
 							<optgroup label="<?php echo $department['Name']; ?>">
 								<?php
 								foreach ($users as $user) {
-									if($user['Department'] == $department['ID']){
-										?>
-										<option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
-										<?php
+									$user_department = get_user_department($user['ID']);
+									if($user_department == $department['ID']){
+										?><option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
+									<?php
 									}
 								}
-							?>
+								?>
 							</optgroup>
 							<?php
 						}
@@ -165,13 +167,13 @@ if(!isset($_SESSION['admin_id'])){
 							<optgroup label="<?php echo $department['Name']; ?>">
 								<?php
 								foreach ($users as $user) {
-									if($user['Department'] == $department['ID']){
-										?>
-										<option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
-										<?php
+									$user_department = get_user_department($user['ID']);
+									if($user_department == $department['ID']){
+										?><option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
+									<?php
 									}
 								}
-							?>
+								?>
 							</optgroup>
 							<?php
 						}
@@ -187,13 +189,13 @@ if(!isset($_SESSION['admin_id'])){
 							<optgroup label="<?php echo $department['Name']; ?>">
 								<?php
 								foreach ($users as $user) {
-									if($user['Department'] == $department['ID']){
-										?>
-										<option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
-										<?php
+									$user_department = get_user_department($user['ID']);
+									if($user_department == $department['ID']){
+										?><option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
+									<?php
 									}
 								}
-							?>
+								?>
 							</optgroup>
 							<?php
 						}
@@ -284,8 +286,8 @@ if(!isset($_SESSION['admin_id'])){
 			$gemiddelde_score = $totale_score/$aantal_vragen;
 
 			?>
-			<h2>Gemiddelde score: <?php echo $gemiddelde_score; ?></h2>
-			<h2>Gemiddelde score: <?php echo mysql_result(mysql_query("SELECT * FROM gemiddelde_score;"), 0); ?></h2>
+			<h2>Gemiddelde score: <?php echo $gemiddelde_score; ?> (deze vragenlijst)</h2>
+			<h2>Gemiddelde score: <?php echo mysql_result(mysql_query("SELECT * FROM average_score_view;"), 0); ?> (alle vragenlijsten samen)</h2>
 			</table>
 			<?php
 		}

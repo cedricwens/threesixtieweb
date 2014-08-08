@@ -501,7 +501,6 @@
 			<b>$preferred_reviewers</b> van de gebruikers die $user aangaf, mogen ook effectief de vragenlijst over $user invullen.
 			<br />
 			$user mag van <b>$preferred_reviewees</b> gebruiker die zijn had gekozen, ook effectief de vragenlijst invullen.";
-		echo "<h3>Gemiddelde score op de verschillende vragen:</h3>";
 			?>
 			<table>
 				<tr>

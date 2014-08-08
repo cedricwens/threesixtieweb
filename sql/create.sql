@@ -59,7 +59,7 @@ CREATE TABLE question(
 	Category int NOT NULL,
 	Question varchar(255) NOT NULL,
 	Comment varchar(255),
-	Batch int,
+	Batch int NOT NULL,
 	PRIMARY KEY (ID)
 	/* future improvement - non mandatory - add a column referring to BATCH*/
 );
