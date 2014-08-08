@@ -45,11 +45,17 @@ if(isset($_GET['Start'])){
 				}
 				if(isset($_POST['answer_own_questions'])){
 					change_poll_status($poll, 'Ingestuurd');
+					?>
+					<p>Je vragenlijst is succesvol opgeslagen.</p>
+					<?php
 				}else if(isset($_POST['save_own_questions'])){
 					change_poll_status($poll, 'Opgeslagen');
+					?>
+					<p>Je vragenlijst is succesvol doorgestuurd.</p>
+					<?php
 				}
 				?>
-					<p>Je vragenlijst is succesvol doorgestuurd.</p>
+					
 					<p>Klik op Volgende om naar de volgende stap te gaan.</p>
 					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=1">Vorige</a>
 					<a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2">Volgende</a>

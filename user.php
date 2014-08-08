@@ -11,7 +11,8 @@
 					<optgroup label="<?php echo $department['Name']; ?>">
 						<?php
 						foreach ($users as $user) {
-							if($user['Department'] == $department['ID']){
+							$user_department = get_user_department($user['ID']);
+							if($user_department == $department['ID']){
 								?><option value="<?php echo $user['Username']; ?>"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></option>
 							<?php
 							}

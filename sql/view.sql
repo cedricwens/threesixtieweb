@@ -19,7 +19,9 @@ CREATE OR REPLACE VIEW reviews_received_view AS
 SELECT p.Reviewee AS Reviewee, count(*) AS Aantal_Reviews
 FROM poll p
 WHERE
-    p.Reviewee != p.Reviewer
+        p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd')
+    AND
+        p.Reviewee != p.Reviewer
 	/*the own review is not added here -- this is correct*/
 GROUP BY p.Reviewee;
 
@@ -32,25 +34,25 @@ WHERE
     p.Reviewer NOT IN (
         SELECT Manager
         FROM department
-        WHERE ID = (
+        /*WHERE ID = (
             SELECT Department
-            FROM user
-            WHERE ID = p.Reviewee
-        )
-		/* this includes managers except your own */
+            FROM user_department
+            WHERE User = p.Reviewee
+        )*/
+        /* this includes managers except your own */
     )
     AND
     p.Reviewer = ANY (
-        SELECT ID
-        FROM user
-        WHERE Department = (
-            SELECT Department
-            FROM user
-            WHERE ID = p.Reviewee
-        )
-		/* get reviewers being member of reviewee's department */
+            SELECT User
+            FROM user_department
+            WHERE Department = (
+                SELECT Department
+                FROM user_department
+                WHERE User = p.Reviewee
+            )
+            /* get reviewers being member of reviewee's department */
     )
-GROUP BY Reviewee;
+GROUP BY p.Reviewee;
 
 CREATE OR REPLACE VIEW notteammember_view AS
 SELECT p.Reviewee, count(*) AS Aantal_NietTeamleden
@@ -65,12 +67,12 @@ WHERE
     )
     AND
     p.Reviewer NOT IN (
-        SELECT ID
-        FROM user
+        SELECT User
+        FROM user_department
         WHERE Department = (
             SELECT Department
-            FROM user
-            WHERE ID = p.Reviewee
+            FROM user_department
+            WHERE User = p.Reviewee
         )
 		/*exclude members of your department regardless them being manager */
     )
@@ -87,7 +89,7 @@ WHERE
         FROM department
         WHERE ID = (
             SELECT Department
-            FROM user
+            FROM user_department
             WHERE ID = p.Reviewee
         )
     )
@@ -105,8 +107,8 @@ WHERE
         WHERE
         	ID != (
             	SELECT Department
-           		FROM user
-            	WHERE ID = p.Reviewee
+           		FROM user_department
+            	WHERE User = p.Reviewee
         	)
     )
 GROUP BY Reviewee;

@@ -1,5 +1,6 @@
 <?php
 require('core/init.php');
+protect_page();
 ?>
 <!DOCTYPE html>
 <html>

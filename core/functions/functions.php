@@ -58,7 +58,6 @@
 					stripslashes('Firstname') => $row['Firstname'],
 					stripslashes('Lastname') => $row['Lastname'],
 					stripslashes('Username') => $row['Username'],
-					stripslashes('Department') => $row['Department'],
 					stripslashes('Job_Title') => $row['Job_Title']
 				);
 			}
@@ -305,6 +304,15 @@
 			return mysql_result($query,0);
 		}
 	}
+	function get_user_department($id){
+		$query = mysql_query("SELECT Department FROM user_department WHERE User = $id");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
 
 	function login($username, $password){
 		$query = mysql_query("SELECT ID, Password FROM user WHERE Username = '$username'");
@@ -352,7 +360,7 @@
 		echo "
 			Heeft <b>$reviews_given</b> review geschreven.
 			<br />
-			Krijgt <b>$reviews_received</b> reviews.
+			Heeft <b>$reviews_received</b> reviews gekregen.
 			<br />
 			Krijgt review(s) van <b>$teammember_reviews</b> teamleden.
 			<br />

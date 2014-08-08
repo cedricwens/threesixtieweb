@@ -10,7 +10,7 @@ CREATE TABLE user(
 	Username varchar(255),
 	Password varchar(255),
 	Email varchar(255),
-	Department int NOT NULL,
+	/*Department int NOT NULL,*/
 	Job_Title varchar(255),
 	/*add columns Full Name /Family Name here */
 	/*add column job title here */
@@ -27,12 +27,12 @@ CREATE TABLE department(
 );
 
 /* Moet nog worden toegevoegd aan de databse. Hierdoor moeten views ook aangepast worden. */
-/*CREATE TABLE user_department{
+CREATE TABLE user_department(
 	ID int NOT NULL AUTO_INCREMENT,
 	User int NOT NULL,
 	Department int NOT NULL,
 	PRIMARY KEY (ID)
-}*/
+);
 
 CREATE TABLE poll(
 	ID int NOT NULL AUTO_INCREMENT,
@@ -127,9 +127,7 @@ CREATE TABLE text_nl(
 );
 
 ALTER TABLE user 
-	ADD CONSTRAINT fk_department FOREIGN KEY (Department)
-		REFERENCES department(ID),
-	ADD CONSTRAINT un_username UNIQUE (Username);
+	ADD uCONSTRAINT un_username UNIQUE (Username);
 
 ALTER TABLE department
 	ADD CONSTRAINT fk_manager 	FOREIGN KEY (Manager)
@@ -195,12 +193,12 @@ ALTER TABLE answer_enum
 	ADD CONSTRAINT un_answer_enum UNIQUE(Name);
 
 ALTER TABLE text_nl
-	ADD CONSTRAINT un_text UNIQUE (Name)
+	ADD CONSTRAINT un_text UNIQUE (Name);
 
 
 
-/*ALTER TABLE user_department
+ALTER TABLE user_department
 	ADD CONSTRAINT fk_user_user_department FOREIGN KEY (User)
 		REFERENCES user(ID),
 	ADD CONSTRAINT fk_department_user_department FOREIGN KEY (Department)
-		REFERENCES department(ID);*/
+		REFERENCES department(ID);

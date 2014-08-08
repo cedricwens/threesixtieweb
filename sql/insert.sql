@@ -64,23 +64,39 @@ INSERT INTO department (Name) VALUES
 	('Finance/HR');
 
 /* Users toevoegen aan databank*/
-INSERT INTO user (Firstname, Lastname, Department) VALUES
-	('Johan',		'Heylen',		(SELECT ID FROM department WHERE Name = 'Development')),
-	('Loesje',		'Hermans',		(SELECT ID FROM department WHERE Name = 'Development')),
-	('Leander',		'Dierckx',		(SELECT ID FROM department WHERE Name = 'Operations')),
-	('Kristof',		'Tuyteleers',	(SELECT ID FROM department WHERE Name = 'Operations')),
-	('Kevin',		'Jacquemyn',	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-	('Kathleen',	'Buffels',		(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-	('Karen',		'Van Rillaer',	(SELECT ID FROM department WHERE Name = 'Finance/HR')),
-	('Helga',		'Parijs',		(SELECT ID FROM department WHERE Name = 'Finance/HR')),
-	('Philip',		'Du Bois',		(SELECT ID FROM department WHERE Name = 'Management')),
-	('Maarten',		'Bosteels',		(SELECT ID FROM department WHERE Name = 'Management')),
-	('Lut',			'Goedhuys',		(SELECT ID FROM department WHERE Name = 'Management')),
-	('Peter',		'Vergote',		(SELECT ID FROM department WHERE Name = 'Management')),
-	('David',		'Goelen',		(SELECT ID FROM department WHERE Name = 'Management'));
+INSERT INTO user (Firstname, Lastname) VALUES
+	('Johan',		'Heylen'),
+	('Loesje',		'Hermans'),
+	('Leander',		'Dierckx'),
+	('Kristof',		'Tuyteleers'),
+	('Kevin',		'Jacquemyn'),
+	('Kathleen',	'Buffels'),
+	('Karen',		'Van Rillaer'),
+	('Helga',		'Parijs'),
+	('Philip',		'Du Bois'),	
+	('Maarten',		'Bosteels'),
+	('Lut',			'Goedhuys'),
+	('Peter',		'Vergote'),
+	('David',		'Goelen');
 
 /* Username genereren */
 UPDATE user SET Username = REPLACE(CONCAT_WS('.',Lastname, Firstname), ' ','');
+
+/* Users koppelen aan departement */
+INSERT INTO user_department (User, Department) VALUES
+	((SELECT ID FROM user WHERE Firstname = 'Johan' 	AND Lastname = 'Heylen'), 		(SELECT ID FROM department WHERE Name = 'Development')),
+	((SELECT ID FROM user WHERE Firstname = 'Loesje' 	AND Lastname = 'Hermans'),		(SELECT ID FROM department WHERE Name = 'Development')),
+	((SELECT ID FROM user WHERE Firstname = 'Leander' 	AND Lastname = 'Dierckx'),		(SELECT ID FROM department WHERE Name = 'Operations')),
+	((SELECT ID FROM user WHERE Firstname = 'Kristof' 	AND Lastname = 'Tuyteleers'),	(SELECT ID FROM department WHERE Name = 'Operations')),
+	((SELECT ID FROM user WHERE Firstname = 'Kevin'		AND Lastname = 'Jacquemyn'),	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
+	((SELECT ID FROM user WHERE Firstname = 'Kathleen'	AND Lastname = 'Buffels'),		(SELECT ID FROM department WHERE Name = 'Support/Communication')),
+	((SELECT ID FROM user WHERE Firstname = 'Karen' 	AND Lastname = 'Van Rillaer'),	(SELECT ID FROM department WHERE Name = 'Finance/HR')),
+	((SELECT ID FROM user WHERE Firstname = 'Helga' 	AND Lastname = 'Parijs'),		(SELECT ID FROM department WHERE Name = 'Finance/HR')),
+	((SELECT ID FROM user WHERE Firstname = 'Philip' 	AND Lastname = 'Du Bois'),		(SELECT ID FROM department WHERE Name = 'Management')),
+	((SELECT ID FROM user WHERE Firstname = 'Maarten' 	AND Lastname = 'Bosteels'),		(SELECT ID FROM department WHERE Name = 'Management')),
+	((SELECT ID FROM user WHERE Firstname = 'Lut'		AND Lastname = 'Goedhuys'),		(SELECT ID FROM department WHERE Name = 'Management')),
+	((SELECT ID FROM user WHERE Firstname = 'Peter' 	AND Lastname = 'Vergote'),		(SELECT ID FROM department WHERE Name = 'Management')),
+	((SELECT ID FROM user WHERE Firstname = 'David' 	AND Lastname = 'Goelen'),		(SELECT ID FROM department WHERE Name = 'Management'));
 
 /* Managers toevoegen aan department*/
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Lut' AND Lastname = 'Goedhuys') WHERE Name = 'Support/Communication';
