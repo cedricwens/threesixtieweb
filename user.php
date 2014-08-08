@@ -1,6 +1,8 @@
 <?php
 require('includes/header.php'); 
-protect_page();
+if(!isset($_SESSION['admin_id'])){
+	header('Location:admin_login.php');
+}
 ?>
 
 <h2><?php echo get_text('Information').' '.strtolower(get_text('About')).' '.strtolower(get_text('User')); ?></h2>

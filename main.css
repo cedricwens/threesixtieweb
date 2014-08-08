@@ -86,3 +86,19 @@ header{
 .questions tr td:not(:first-child){
 	width: 50px;
 }
+.names{
+	min-width: 200px;
+}
+.names_wrapper{
+	display:inline-block;
+	vertical-align:top;
+	overflow:hidden;
+	border:solid grey 1px;
+}
+.names_wrapper select{
+	padding:10px;
+	margin:-5px -20px -5px -5px;
+}
+.align_center{
+	text-align: center;
+}

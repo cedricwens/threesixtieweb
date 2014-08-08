@@ -47,7 +47,7 @@
 		}
 	}
 	function get_users(){
-		$query = mysql_query("SELECT * FROM user");
+		$query = mysql_query("SELECT * FROM user ORDER BY Lastname ASC");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
@@ -322,6 +322,15 @@
 			return mysql_result($query,0);
 		}
 	}
+	function get_number_of_users(){
+		$query = mysql_query("SELECT count(ID) FROM user");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
 
 
 	function login($username, $password){
@@ -367,6 +376,15 @@
 			}else{
 				return false;
 			}
+		}
+	}
+	function get_admin_id($name){
+		$query = mysql_query("SELECT ID FROM admin WHERE Username = '$name");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
 		}
 	}
 
@@ -545,4 +563,5 @@
 	$users = get_users();
 	$departments = get_departments();
 	$poll_statuses = get_all_poll_statuses();
+	$number_of_users = get_number_of_users();
 ?>

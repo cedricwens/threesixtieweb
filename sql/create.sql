@@ -8,14 +8,10 @@ CREATE TABLE user(
 	Firstname varchar(255) NOT NULL,
 	Lastname varchar(255) NOT NULL,
 	Username varchar(255),
-	Password varchar(255),
+	Password varchar(255) NOT NULL,
 	Email varchar(255),
 	/*Department int NOT NULL,*/
 	Job_Title varchar(255),
-	Type int NOT NULL,
-	/*add columns Full Name /Family Name here */
-	/*add column job title here */
-	/*consider adding a manager of*/
 	PRIMARY KEY (ID)
 );
 
@@ -27,7 +23,6 @@ CREATE TABLE department(
 	PRIMARY KEY (ID)
 );
 
-/* Moet nog worden toegevoegd aan de databse. Hierdoor moeten views ook aangepast worden. */
 CREATE TABLE user_department(
 	ID int NOT NULL AUTO_INCREMENT,
 	User int NOT NULL,
@@ -35,9 +30,10 @@ CREATE TABLE user_department(
 	PRIMARY KEY (ID)
 );
 
-CREATE TABLE user_type(
+CREATE TABLE admin(
 	ID int NOT NULL AUTO_INCREMENT,
-	Name varchar(255),
+	Username varchar(255),
+	Password varchar(255),
 	PRIMARY KEY (ID)
 );
 
@@ -134,16 +130,14 @@ CREATE TABLE text_nl(
 );
 
 ALTER TABLE user 
-	ADD CONSTRAINT un_username UNIQUE (Username),
-	ADD CONSTRAINT fk_usertype FOREIGN KEY (Type)
-		REFERENCES user_type(ID);
+	ADD CONSTRAINT un_username UNIQUE (Username);
 
 ALTER TABLE department
 	ADD CONSTRAINT fk_manager FOREIGN KEY (Manager)
 		REFERENCES user(ID);
 
-ALTER TABLE user_type
-	ADD CONSTRAINT un_type UNIQUE (Name);
+ALTER TABLE admin
+	ADD CONSTRAINT un_admin UNIQUE (Username);
 
 ALTER TABLE poll
 	ADD CONSTRAINT fk_reviewerpoll FOREIGN KEY (Reviewer)

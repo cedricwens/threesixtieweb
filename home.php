@@ -46,12 +46,12 @@ if(isset($_GET['Start'])){
 				if(isset($_POST['answer_own_questions'])){
 					change_poll_status($poll, 'Ingestuurd');
 					?>
-					<p>Je vragenlijst is succesvol opgeslagen.</p>
+					<p>Je vragenlijst is succesvol doorgestuurd.</p>
 					<?php
 				}else if(isset($_POST['save_own_questions'])){
 					change_poll_status($poll, 'Opgeslagen');
 					?>
-					<p>Je vragenlijst is succesvol doorgestuurd.</p>
+					<p>Je vragenlijst is succesvol opgeslagen.</p>
 					<?php
 				}
 				?>
@@ -135,6 +135,48 @@ if(isset($_GET['Start'])){
 							<?php
 						}
 						?>
+				</form>
+				<?php
+			}else if($_GET['Step'] == 2){
+				/*foreach ($users as $user) {
+					?>
+					<input name="<?php echo $user['Username']; ?>" type="checkbox" /><?php echo $user['Firstname'].' '.$user['Lastname']; ?><br />
+					<?php
+				}*/
+				?>
+				<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" name="moveList">
+
+					<table width="450">
+						<tr>
+							<td><b>Medewerkers</b></td>
+							<td></td>
+							<td><b>Mijn keuzes:</b></td>
+						</tr>
+						<tr>
+						    <td class="names_wrapper align_center">
+						    	<select name="namesLeft" size="<?php echo $number_of_users; ?>" multiple="multiple" id="namesLeft" class="names">
+							    	<?php
+							    	foreach ($users as $user) {
+										?>
+										<option name="<?php echo $user['Username']; ?>" ><?php echo $user['Lastname'].' '.$user['Firstname']; ?></option>
+										<?php
+									}
+							   	 	?>
+						    	</select>
+						    </td>
+						    
+						    <td class="align_center" >
+						    	<input name="" onclick="moveItem('namesRight', 'namesLeft');" type="button" value="<<" />
+								<input name="" onclick="moveItem('namesLeft','namesRight');" type="button" value=">>" />
+	    					</td>
+						    
+						    <td class="names_wrapper align_center">
+							    <select name="namesRight" size="<?php echo $number_of_users; ?>" multiple="multiple" id="namesRight" class="names">
+							    </select>
+							</td>
+						 </tr>
+					</table>
+
 				</form>
 				<?php
 			}

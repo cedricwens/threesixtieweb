@@ -1,7 +1,7 @@
 <?php
 require('includes/header.php');
-if(!has_access($_SESSION['user_id'],get_user_type_id('Admin'))){
-	header('Location:home.php');
+if(!isset($_SESSION['admin_id'])){
+	header('Location:admin_login.php');
 }
 ?>
 	<div>

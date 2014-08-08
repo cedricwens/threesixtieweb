@@ -4,7 +4,6 @@ DELETE FROM question;
 DELETE FROM category;
 DELETE FROM poll;
 DELETE FROM user;
-DELETE FROM user_type;
 DELETE FROM department;
 DELETE FROM poll_status;
 DELETE FROM batch_status;
@@ -64,26 +63,25 @@ INSERT INTO department (Name) VALUES
 	('Management'),
 	('Finance/HR');
 
-INSERT INTO user_type(Name) VALUES
-	('Admin'),
-	('User');
+/* Admin toevoegen aan database */
+INSERT INTO admin(Username, Password) VALUES
+	('Admin', '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO');
 
-/* Users toevoegen aan databank*/
-INSERT INTO user (Firstname, Lastname, Type, Password) VALUES
-	('Johan',		'Heylen',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Loesje',		'Hermans',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Leander',		'Dierckx',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Kristof',		'Tuyteleers',	(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Kevin',		'Jacquemyn',	(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Kathleen',	'Buffels',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Karen',		'Van Rillaer',	(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Helga',		'Parijs',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Philip',		'Du Bois',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),	
-	('Maarten',		'Bosteels',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Lut',			'Goedhuys',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Peter',		'Vergote',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('David',		'Goelen',		(SELECT ID FROM user_type WHERE Name = 'User'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Admin',		'Admin',		(SELECT ID FROM user_type WHERE Name = 'Admin'), '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO');
+/* Users toevoegen aan database*/
+INSERT INTO user (Firstname, Lastname, Password) VALUES
+	('Johan',		'Heylen', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Loesje',		'Hermans', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Leander',		'Dierckx', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kristof',		'Tuyteleers', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kevin',		'Jacquemyn', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kathleen',	'Buffels', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Karen',		'Van Rillaer', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Helga',		'Parijs', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Philip',		'Du Bois', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),	
+	('Maarten',		'Bosteels', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Lut',			'Goedhuys', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Peter',		'Vergote', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('David',		'Goelen', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO');
 
 /* Username genereren */
 UPDATE user SET Username = REPLACE(CONCAT_WS('.',Lastname, Firstname), ' ','');
@@ -111,7 +109,7 @@ UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Maarten'
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Philip' AND Lastname = 'Du Bois') WHERE Name = 'Management';
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Peter' AND Lastname = 'Vergote') WHERE Name = 'Finance/HR';
 
-/* Statussen toevoegen aan databank*/
+/* Statussen toevoegen aan database*/
 INSERT INTO poll_status (Name) VALUES 
 	('Niet ingevuld'),
 	('Opgeslagen'),
