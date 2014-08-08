@@ -5,6 +5,58 @@ if(!isset($_SESSION['admin_id'])){
 }
 ?>
 	<div>
+		Lijst van batches:
+		<?php
+		$batches = get_batches();
+		?>
+		<table id="batches">
+			<tr>
+				<th>ID</th>
+				<th>Init Date</th>
+				<th>Running Date</th>
+				<th>Finished Date</th>
+				<th>Status</th>
+				<th>Comment</th>
+				<th>Action</th>
+			</tr>
+			<?php
+			foreach ($batches as $batch) {
+				?>
+				<tr>
+					<td><?php echo $batch['ID']; ?></td>
+					<td><?php echo $batch['Init_date']; ?></td>
+					<td><?php echo $batch['Running_date']; ?></td>
+					<td><?php echo $batch['Finished_date']; ?></td>
+					<td><?php echo get_batch_status_name($batch['Status']); ?></td>
+					<td><?php echo $batch['Comment']; ?></td>
+					<td>
+						<?php include('includes/form/change_batch_status.php'); ?>
+					</td>
+				</tr>
+				
+
+				<?php
+			}
+			?>
+		</table>
+	</div>
+	<?php
+	if(isset($_POST['change_batch_status'])){
+		switch ($_POST['change_batch_status']) {
+			case 'Init':
+				break;
+			case 'Run':
+				run_status($_POST['batch_id']);
+				break;
+			case 'Stop':
+				break;
+			default:
+				# code...
+				break;
+		}
+	}
+	?>
+	<div>
 		<h2><?php echo get_text('Add_poll'); ?></h2>
 		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 			<label for="reviewer">Reviewer: </label><input type="text" name="reviewer" /><br />
@@ -22,6 +74,14 @@ if(!isset($_SESSION['admin_id'])){
 			<input type="submit" value="Voeg toe" name="add_poll" />
 		</form>
 	</div>
+	<?php
+	if(isset($_POST['add_poll'])){
+		$reviewer 	= $_POST['reviewer'];
+		$reviewee 	= $_POST['reviewee'];
+		$status		= $_POST['status'];
+		create_poll($reviewer,$reviewee,$status);
+	}
+	?>
 	<div>
 		<h2><?php echo get_text('Add_answer'); ?></h2>
 		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
@@ -63,6 +123,14 @@ if(!isset($_SESSION['admin_id'])){
 				<input type="submit" value="Beantwoord" name="answer_question"/>
 		</form>
 	</div>
+	<?php
+	if(isset($_POST['answer_question'])){
+		$question = $_POST['question'];
+		$poll = $_POST['poll'];
+		$answer = $_POST['answer'];
+		answer($poll, $question, $answer);
+	}
+	?>
 	<div>
 		<h2><?php echo get_text('Preferences'); ?></h2>
 		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
@@ -135,23 +203,7 @@ if(!isset($_SESSION['admin_id'])){
 			<input type="submit" value="Voeg toe" name="add_preferred" />
 		</form>
 	</div>
-
-
 	<?php
-	if(isset($_POST['add_poll'])){
-		$reviewer 	= $_POST['reviewer'];
-		$reviewee 	= $_POST['reviewee'];
-		$status		= $_POST['status'];
-		create_poll($reviewer,$reviewee,$status);
-	}
-
-	if(isset($_POST['answer_question'])){
-		$question = $_POST['question'];
-		$poll = $_POST['poll'];
-		$answer = $_POST['answer'];
-		answer($poll, $question, $answer);
-	}
-
 	if(isset($_POST['add_preferred'])){
 		$me = $_POST['me'];
 		$reviewer = $_POST['reviewer'];

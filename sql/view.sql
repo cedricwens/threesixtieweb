@@ -10,18 +10,15 @@ SELECT p.Reviewer AS Reviewer, count(*) AS Aantal_Reviews
 FROM poll p
 WHERE
         p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd')
-		/*this state dentes completed invariant poll -- QUERY CHANGED */
-    AND
-        p.Reviewer != p.Reviewee
 GROUP BY p.Reviewer;
 
 CREATE OR REPLACE VIEW reviews_received_view AS
 SELECT p.Reviewee AS Reviewee, count(*) AS Aantal_Reviews
 FROM poll p
 WHERE
-        p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd')
+    p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd')
     AND
-        p.Reviewee != p.Reviewer
+    p.Reviewee != p.Reviewer
 	/*the own review is not added here -- this is correct*/
 GROUP BY p.Reviewee;
 

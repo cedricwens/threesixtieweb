@@ -150,3 +150,13 @@ INSERT INTO answer_enum (Name) VALUES
 	('Goed'),
 	('Zeer goed'),
 	('N.v.t');
+
+/* Batch status toevoegen aan database */
+INSERT INTO batch_status (Name, Description) VALUES
+	('Init', 	'Deze batch is geinitialiseerd en kan gestart worden'),
+	('Running', 'Dit is de actieve batch'),
+	('Finished','Deze batch is afgelopen');
+
+/* Batch toevoegen aan database */
+INSERT INTO batch (Init_date, Status) VALUES
+	('2014-08-08 15:53:02', (SELECT ID FROM batch_status WHERE Name = 'Init'));

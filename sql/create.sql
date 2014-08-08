@@ -59,7 +59,7 @@ CREATE TABLE question(
 	Category int NOT NULL,
 	Question varchar(255) NOT NULL,
 	Comment varchar(255),
-	Batch int NOT NULL,
+	Batch int,
 	PRIMARY KEY (ID)
 	/* future improvement - non mandatory - add a column referring to BATCH*/
 );
@@ -79,7 +79,7 @@ CREATE TABLE preferred_poll(
 	Reviewer int NOT NULL,
 	Reviewee int NOT NULL,
 	User int NOT NULL,
-	Batch int NOT NULL,
+	Batch int,
 	PRIMARY KEY (ID)
 );
 

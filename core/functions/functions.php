@@ -64,25 +64,6 @@
 			return $users;
 		}
 	}
-	function create_poll($reviewer, $reviewee, $status){
-		$date = create_date();
-		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer') AND Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee')");
-		if(!$query || mysql_num_rows($query)>0 || mysql_num_rows($query) < 0){
-			if(mysql_num_rows($query) > 0) {
-				echo get_text('Poll_already_exists');
-			}else{
-				echo mysql_error();
-
-			}
-		}else{
-			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created) VALUES ((SELECT ID FROM user WHERE Username = '$reviewer'),(SELECT ID FROM user WHERE Username = '$reviewee'), (SELECT ID FROM poll_status WHERE Name = '$status'), '$date')");
-			if(!$query) {
-				echo mysql_error();
-			}else{
-				echo get_text('Poll').' '.strtolower(get_text('Created'));
-			}
-		}
-	}
 	function get_polls(){
 		$query = mysql_query("SELECT * FROM poll");
 		if(!$query || mysql_num_rows($query) <=0) {
@@ -164,13 +145,13 @@
 			return $questions;
 		}
 	}
-	function answer($poll, $question, $answer){
-		$date = create_date();
-		$query = mysql_query("INSERT INTO answer (Poll, Question, Answer, Time_Created, Last_Update) VALUES ($poll, $question, $answer, '$date', '$date') ON DUPLICATE KEY UPDATE Answer = $answer, Last_Update = '$date'");
-		if(!$query) {
+	function get_running_batch_id(){
+		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running'");
+		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
+			return false;
 		}else{
-			/*echo get_text('Question').' '.strtolower(get_text('Answered'));*/
+			return mysql_result($query,0);
 		}
 	}
 	function get_answers($poll){
@@ -231,23 +212,41 @@
 			return $categories;
 		}
 	}
-	function add_preferred($reviewer, $reviewee, $user){
-		if($reviewer == $reviewee){
-			echo get_text('Prohibited_to_prefer_yourself');
+	function get_batch($status){
+		$query = mysql_query("SELECT ID FROM batch WHERE Name = '$status'");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
 		}else{
-			$query = mysql_query("SELECT * FROM preferred_poll WHERE (Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer') AND Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee') AND User = (SELECT ID FROM user WHERE Username = '$user'))");
-			if(!$query || mysql_num_rows($query) < 0){
-				echo mysql_error();
-			}else if(mysql_num_rows($query) == 0){
-				$query = mysql_query("INSERT INTO preferred_poll (Reviewer, Reviewee, User) VALUES ((SELECT ID FROM user WHERE Username = '$reviewer'), (SELECT ID FROM user WHERE Username = '$reviewee'), (SELECT ID FROM user WHERE Username = '$user')) ON DUPLICATE KEY UPDATE Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer'), Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee'), User = (SELECT ID FROM user WHERE Username ='$user')");
-				if(!$query){
-						echo mysql_error();
-				}else{
-						//echo get_Text('Preference').' '.strtolower('Added');
-				}
-			}else if(mysql_num_rows($query) > 0){
-				//echo "Deze voorkeur werd al ingegeven";
+			return mysql_result($query,0);
+		}
+	}
+	function get_batches(){
+		$query = mysql_query("SELECT * FROM batch");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$categories[] = array(
+					'ID' => $row['ID'],
+					'Init_date' => $row['Init_date'],
+					'Running_date' => $row['Running_date'],
+					'Finished_date' => $row['Finished_date'],
+					'Status' => $row['Status'],
+					'Comment' => $row['Comment']
+				);
 			}
+			return $categories;
+		}
+	}
+	function get_batch_status_name($status_id){
+		$query = mysql_query("SELECT Name FROM batch_status WHERE Id = $status_id");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
 		}
 	}
 	function get_user_id($user){
@@ -301,9 +300,6 @@
 			return $statuses;
 		}
 	}
-	function change_poll_status($poll, $status){
-		$query = mysql_query("UPDATE poll SET Status = (SELECT ID FROM poll_status WHERE Name = '$status') WHERE ID = $poll");
-	}
 	function get_user_name($id){
 		$query = mysql_query("SELECT Firstname, Lastname FROM user WHERE ID = $id");
 		if(!$query || mysql_num_rows($query) <=0){
@@ -339,6 +335,86 @@
 		}else{
 			return mysql_result($query,0);
 		}
+	}
+
+	function create_poll($reviewer, $reviewee, $status){
+		$date = create_date();
+		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer') AND Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee') AND Batch = $batch");
+		if(!$query || mysql_num_rows($query)>0 || mysql_num_rows($query) < 0){
+			if(mysql_num_rows($query) > 0) {
+				echo get_text('Poll_already_exists');
+			}else{
+				echo mysql_error();
+
+			}
+		}else{
+			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created, Last_Update, Batch) VALUES ((SELECT ID FROM user WHERE Username = '$reviewer'),(SELECT ID FROM user WHERE Username = '$reviewee'), (SELECT ID FROM poll_status WHERE Name = '$status'), '$date', '$date', $batch)");
+			if(!$query) {
+				echo mysql_error();
+			}else{
+				echo get_text('Poll').' '.strtolower(get_text('Created'));
+			}
+		}
+	}
+	function answer($poll, $question, $answer){
+		$date = create_date();
+		$query = mysql_query("INSERT INTO answer (Poll, Question, Answer, Time_Created, Last_Update) VALUES ($poll, $question, $answer, '$date', '$date') ON DUPLICATE KEY UPDATE Answer = $answer, Last_Update = '$date'");
+		if(!$query) {
+			echo mysql_error();
+		}else{
+			/*echo get_text('Question').' '.strtolower(get_text('Answered'));*/
+		}
+	}
+	function init_batch($batch){}
+	function run_status($id){
+		$date = create_date();
+		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running'), Running_date = '$date' WHERE ID = $id");
+	}
+	function stop_batch($id){}
+	function add_preferred($reviewer, $reviewee, $user){
+		$batch = get_running_batch_id();
+		if($reviewer == $reviewee){
+			echo get_text('Prohibited_to_prefer_yourself');
+		}else{
+			$query = mysql_query("	SELECT *
+									FROM preferred_poll
+									WHERE (
+										Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer')
+										AND
+										Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee')
+										AND
+										User = (SELECT ID FROM user WHERE Username = '$user')
+										AND
+										Batch = $id
+									)
+								");
+			if(!$query || mysql_num_rows($query) < 0){
+				echo mysql_error();
+			}else if(mysql_num_rows($query) == 0){
+				$query = mysql_query("	INSERT INTO preferred_poll (Reviewer, Reviewee, User, Batch) VALUES (
+											(SELECT ID FROM user WHERE Username = '$reviewer'),
+											(SELECT ID FROM user WHERE Username = '$reviewee'),
+											(SELECT ID FROM user WHERE Username = '$user'),
+											$batch
+										)
+										ON DUPLICATE KEY UPDATE
+										Reviewer = 	(SELECT ID FROM user WHERE Username = '$reviewer'),
+										Reviewee = 	(SELECT ID FROM user WHERE Username = '$reviewee'),
+										User = 		(SELECT ID FROM user WHERE Username ='$user'),
+										Batch =		$batch
+									");
+				if(!$query){
+						echo mysql_error();
+				}else{
+						//echo get_Text('Preference').' '.strtolower('Added');
+				}
+			}else if(mysql_num_rows($query) > 0){
+				//echo "Deze voorkeur werd al ingegeven";
+			}
+		}
+	}
+	function change_poll_status($poll, $status){
+		$query = mysql_query("UPDATE poll SET Status = (SELECT ID FROM poll_status WHERE Name = '$status') WHERE ID = $poll");
 	}
 
 
@@ -387,6 +463,8 @@
 			}
 		}
 	}
+	
+
 	function get_admin_id($name){
 		$query = mysql_query("SELECT ID FROM admin WHERE Username = '$name");
 		if(!$query || mysql_num_rows($query) <=0){
@@ -396,8 +474,6 @@
 			return mysql_result($query,0);
 		}
 	}
-
-
 	function get_user_info($id){
 		$user 					= get_user_by_id($id);
 		$reviews_given 			= get_number_of_reviews_given($id);

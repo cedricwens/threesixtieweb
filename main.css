@@ -90,15 +90,21 @@ header{
 	min-width: 200px;
 }
 .names_wrapper{
-	display:inline-block;
-	vertical-align:top;
-	overflow:hidden;
-	border:solid grey 1px;
+	display: inline-block;
+	vertical-align: top;
+	overflow: hidden;
+	border: 1px solid gray;
 }
 .names_wrapper select{
-	padding:10px;
-	margin:-5px -20px -5px -5px;
+	padding: 10px;
+	margin: -5px -20px -5px -5px;
 }
 .align_center{
 	text-align: center;
+}
+#batches{
+	border-collapse: collapse;
+}
+#batches tr td, tr th{
+	border: 1px solid gray;
 }
