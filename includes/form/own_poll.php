@@ -59,7 +59,7 @@
 	<?php
 	if($poll_status == get_poll_status_id('Ingestuurd')){
 		?>
-		<a href="<?php $_SERVER['PHP_SELF'];?>?Start&Step=2">Verder</a>
+		<h3><a href="<?php $_SERVER['PHP_SELF'];?>?Start&Step=2">Verder</a></h3>
 		<?php
 	}else{
 		?>

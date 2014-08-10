@@ -5,7 +5,9 @@ require('core/init.php');
 <html>
 <head>
 	<title>ThreeSixtyWeb</title>
-	<link rel="stylesheet" type="text/css" href="main.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--<link rel="stylesheet" type="text/css" href="main.css">-->
 	<!-- consider adding a logo here /somewhere on the page
 				dnsbelgium.png (please ask for the file)-->
 	<script type="text/javascript">
@@ -29,27 +31,26 @@ require('core/init.php');
 	</script>
 
 </head>
-<body>
-	<div id="container">
-	<div id="header_container">
-		<header><h1><?php echo get_Text('Title'); ?></h1></header>
-		<nav id="menu">
+<body class="body">
+	<header class="mainHeader">
+		<img src="img/logo.png" />
+		<nav>
 			<ul>
-				<li><a href="home.php">Home</a></li>
+				<li class="active"><a href="home.php">Home</a></li>
 				<?php
 				if(isset($_SESSION['admin_id'])){
 					?>
-					 - <li><a href="user.php">User</a></li>
-					 - <li><a href="admin.php">Admin</a></li>
+					<li><a href="user.php">User</a></li>
+					<li><a href="admin.php">Admin</a></li>
 					<?php
 				}
 				if(logged_in() || isset($_SESSION['admin_id'])){
 					?>
-					 - <li><a href="logout.php">Logout</a></li>
+					<li><a href="logout.php">Logout</a></li>
 					<?php
 				}
 				?>
 			</ul>
 		</nav>
-	</div>
-	<div class="content_wrapper">
+	</header>
+	<div class="mainContent">

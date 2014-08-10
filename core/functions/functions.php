@@ -146,7 +146,7 @@
 		}
 	}
 	function get_running_batch_id(){
-		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running'");
+		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running')");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -385,7 +385,7 @@
 										AND
 										User = (SELECT ID FROM user WHERE Username = '$user')
 										AND
-										Batch = $id
+										Batch = $batch
 									)
 								");
 			if(!$query || mysql_num_rows($query) < 0){
@@ -404,7 +404,7 @@
 										Batch =		$batch
 									");
 				if(!$query){
-						echo mysql_error();
+					echo mysql_error();
 				}else{
 						//echo get_Text('Preference').' '.strtolower('Added');
 				}
@@ -418,7 +418,7 @@
 	}
 
 
-	function login($username, $password){
+	function login($username, $password, $rememberme){
 		$query = mysql_query("SELECT ID, Password FROM user WHERE Username = '$username'");
 		if(!$query || mysql_num_rows($query) <= 0){
 			echo mysql_error();
@@ -426,13 +426,16 @@
 		}else{
 			$user = mysql_fetch_row($query);
 			if(password_verify($password, $user['1'])){
-				echo "Aangemeld";
+				if($rememberme == "on"){
+					setcookie("username",$username, time()+7200);
+				}else if($rememberme == ""){
+					$_SESSION['user_id'] = $user['0'];
+				}
+				header('Location: home.php');
+				exit();
 			}else{
 				echo "Foutief wachtwoord";
 			}
-			$_SESSION['user_id'] = $user['0'];
-			echo 'aangemeld';
-			header('Location: home.php');
 		}
 	}
 	function logged_in_redirect(){
@@ -442,7 +445,7 @@
 		}
 	}
 	function logged_in(){
-		return (isset($_SESSION['user_id'])) ? true : false;
+		return (isset($_SESSION['user_id'])||isset($_COOCKIE['username'])) ? true : false;
 	}
 	function protect_page(){
 		if(logged_in() === false){
