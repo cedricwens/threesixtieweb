@@ -408,6 +408,12 @@
 		}else{
 			/*echo get_text('Question').' '.strtolower(get_text('Answered'));*/
 		}
+		$query = mysql_query("UPDATE poll SET Last_Update = '$date' WHERE ID = $poll");
+		if(!$query) {
+			echo mysql_error();
+		}else{
+			/*echo get_text('Question').' '.strtolower(get_text('Answered'));*/
+		}
 	}
 	function init_batch($batch){}
 	function run_batch($id){
@@ -461,7 +467,8 @@
 		}
 	}
 	function change_poll_status($poll, $status){
-		$query = mysql_query("UPDATE poll SET Status = (SELECT ID FROM poll_status WHERE Name = '$status') WHERE ID = $poll");
+		$date = create_date();
+		$query = mysql_query("UPDATE poll SET Status = (SELECT ID FROM poll_status WHERE Name = '$status'), Last_Update = '$date' WHERE ID = $poll");
 	}
 
 
