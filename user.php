@@ -1,10 +1,15 @@
 <?php
+$selected_page = "User";
 require('includes/header.php'); 
 if(!isset($_SESSION['admin_id'])){
 	header('Location:admin_login.php');
 }
 ?>
 <div class="content">
+	<aside class="sidebarContent">
+		<h2><?php echo get_text('Information').' '.strtolower(get_text('About')).' '.strtolower(get_text('User')); ?></h2>
+		<?php include('includes/form/choose_user.php'); ?>
+	</aside>
 	<div class="topContent">
 		<?php
 		if (isset($_POST['user'])) {
@@ -21,7 +26,7 @@ if(!isset($_SESSION['admin_id'])){
 		?>
 	</div>
 </div>
-<aside class="topSidebar">
+<aside class="topSidebar step">
 	<h2><?php echo get_text('Information').' '.strtolower(get_text('About')).' '.strtolower(get_text('User')); ?></h2>
 	<?php include('includes/form/choose_user.php'); ?>
 </aside>

@@ -1,9 +1,9 @@
 CREATE OR REPLACE VIEW average_score_view AS
-SELECT p.Reviewee AS Reviewee, a.Question AS Question, AVG(a.Answer) AS Average_Score
+SELECT p.Reviewee AS Reviewee, a.Question AS Question, AVG(a.Answer) AS Average_Score, p.Batch AS Batch, p.ID AS Poll
 FROM answer a
 JOIN poll p
 ON a.Poll = p.ID
-WHERE Reviewee != Reviewer
+WHERE Reviewee != Reviewer AND a.Answer != 6
 GROUP BY Question, Reviewee;
 
 CREATE OR REPLACE VIEW reviews_given_view AS

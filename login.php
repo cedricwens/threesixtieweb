@@ -1,4 +1,5 @@
 <?php
+	$selected_page = "Login";
 require('includes/header.php');
 logged_in_redirect();
 ?>

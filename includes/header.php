@@ -36,12 +36,12 @@ require('core/init.php');
 		<img src="img/logo.png" />
 		<nav>
 			<ul>
-				<li class="active"><a href="home.php">Home</a></li>
+				<li <?php if($selected_page == 'Home'){ echo 'class="active"';} ?>><a href="home.php">Home</a></li>
 				<?php
 				if(isset($_SESSION['admin_id'])){
 					?>
-					<li><a href="user.php">User</a></li>
-					<li><a href="admin.php">Admin</a></li>
+					<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php">User</a></li>
+					<li <?php if($selected_page == 'Admin'){ echo 'class="active"';} ?>><a href="admin.php">Admin</a></li>
 					<?php
 				}
 				if(logged_in() || isset($_SESSION['admin_id'])){

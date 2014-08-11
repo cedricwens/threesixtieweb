@@ -72,6 +72,15 @@ a:hover, a:active{
 	width: 70%;
 	float: left;
 }
+.sidebarContent{
+	display: none;
+	background-color: #FFF;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 3% 5%;
+	margin-top: 2%;
+}
 .topContent{
 	background-color: #FFF;
 	border-radius: 5px;
@@ -133,6 +142,7 @@ a:hover, a:active{
 	width: 92%;
 	margin: 10px auto;
 	color: #FFF;
+	text-align: center;
 }
 .activeStep{
 	font-weight: bold;
@@ -165,7 +175,23 @@ a:hover, a:active{
 	.content{
 		width: 100%;
 	}
-	.topSidebar{
+	.topSidebar, .middleSidebar, .bottomSidebar{
+		width: 94%;
+		margin: 2% 0 2% 0;
+		padding: 2% 3%;
+	}
+}
+@media only screen and (max-width: 950px){
+	.sidebarContent{
+		display: block;
+	}
+	.step{
+		display: none;
+	}
+	.content{
+		width: 100%;
+	}
+	.topSidebar, .middleSidebar, .bottomSidebar{
 		width: 94%;
 		margin: 2% 0 2% 0;
 		padding: 2% 3%;

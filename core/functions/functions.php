@@ -336,23 +336,34 @@
 			return mysql_result($query,0);
 		}
 	}
+	function get_average_score_poll($poll, $question){
+		$batch = get_running_batch_id();
+		$query = mysql_query("SELECT Average_Score FROM average_score_view WHERE Batch = $batch AND Poll = $poll AND Question = $question");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
 
 	function create_poll($reviewer, $reviewee, $status){
 		$date = create_date();
+		$batch = get_running_batch_id();
 		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer') AND Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee') AND Batch = $batch");
 		if(!$query || mysql_num_rows($query)>0 || mysql_num_rows($query) < 0){
 			if(mysql_num_rows($query) > 0) {
-				echo get_text('Poll_already_exists');
+				return get_text('Poll_already_exists');
 			}else{
-				echo mysql_error();
+				return mysql_error();
 
 			}
 		}else{
 			$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created, Last_Update, Batch) VALUES ((SELECT ID FROM user WHERE Username = '$reviewer'),(SELECT ID FROM user WHERE Username = '$reviewee'), (SELECT ID FROM poll_status WHERE Name = '$status'), '$date', '$date', $batch)");
 			if(!$query) {
-				echo mysql_error();
+				return mysql_error();
 			}else{
-				echo get_text('Poll').' '.strtolower(get_text('Created'));
+				return get_text('Poll').' '.strtolower(get_text('Created'));
 			}
 		}
 	}
@@ -366,11 +377,14 @@
 		}
 	}
 	function init_batch($batch){}
-	function run_status($id){
+	function run_batch($id){
 		$date = create_date();
 		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running'), Running_date = '$date' WHERE ID = $id");
 	}
-	function stop_batch($id){}
+	function stop_batch($id){
+		$date = create_date();
+		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Finished'), Finished_date = '$date' WHERE ID = $id");
+	}
 	function add_preferred($reviewer, $reviewee, $user){
 		$batch = get_running_batch_id();
 		if($reviewer == $reviewee){
@@ -503,7 +517,7 @@
 			<br />
 			<b>$preferred_reviewers</b> van de gebruikers die $user aangaf, mogen ook effectief de vragenlijst over $user invullen.
 			<br />
-			$user mag van <b>$preferred_reviewees</b> gebruiker die zijn had gekozen, ook effectief de vragenlijst invullen.";
+			$user mag van <b>$preferred_reviewees</b> gebruikers die zijn had gekozen, ook effectief de vragenlijst invullen.";
 			?>
 			<table>
 				<tr>

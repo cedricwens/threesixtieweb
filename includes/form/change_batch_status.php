@@ -3,11 +3,11 @@
 	<?php
 	if(get_batch_status_name($batch['Status']) == 'Init'){
 		?>
-		<input type="submit" name="change_batch_status" value="Run" />
+		<input type="submit" name="change_batch_status" value="Run" <?php if(get_running_batch_id()){echo 'disabled="disabled"';}?>/>
 		<?php
 	}else if(get_batch_status_name($batch['Status']) == 'Running'){
 		?>
-		<input type="submit" name="change_batch_status" value="Stop" disabled="disabled" />
+		<input type="submit" name="change_batch_status" value="Stop" />
 		<?php
 	}else if(get_batch_status_name($batch['Status']) == 'Finished'){
 		?>

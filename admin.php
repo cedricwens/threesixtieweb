@@ -1,8 +1,10 @@
 <?php
+$selected_page = "Admin";
 require('includes/header.php');
 if(!isset($_SESSION['admin_id'])){
 	header('Location:admin_login.php');
 }
+$error = "";
 ?>
 <div class="content">
 	<div class="topContent">
@@ -91,13 +93,12 @@ if(!isset($_SESSION['admin_id'])){
 						<th>Vraag</th>
 						<th>Antwoord</th>
 						<th>Tijd</th>
+						<th>Gemiddelde score</th>
 					</tr>
 					<?php
-					$totale_score = 0;
-					$aantal_vragen = 0;
 					foreach($answers as $answer){
-						$totale_score += $answer['Answer'];
-						$aantal_vragen += 1;
+						$question = $answer['Question'];
+						$average_score = get_average_score_poll($poll, $question);
 						?>
 						<tr>
 							<td><?php echo $answer['ID']; ?></td>
@@ -105,14 +106,30 @@ if(!isset($_SESSION['admin_id'])){
 							<td><?php echo $answer['Question']; ?></td>
 							<td><?php echo $answer['Answer']; ?></td>
 							<td><?php echo $answer['Last_Update']; ?></td>
+							<td>
+								<?php 
+									if($average_score == ""){
+										echo "Er is geen gemiddelde score bekend voor deze vraag";
+									}else{
+										echo $average_score;
+									} 
+								?>
+							</td>
 						</tr>
 						<?php
 					}
-					$gemiddelde_score = $totale_score/$aantal_vragen;
 
 					?>
-					<h2>Gemiddelde score: <?php echo $gemiddelde_score; ?> (deze vragenlijst)</h2>
-					<h2>Gemiddelde score: <?php echo mysql_result(mysql_query("SELECT * FROM average_score_view;"), 0); ?> (alle vragenlijsten samen)</h2>
+					<h2>Gemiddelde score (alle vragenlijsten samen):
+						<?php
+							
+							if($average_score == ""){
+								echo "Er is geen gemiddelde score bekend voor deze vraag";
+							}else{
+								echo $average_score;
+							}
+						?>
+					</h2>
 				</table>
 				<?php
 			}
@@ -124,44 +141,47 @@ if(!isset($_SESSION['admin_id'])){
 if(isset($_POST['change_batch_status'])){
 	switch ($_POST['change_batch_status']) {
 		case 'Init':
-		break;
+			break;
 		case 'Run':
-		run_status($_POST['batch_id']);
-		break;
+			run_batch($_POST['batch_id']);
+			break;
 		case 'Stop':
-		break;
+			stop_batch($_POST['batch_id']);
+			break;
 		default:
 				# code...
 		break;
 	}
 }
 ?>
-<aside class="topSidebar">
-	<h2><?php echo get_text('Add_poll'); ?></h2>
-	<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-		<label for="reviewer">Reviewer: </label><input type="text" name="reviewer" /><br />
-		<label for="reviewee">Reviewee: </label><input type="text" name="reviewee" /><br />
-		<label for="status">Status: </label>
-		<select name="status">
-			<?php
-			foreach ($poll_statuses as $poll_status) {
-				?>
-				<option value="<?php echo $poll_status['Name']; ?>"><?php echo $poll_status['Name']; ?></option>
+	<?php
+		if(isset($_POST['add_poll'])){
+			$reviewer 	= $_POST['reviewer'];
+			$reviewee 	= $_POST['reviewee'];
+			$status		= $_POST['status'];
+			$error = create_poll($reviewer,$reviewee,$status);
+		}
+	?>
+	<aside class="topSidebar">
+		<h2><?php echo get_text('Add_poll'); ?></h2>
+		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+			<label for="reviewer">Reviewer: </label><input type="text" name="reviewer" /><br />
+			<label for="reviewee">Reviewee: </label><input type="text" name="reviewee" /><br />
+			<label for="status">Status: </label>
+			<select name="status">
 				<?php
-			}
-			?>
-			<br />
+				foreach ($poll_statuses as $poll_status) {
+					?>
+					<option value="<?php echo $poll_status['Name']; ?>"><?php echo $poll_status['Name']; ?></option>
+					<?php
+				}
+				?>
+				<br />
+			</select>
 			<input type="submit" value="Voeg toe" name="add_poll" />
 		</form>
+		<?php echo $error; ?>
 	</aside>
-	<?php
-	if(isset($_POST['add_poll'])){
-		$reviewer 	= $_POST['reviewer'];
-		$reviewee 	= $_POST['reviewee'];
-		$status		= $_POST['status'];
-		create_poll($reviewer,$reviewee,$status);
-	}
-	?>
 	<aside class="middleSidebar">
 		<h2><?php echo get_text('Add_answer'); ?></h2>
 		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
