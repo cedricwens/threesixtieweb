@@ -3,13 +3,8 @@ if(isset($_GET['Start'])){
 	?>
 	<div class="content">
 		<div class="sidebarContent">
-				<ol>
-					<li class="<?php if(!isset($_GET['Step'])){ echo 'activeStep';} ?>">Start</li>
-					<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 1){ echo 'activeStep';} ?>">Vragenlijst invullen</li>
-					<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 2){ echo 'activeStep';} ?>">Keuze: Jouw vragenlijst</li>
-					<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 3){ echo 'activeStep';} ?>">Keuze: Andere vragenlijst</li>
-				</ol>
-			</div>
+			<?php include('includes/aside/fase1.php'); ?>
+		</div>
 		<?php
 		if(!isset($_GET['Step'])){
 			?>
@@ -139,12 +134,7 @@ if(isset($_GET['Start'])){
 		?>
 	</div>
 	<div class="topSidebar step">
-		<ol>
-			<li class="<?php if(!isset($_GET['Step'])){ echo 'activeStep';} ?>">Start</li>
-			<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 1){ echo 'activeStep';} ?>">Vragenlijst invullen</li>
-			<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 2){ echo 'activeStep';} ?>">Keuze: Jouw vragenlijst</li>
-			<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 3){ echo 'activeStep';} ?>">Keuze: Andere vragenlijst</li>
-		</ol>
+		<?php include('includes/aside/fase1.php'); ?>
 	</div>
 <?php
 }else{

@@ -5,87 +5,24 @@
 		$date = date("Y-m-d H:i:s", $time);
 		return $date;
 	}
-	function get_text($name){
-		$query = mysql_query("SELECT Text FROM text_nl WHERE Name = '$name'");
-		if(!$query || mysql_num_rows($query) <=0){
-			echo mysql_error();
-			return false;
-		}else{
-			return mysql_result($query,0);
-		}
-	}
-	function get_text_info($name){
-		$query = mysql_query("SELECT * FROM text_nl WHERE Name = '$name'");
+
+	function get_all_poll_statuses(){
+		$query = mysql_query("SELECT * FROM poll_status ORDER BY ID");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
 		}else{
 			while ($row = mysql_fetch_assoc($query)) {
-				$questions[] = array(
+				$statuses[] = array(
 					'ID' => $row['ID'],
-					stripslashes('Name') => $row['Name'],
-					stripslashes('Text') => $row['Text'],
-					stripslashes('Comment') => $row['Comment']
-				);
-			}
-			return $questions;
-		}
-	}
-	function get_managers(){
-		$query = mysql_query("SELECT d.Name AS Department, u.Name FROM user u INNER JOIN department d ON u.ID = d.Manager");
-		if(!$query || mysql_num_rows($query) <=0) {
-			echo mysql_error();
-			return false;
-		}else{
-			while ($row = mysql_fetch_assoc($query)) {
-				$managers[] = array(
-					stripslashes('Department') => $row['Department'],
 					stripslashes('Name') => $row['Name']
 				);
 			}
-			return $managers;
+			return $statuses;
 		}
 	}
-	function get_users(){
-		$query = mysql_query("SELECT * FROM user ORDER BY Lastname ASC");
-		if(!$query || mysql_num_rows($query) <=0) {
-			echo mysql_error();
-			return false;
-		}else{
-			while ($row = mysql_fetch_assoc($query)) {
-				$users[] = array(
-					'ID' => $row['ID'],
-					stripslashes('Firstname') => $row['Firstname'],
-					stripslashes('Lastname') => $row['Lastname'],
-					stripslashes('Username') => $row['Username'],
-					stripslashes('Job_Title') => $row['Job_Title']
-				);
-			}
-			return $users;
-		}
-	}
-	function get_polls(){
-		$query = mysql_query("SELECT * FROM poll");
-		if(!$query || mysql_num_rows($query) <=0) {
-			echo mysql_error();
-			return false;
-		}else{
-			while ($row = mysql_fetch_assoc($query)) {
-				$polls[] = array(
-					'ID'			=> $row['ID'],
-					'Reviewer' 		=> $row['Reviewer'],
-					'Reviewee'		=> $row['Reviewee'],
-					'Comment'		=> $row['Comment'],
-					'Status'		=> $row['Status'],
-					'Time_Created'	=> $row['Time_Created'],
-					'Last_Update'	=> $row['Last_Update']
-				);
-			}
-			return $polls;
-		}
-	}
-	function get_poll_status($poll){
-		$query = mysql_query("SELECT Status FROM poll WHERE ID = $poll");
+	function get_answer($poll, $question){
+		$query = mysql_query("SELECT Answer FROM answer WHERE Poll = $poll AND Question = $question");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -93,8 +30,8 @@
 			return mysql_result($query,0);
 		}
 	}
-	function get_poll_status_id($poll_status){
-		$query = mysql_query("SELECT ID FROM poll_status WHERE Name = '$poll_status'");
+	function get_answer_name($value){
+		$query = mysql_query("SELECT Name FROM answer_enum WHERE ID = $value");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -102,51 +39,8 @@
 			return mysql_result($query,0);
 		}
 	}
-	function get_user_by_id($id){
-		$query = mysql_query("SELECT Firstname, Lastname FROM user WHERE ID = $id");
-		if(!$query || mysql_num_rows($query) <=0){
-			echo mysql_error();
-			return false;
-		}else{
-			return mysql_result($query,0);
-		}
-	}
-	function get_username_by_id($id){
-		$query = mysql_query("SELECT Username FROM user WHERE ID = $id");
-		if(!$query || mysql_num_rows($query) <=0){
-			echo mysql_error();
-			return false;
-		}else{
-			return mysql_result($query,0);
-		}
-	}
-	function get_id_by_username($username){
-		$query = mysql_query("SELECT ID FROM user WHERE Username = $username");
-		if(!$query || mysql_num_rows($query) <=0){
-			echo mysql_error();
-			return false;
-		}else{
-			return mysql_result($query,0);
-		}
-	}
-	function get_questions(){
-		$query = mysql_query("SELECT * FROM question");
-		if(!$query || mysql_num_rows($query) <=0) {
-			echo mysql_error();
-			return false;
-		}else{
-			while ($row = mysql_fetch_assoc($query)) {
-				$questions[] = array(
-					'ID' => $row['ID'],
-					stripslashes('Question') => $row['Question'],
-					'Category' => $row['Category']
-				);
-			}
-			return $questions;
-		}
-	}
-	function get_running_batch_id(){
-		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running')");
+	function get_answer_value_by_name($name){
+		$query = mysql_query("SELECT ID FROM answer_enum WHERE Name = '$name'");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -172,13 +66,51 @@
 			return $answers;
 		}
 	}
-	function get_answer($poll, $question){
-		$query = mysql_query("SELECT Answer FROM answer WHERE Poll = $poll AND Question = $question");
+	function get_average_score_poll($poll, $question){
+		$batch = get_running_batch_id();
+		$query = mysql_query("SELECT Average_Score FROM average_score_view WHERE Batch = $batch AND Poll = $poll AND Question = $question");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
 		}else{
 			return mysql_result($query,0);
+		}
+	}
+	function get_batch($status){
+		$query = mysql_query("SELECT ID FROM batch WHERE Name = '$status'");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_batch_status_name($status_id){
+		$query = mysql_query("SELECT Name FROM batch_status WHERE Id = $status_id");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_batches(){
+		$query = mysql_query("SELECT * FROM batch");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$categories[] = array(
+					'ID' => $row['ID'],
+					'Init_date' => $row['Init_date'],
+					'Running_date' => $row['Running_date'],
+					'Finished_date' => $row['Finished_date'],
+					'Status' => $row['Status'],
+					'Comment' => $row['Comment']
+				);
+			}
+			return $categories;
 		}
 	}
 	function get_categories(){
@@ -212,8 +144,8 @@
 			return $categories;
 		}
 	}
-	function get_batch($status){
-		$query = mysql_query("SELECT ID FROM batch WHERE Name = '$status'");
+	function get_id_by_username($username){
+		$query = mysql_query("SELECT ID FROM user WHERE Username = $username");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -221,54 +153,23 @@
 			return mysql_result($query,0);
 		}
 	}
-	function get_batches(){
-		$query = mysql_query("SELECT * FROM batch");
+	function get_managers(){
+		$query = mysql_query("SELECT d.Name AS Department, u.Name FROM user u INNER JOIN department d ON u.ID = d.Manager");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
 		}else{
 			while ($row = mysql_fetch_assoc($query)) {
-				$categories[] = array(
-					'ID' => $row['ID'],
-					'Init_date' => $row['Init_date'],
-					'Running_date' => $row['Running_date'],
-					'Finished_date' => $row['Finished_date'],
-					'Status' => $row['Status'],
-					'Comment' => $row['Comment']
+				$managers[] = array(
+					stripslashes('Department') => $row['Department'],
+					stripslashes('Name') => $row['Name']
 				);
 			}
-			return $categories;
+			return $managers;
 		}
 	}
-	function get_batch_status_name($status_id){
-		$query = mysql_query("SELECT Name FROM batch_status WHERE Id = $status_id");
-		if(!$query || mysql_num_rows($query) <=0){
-			echo mysql_error();
-			return false;
-		}else{
-			return mysql_result($query,0);
-		}
-	}
-	function get_user_id($user){
-		$query = mysql_query("SELECT ID FROM user WHERE Username = '$user'");
-		if(!$query || mysql_num_rows($query) <=0){
-			echo mysql_error();
-			return false;
-		}else{
-			return mysql_result($query,0);
-		}
-	}
-	function get_answer_name($value){
-		$query = mysql_query("SELECT Name FROM answer_enum WHERE ID = $value");
-		if(!$query || mysql_num_rows($query) <=0){
-			echo mysql_error();
-			return false;
-		}else{
-			return mysql_result($query,0);
-		}
-	}
-	function get_answer_value_by_name($name){
-		$query = mysql_query("SELECT ID FROM answer_enum WHERE Name = '$name'");
+	function get_number_of_users(){
+		$query = mysql_query("SELECT count(ID) FROM user");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -285,22 +186,126 @@
 			return mysql_result($query,0);
 		}
 	}
-	function get_all_poll_statuses(){
-		$query = mysql_query("SELECT * FROM poll_status ORDER BY ID");
+	function get_poll_reviewee($poll){
+		$query = mysql_query("SELECT Reviewee FROM poll WHERE ID = $poll");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_poll_status($poll){
+		$query = mysql_query("SELECT Status FROM poll WHERE ID = $poll");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_poll_status_id($poll_status){
+		$query = mysql_query("SELECT ID FROM poll_status WHERE Name = '$poll_status'");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_polls(){
+		$query = mysql_query("SELECT * FROM poll");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
 		}else{
 			while ($row = mysql_fetch_assoc($query)) {
-				$statuses[] = array(
-					'ID' => $row['ID'],
-					stripslashes('Name') => $row['Name']
+				$polls[] = array(
+					'ID'			=> $row['ID'],
+					'Reviewer' 		=> $row['Reviewer'],
+					'Reviewee'		=> $row['Reviewee'],
+					'Comment'		=> $row['Comment'],
+					'Status'		=> $row['Status'],
+					'Time_Created'	=> $row['Time_Created'],
+					'Last_Update'	=> $row['Last_Update']
 				);
 			}
-			return $statuses;
+			return $polls;
 		}
 	}
-	function get_user_name($id){
+	function get_polls_by_reviewer($reviewer){
+		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = $reviewer AND Reviewee != $reviewer");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$polls[] = array(
+					'ID' => $row['ID'],
+					'Reviewer' => $row['Reviewer'],
+					'Reviewee' => $row['Reviewee'],
+					'Comment' => $row['Comment'],
+					'Status' => $row['Status'],
+					'Time_Created' => $row['Time_Created'],
+					'Last_Update' => $row['Last_Update'],
+					'Batch' => $row['Batch']
+				);
+			}
+			return $polls;
+		}
+	}
+	function get_questions(){
+		$query = mysql_query("SELECT * FROM question");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$questions[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Question') => $row['Question'],
+					'Category' => $row['Category']
+				);
+			}
+			return $questions;
+		}
+	}
+	function get_running_batch_id(){
+		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running')");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_text($name){
+		$query = mysql_query("SELECT Text FROM text_nl WHERE Name = '$name'");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_text_info($name){
+		$query = mysql_query("SELECT * FROM text_nl WHERE Name = '$name'");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$questions[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Name') => $row['Name'],
+					stripslashes('Text') => $row['Text'],
+					stripslashes('Comment') => $row['Comment']
+				);
+			}
+			return $questions;
+		}
+	}
+	function get_user_by_id($id){
 		$query = mysql_query("SELECT Firstname, Lastname FROM user WHERE ID = $id");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
@@ -318,6 +323,24 @@
 			return mysql_result($query,0);
 		}
 	}
+	function get_user_id($user){
+		$query = mysql_query("SELECT ID FROM user WHERE Username = '$user'");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_user_name($id){
+		$query = mysql_query("SELECT Firstname, Lastname FROM user WHERE ID = $id");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_fetch_row($query,0);
+		}
+	}
 	function get_user_type_id($type){
 		$query = mysql_query("SELECT ID FROM user_type WHERE Name = '$type'");
 		if(!$query || mysql_num_rows($query) <=0){
@@ -327,25 +350,34 @@
 			return mysql_result($query,0);
 		}
 	}
-	function get_number_of_users(){
-		$query = mysql_query("SELECT count(ID) FROM user");
+	function get_username_by_id($id){
+		$query = mysql_query("SELECT Username FROM user WHERE ID = $id");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
 		}else{
 			return mysql_result($query,0);
 		}
-	}
-	function get_average_score_poll($poll, $question){
-		$batch = get_running_batch_id();
-		$query = mysql_query("SELECT Average_Score FROM average_score_view WHERE Batch = $batch AND Poll = $poll AND Question = $question");
-		if(!$query || mysql_num_rows($query) <=0){
+	}	
+	function get_users(){
+		$query = mysql_query("SELECT * FROM user ORDER BY Lastname ASC");
+		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
 		}else{
-			return mysql_result($query,0);
+			while ($row = mysql_fetch_assoc($query)) {
+				$users[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Firstname') => $row['Firstname'],
+					stripslashes('Lastname') => $row['Lastname'],
+					stripslashes('Username') => $row['Username'],
+					stripslashes('Job_Title') => $row['Job_Title']
+				);
+			}
+			return $users;
 		}
-	}
+	}	
+	
 
 	function create_poll($reviewer, $reviewee, $status){
 		$date = create_date();
@@ -363,7 +395,8 @@
 			if(!$query) {
 				return mysql_error();
 			}else{
-				return get_text('Poll').' '.strtolower(get_text('Created'));
+				$text = get_text('Poll').' '.strtolower(get_text('Added'));
+				return $text;
 			}
 		}
 	}
@@ -526,11 +559,11 @@
 					<th>Gemiddelde score</th>
 				</tr>
 				<?php 
-					foreach ($questions as $question) {
+					foreach ($questions as $key => $question) {
 						?>
 						<tr>
 							<td>
-								<?php echo $question['ID'] ?>
+								<?php echo $key+1; ?>
 							</td>
 							<td>
 								<?php echo $question['Question']; ?>

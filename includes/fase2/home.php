@@ -3,31 +3,65 @@ if(isset($_GET['Start'])){
 	?>
 	<div class="content">
 		<div class="sidebarContent">
-				<ol>
-					<li class="<?php if(!isset($_GET['Step'])){ echo 'activeStep';} ?>">Vragenlijst selecteren</li>
-					<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 1){ echo 'activeStep';} ?>">Vragenlijst invullen</li>
-				</ol>
-			</div>
+			<?php include('includes/aside/fase2.php'); ?>
+		</div>
 		<?php
-		if(!isset($_GET['Step'])){
+		if(!isset($_GET['Poll'])){
 			?>
 			<div class="topContent">
-				
-				<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1">Verder</a></h3>
+				<?php
+					$polls = get_polls_by_reviewer($_SESSION['user_id']);
+					?>
+					<table>
+						<?php
+						foreach ($polls as $poll) {
+							if($poll['Reviewer'] != $poll['Reviewee']){
+								?>
+								<tr>
+									<?php $user = get_user_name($poll['Reviewee']); ?>
+									<td style="width: 75%;"><?php echo $user[0].' '.$user[1]; ?></td>
+									<td>
+										<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+											<input type="hidden" name="Start" value="start" />
+											<input type="hidden" name="Poll" value="<?php echo $poll['ID']; ?>" />
+											<?php
+												if($poll['Status'] == get_poll_status_id('Ingestuurd')){
+													?>
+													<input type="submit" value="Deze enquete werd reeds ingevuld" disabled="disabled" />
+													<?php
+												}else{
+													?>
+													<input type="submit" name="answer_poll" value="Vragenlijst invullen" />
+													<?php
+												}
+											?>
+										</form>
+									</td>
+								</tr>
+								<?php
+							}
+						}
+						?>
+					</table>
+				<!--<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1">Verder</a></h3>-->
 			</div>
 
 			<?php
 		}else{
-			if(isset($_POST['answer_own_questions']) || isset($_POST['save_own_questions'])){
-				$poll = get_poll_by_reviewer_reviewee($_SESSION['user_id'],$_SESSION['user_id']);	
+			$poll = $_GET['Poll'];
+			$poll_status = get_poll_status($poll);
+			$reviewee_id = get_poll_reviewee($poll);
+			$reviewee = get_user_name($reviewee_id);
+			if(isset($_POST['answer_questions']) || isset($_POST['save_questions'])){
+				$poll = get_poll_by_reviewer_reviewee($_SESSION['user_id'],$reviewee_id);	
 				for ($question=1; $question < 30; $question++) {
 					$answer = $_POST[$question];
 					answer($poll, $question, $answer);
 				}
-				if(isset($_POST['answer_own_questions'])){
+				if(isset($_POST['answer_questions'])){
 					change_poll_status($poll, 'Ingestuurd');
 					$result = "<p>Je vragenlijst is succesvol doorgestuurd.</p>";
-				}else if(isset($_POST['save_own_questions'])){
+				}else if(isset($_POST['save_questions'])){
 					change_poll_status($poll, 'Opgeslagen');
 					$result = "<p>Je vragenlijst is succesvol opgeslagen.</p>";
 				}
@@ -35,72 +69,89 @@ if(isset($_GET['Start'])){
 				<div class="topContent">
 					<?php echo $result; ?>
 					<p>Klik op Volgende om naar de volgende stap te gaan.</p>
-					<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=1">Vorige</a></h3>
-					<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2">Volgende</a></h3>
+					<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&Poll=<?php echo $poll; ?>">Vorige</a></h3>
+					<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start">Volgende</a></h3>
 				</div>
 					
 				<?php
-			}else if(isset($_POST['add_preferred_reviewers'])){
-				if(isset($_POST['preferred_reviewer'])){
-					$preferred_reviewers = $_POST['preferred_reviewer'];
-					$reviewee = get_username_by_id($_SESSION['user_id']);
-
-					foreach ($preferred_reviewers as $preferred_reviewer){
-						add_preferred($preferred_reviewer, $reviewee, $reviewee);
-					}
-					?>
-					<div class="topContent">
-						<p>Klik op Volgende om naar de volgende stap te gaan.</p>
-						<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2">Vorige</a></h3>
-						<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3">Volgende</a></h3>
-					</div>
-					<?php
-				}else{
-					$error = "Gelieve minstens x gebruikers te selecteren.";
-					?>
-					<div class="topContent">
-						<?php echo $error; ?>
-						<br />
-						<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2">Vorige</a></h3>
-					</div>
-					<?php
-				}
-			}else if(isset($_POST['add_preferred_reviewees'])){
-				if(isset($_POST['preferred_reviewee'])){
-					$preferred_reviewees = $_POST['preferred_reviewee'];
-					$reviewer = get_username_by_id($_SESSION['user_id']);
-
-					foreach ($preferred_reviewees as $preferred_reviewee){
-						add_preferred($reviewer, $preferred_reviewee, $reviewer);
-					}
-					$success = true;
-				}else{
-					$error = "Gelieve minstens x gebruikers te selecteren.";
-					?>
-					<div class="topContent">
-						<?php echo $error; ?>
-						<br />
-						<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3">Vorige</a></h3>
-					</div>
-					<?php
-					$success = false;
-				}
-				/*foreach ($preferred_reviewers as $preferred_reviewer) {
-					echo $preferred_reviewer;
-				}*/
-				if($success){
+			}else{
 				?>
-					<div class="topContent">
-						<p>U bent aan het einde gekomen van fase 1.</p>
-						<p>Zodra alle gebruikers fase 1 hebben afgerond, zal fase 2 beginnen.</p>
-						U zult via mail een bericht ontvangen wanneer fase 2 begint, zodat u de reviews van de andere gebruikers kan invullen.</p>
-						<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3">Vorige</a></h3>
-						<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>">Afsluiten</a></h3>
-					</div>
-					<?php
-				}
-			}else if($_GET['Step'] == 1){
-				$poll = get_poll_by_reviewer_reviewee($_SESSION['user_id'],$_SESSION['user_id']);
+				<div class="topContent">
+					<h3><?php echo $reviewee[0].' '.$reviewee[1]; ?></h3>
+					<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&Poll=<?php echo $poll; ?>">
+						<table class="questions">
+							<tr>
+								<th><?php get_text('Question'); ?></th>
+								<?php
+								for ($value=1; $value < 7; $value++) { 
+									?>
+									<th><?php echo get_answer_name($value); ?></th>
+									<?php
+								}
+								?>
+							</tr>
+							<?php
+							$number = 1;
+							foreach ($categories as $category) {
+								?>
+								<td colspan="7"><b><?php echo $category['Name']; ?></b></td>
+								<?php
+								foreach ($questions as $question) {
+									if($category['ID'] == $question['Category']){
+										?>
+										<tr>
+											<td><?php echo $number.'. '.$question['Question']; ?></td>
+											<?php
+											if($poll_status == get_poll_status_id('Niet ingevuld')){
+												for ($value=1; $value < 7; $value++) {
+													?>
+													<td style="text-align:center;">
+														<input type="radio" name="<?php echo $question['ID']; ?>" value="<?php echo $value; ?>" <?php if($value == get_answer_value_by_name('Neutraal')){echo 'checked';} ?>/>
+													</td>
+													<?php
+												}
+											}else if($poll_status == get_poll_status_id('Opgeslagen')){
+												for ($value=1; $value < 7; $value++) {
+													?>
+													<td style="text-align:center;">
+														<input type="radio" name="<?php echo $question['ID']; ?>" value="<?php echo $value; ?>" <?php if($value == get_answer($poll, $question['ID'])){echo 'checked';} ?>/>
+													</td>
+													<?php
+												}
+											}else if($poll_status == get_poll_status_id('Ingestuurd')){
+												for ($value=1; $value < 7; $value++) {
+													?>
+													<td style="text-align:center;">
+														<input type="radio" name="<?php echo $question['ID']; ?>" value="<?php echo $value; ?>" <?php if($value == get_answer($poll, $question['ID'])){echo 'checked';} ?> disabled />
+													</td>
+													<?php
+												}
+											}
+											?>
+										</tr>
+										<?php
+										$number++;
+									}
+								}
+							}
+							?>
+						</table>
+						<?php
+						if($poll_status == get_poll_status_id('Ingestuurd')){
+							?>
+							<h3><a href="<?php $_SERVER['PHP_SELF'];?>?Start&Step=2">Verder</a></h3>
+							<?php
+						}else{
+							?>
+							<input type="submit" value="Versturen" name="answer_questions" />
+							<input type="submit" value="Opslaan" name="save_questions" />
+							<?php
+						}
+						?>
+					</form>
+				</div>
+				<?php
+				/*$poll = get_poll_by_reviewer_reviewee($_SESSION['user_id'],$_SESSION['user_id']);
 				if($poll){
 					$poll_status = get_poll_status($poll);
 					echo '<div class="topContent">';
@@ -108,26 +159,13 @@ if(isset($_GET['Start'])){
 					echo '</div>';
 				}else{
 					echo '<div class="topContent">Er is een fout opgetreden. Probeer later nog eens.</div>';
-				}
-			}else if($_GET['Step'] == 2){
-				echo '<div class="topContent">';
-					include('includes/form/preferred_reviewer.php');
-				echo '</div>';
-			}else if($_GET['Step'] == 3){
-				echo '<div class="topContent">';
-					include('includes/form/preferred_reviewee.php');
-				echo '</div>';
+				}*/
 			}
 		}
 		?>
 	</div>
 	<div class="topSidebar step">
-		<ol>
-			<li class="<?php if(!isset($_GET['Step'])){ echo 'activeStep';} ?>">Start</li>
-			<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 1){ echo 'activeStep';} ?>">Vragenlijst invullen</li>
-			<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 2){ echo 'activeStep';} ?>">Keuze: Jouw vragenlijst</li>
-			<li class="<?php if(isset($_GET['Step']) && $_GET['Step'] == 3){ echo 'activeStep';} ?>">Keuze: Andere vragenlijst</li>
-		</ol>
+		<?php include('includes/aside/fase2.php'); ?>
 	</div>
 <?php
 }else{

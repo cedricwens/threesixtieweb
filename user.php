@@ -19,7 +19,7 @@ if(!isset($_SESSION['admin_id'])){
 				$user = $_POST['user'];
 				$id = get_user_id($user);
 				$name = get_user_name($id);
-				echo "<h2>".get_text('Information')." ".strtolower(get_text('About')).": $user</h2>";
+				echo "<h2>".get_text('Information')." ".strtolower(get_text('About')).": $name[0] $name[1]</h2>";
 				get_user_info($id);
 			}
 		}
