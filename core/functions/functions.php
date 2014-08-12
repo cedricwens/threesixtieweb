@@ -114,6 +114,15 @@
 			return $categories;
 		}
 	}
+	function get_calculating_batch_id(){
+		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1')");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
 	function get_categories(){
 		$query = mysql_query("SELECT * FROM category");
 		if(!$query || mysql_num_rows($query) <=0) {
@@ -255,6 +264,24 @@
 			return $polls;
 		}
 	}
+	function get_preferred_polls(){
+		$query = mysql_query("SELECT * FROM preferred_poll");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$polls[] = array(
+					'ID'			=> $row['ID'],
+					'Reviewer' 		=> $row['Reviewer'],
+					'Reviewee'		=> $row['Reviewee'],
+					'User'		=> $row['User'],
+					'Batch'		=> $row['Batch']
+				);
+			}
+			return $polls;
+		}
+	}
 	function get_questions(){
 		$query = mysql_query("SELECT * FROM question");
 		if(!$query || mysql_num_rows($query) <=0) {
@@ -264,7 +291,7 @@
 			while ($row = mysql_fetch_assoc($query)) {
 				$questions[] = array(
 					'ID' => $row['ID'],
-					stripslashes('Question') => $row['Question'],
+					html_entity_decode(stripslashes('Question')) => $row['Question'],
 					'Category' => $row['Category']
 				);
 			}
@@ -321,7 +348,7 @@
 			echo mysql_error();
 			return false;
 		}else{
-			return mysql_result($query,0);
+			return mysql_fetch_row($query);
 		}
 	}
 	function get_user_department($id){
@@ -464,6 +491,19 @@
 		$date = create_date();
 		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'), Running1_date = '$date' WHERE ID = $id");
 	}
+	function calculate_couples($id){
+		$date = create_date();
+		$batch = get_calculating_batch_id();
+		$polls = get_preferred_polls();
+		foreach ($polls as $poll) {
+			$reviewer = $poll['Reviewer'];
+			$reviewee = $poll['Reviewee'];
+			mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_created, Last_update, Batch) VALUES($reviewer, $reviewee, (SELECT ID FROM poll_status WHERE Name = 'Niet Ingevuld'), '$date','$date',$batch)");
+		}
+		/*mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_created, Last_update, Batch) VALUES ((SELECT Reviewer FROM preferred_poll),(SELECT Reviewee FROM preferred_poll),(SELECT ID FROM poll_status WHERE Name = 'Niet Ingevuld'),'$date','$date', $batch)");
+		$date = create_date();*/
+		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Calculate') WHERE ID = $id");
+	}
 	function run_batch($id){
 		$date = create_date();
 		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running2'), Running2_date = '$date' WHERE ID = $id");
@@ -551,7 +591,7 @@
 				}else if($rememberme == ""){
 					$_SESSION['user_id'] = $user['0'];
 				}
-				header('Location: home.php');
+				header('Location: index.php');
 				exit();
 			}else{
 				echo "Foutief wachtwoord";
@@ -560,7 +600,7 @@
 	}
 	function logged_in_redirect(){
 		if(logged_in() === true){
-			header('Location: home.php');
+			header('Location: index.php');
 			exit();
 		}
 	}

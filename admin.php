@@ -13,20 +13,37 @@ $error = "";
 		<?php
 			$users = get_users_not_answered_own_questions();
 			if($users){
+				$number = 0;
 				foreach ($users as $user) {
-					?>
-					<tr>
-						<td style="width: 75%;"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></td>
-						<td>
-							<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-								<input type="hidden" name="user_name" value="<?php echo $user['Firstname'].' '.$user['Lastname']; ?>">
-								<input type="hidden" name="email" value="<?php echo $user['Email']; ?>">
-								<input type="submit" name="reminder_1" value="Stuur herinnering">
-							</form>
-						</td>
-					</tr>
-					<?php
+					$number++;
 				}
+				?>
+				<tr>
+					<td style="width: 75%;"><b><?php echo $number; ?></b> gebruikers hebben hun eigen vragenlijst nog niet ingevuld.</td>
+					<td>
+						<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+							<input type="submit" name="reminder_1" value="Stuur herinnering">
+						</form>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<?php
+						if(isset($_POST['reminder_1'])){
+							$users = get_users_not_answered_own_questions();
+							if($users){
+								foreach ($users as $user) {
+									$user_name = $user['Firstname'].' '.$user['Lastname'];
+									$user_email = $user['Email'];
+									send_reminder_phase1($user_name, $user_name);
+								}
+								echo "Herinnering verzonden.";
+							}
+						}
+						?>
+					</td>
+				</tr>
+				<?php
 			}else{
 				?>
 					Elke gebruiker heeft zijn eigen vragenlijst ingevuld. Fase 2 kan gestart worden.
@@ -72,8 +89,6 @@ $error = "";
 						<?php include('includes/form/change_batch_status.php'); ?>
 					</td>
 				</tr>
-				
-
 				<?php
 			}
 			?>
@@ -99,8 +114,8 @@ $error = "";
 					?>
 					<tr>
 						<td><?php echo $poll['ID']; ?></td>
-						<td><?php echo $reviewer; ?></td>
-						<td><?php echo $reviewee; ?></td>
+						<td><?php echo $reviewer[0]; ?></td>
+						<td><?php echo $reviewee[1]; ?></td>
 						<td><?php echo $poll['Last_Update']; ?></td>
 						<td><a href="?view_answer=<?php echo $poll['ID']; ?>">Bekijk</a></td>
 					</tr>
@@ -172,31 +187,6 @@ $error = "";
 	</div>
 </div>
 <?php
-if(isset($_POST['change_batch_status'])){
-	switch ($_POST['change_batch_status']) {
-		case 'Init':
-			break;
-		case 'Start':
-			start_batch($_POST['batch_id']);
-			break;
-		case 'Run':
-			run_batch($_POST['batch_id']);
-			break;
-		case 'Stop':
-			stop_batch($_POST['batch_id']);
-			break;
-		default:
-				# code...
-		break;
-	}
-}
-if(isset($_POST['reminder_1'])){
-	$user = $_POST['user_name'];
-	$email = $_POST['email'];
-	send_reminder_phase1($user, $email);
-}
-?>
-	<?php
 		if(isset($_POST['add_poll'])){
 			$reviewer 	= $_POST['reviewer'];
 			$reviewee 	= $_POST['reviewee'];
@@ -255,7 +245,7 @@ if(isset($_POST['reminder_1'])){
 					$reviewer = get_user_by_id($poll['Reviewer']);
 					$reviewee = get_user_by_id($poll['Reviewee']);
 					?>
-					<option value="<?php echo $poll['ID']; ?>"><?php echo $reviewer.' '.strtolower(get_text('About')).' '.$reviewee; ?></option>
+					<option value="<?php echo $poll['ID']; ?>"><?php echo $reviewer[0].' '.strtolower(get_text('About')).' '.$reviewee[0]; ?></option>
 					<?php
 				}
 				?>
