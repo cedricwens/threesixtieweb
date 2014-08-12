@@ -6,9 +6,9 @@
 
 <?php 
 $fase = 2;
-if($fase == 1){
+if(get_running1_batch_id()){
 	include_once('includes/fase1/home.php');
-}else{
+}else if(get_running2_batch_id()){
 	include_once('includes/fase2/home.php');
 }
 ?>

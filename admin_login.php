@@ -4,7 +4,6 @@ require('includes/header.php');
 logged_in_redirect();
 $errors = "";
 ?>
-
 <?php
 	if(isset($_POST['login'])){
 

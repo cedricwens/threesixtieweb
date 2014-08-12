@@ -1,5 +1,5 @@
 <?php
-	$selected_page = "Login";
+	$selected_page = "Home";
 require('includes/header.php');
 logged_in_redirect();
 ?>

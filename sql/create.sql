@@ -100,7 +100,8 @@ CREATE TABLE parameter(
 CREATE TABLE batch(
 	ID int NOT NULL AUTO_INCREMENT,
 	Init_date datetime, 
-	Running_date datetime,
+	Running1_date datetime,
+	Running2_date datetime,
 	Finished_date datetime,
 	Status int NOT NULL,
 	Comment varchar(255),

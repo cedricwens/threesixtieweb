@@ -8,6 +8,38 @@ $error = "";
 ?>
 <div class="content">
 	<div class="topContent">
+		Deze gebruikers hebben hun eigen vragenlijst nog niet ingevuld:
+		<table>
+		<?php
+			$users = get_users_not_answered_own_questions();
+			if($users){
+				foreach ($users as $user) {
+					?>
+					<tr>
+						<td style="width: 75%;"><?php echo $user['Firstname'].' '.$user['Lastname']; ?></td>
+						<td>
+							<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+								<input type="hidden" name="user_name" value="<?php echo $user['Firstname'].' '.$user['Lastname']; ?>">
+								<input type="hidden" name="email" value="<?php echo $user['Email']; ?>">
+								<input type="submit" name="reminder_1" value="Stuur herinnering">
+							</form>
+						</td>
+					</tr>
+					<?php
+				}
+			}else{
+				?>
+					Elke gebruiker heeft zijn eigen vragenlijst ingevuld. Fase 2 kan gestart worden.
+					<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+						<input type="submit" name="start_fase_2" value="Start fase 2">
+					</form>
+				<?php
+
+			}
+		?>
+		</table>
+	</div>
+	<div class="middleContent">
 
 		<h3>Lijst van batches:</h3>
 		Er kan maar 1 batch in 'Init' state zijn, en maar 1 batch in 'Running' state. Er staat geen limiet op het aantal batches in 'Finished' state.
@@ -18,7 +50,8 @@ $error = "";
 			<tr>
 				<th>ID</th>
 				<th>Init Date</th>
-				<th>Running Date</th>
+				<th>Running Date Phase 1</th>
+				<th>Running Date Phase 2</th>
 				<th>Finished Date</th>
 				<th>Status</th>
 				<th>Comment</th>
@@ -30,7 +63,8 @@ $error = "";
 				<tr>
 					<td><?php echo $batch['ID']; ?></td>
 					<td><?php echo $batch['Init_date']; ?></td>
-					<td><?php echo $batch['Running_date']; ?></td>
+					<td><?php echo $batch['Running1_date']; ?></td>
+					<td><?php echo $batch['Running2_date']; ?></td>
 					<td><?php echo $batch['Finished_date']; ?></td>
 					<td><?php echo get_batch_status_name($batch['Status']); ?></td>
 					<td><?php echo $batch['Comment']; ?></td>
@@ -142,6 +176,9 @@ if(isset($_POST['change_batch_status'])){
 	switch ($_POST['change_batch_status']) {
 		case 'Init':
 			break;
+		case 'Start':
+			start_batch($_POST['batch_id']);
+			break;
 		case 'Run':
 			run_batch($_POST['batch_id']);
 			break;
@@ -152,6 +189,11 @@ if(isset($_POST['change_batch_status'])){
 				# code...
 		break;
 	}
+}
+if(isset($_POST['reminder_1'])){
+	$user = $_POST['user_name'];
+	$email = $_POST['email'];
+	send_reminder_phase1($user, $email);
 }
 ?>
 	<?php

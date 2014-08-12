@@ -11,38 +11,44 @@ if(isset($_GET['Start'])){
 			<div class="topContent">
 				<?php
 					$polls = get_polls_by_reviewer($_SESSION['user_id']);
-					?>
-					<table>
-						<?php
-						foreach ($polls as $poll) {
-							if($poll['Reviewer'] != $poll['Reviewee']){
-								?>
-								<tr>
-									<?php $user = get_user_name($poll['Reviewee']); ?>
-									<td style="width: 75%;"><?php echo $user[0].' '.$user[1]; ?></td>
-									<td>
-										<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-											<input type="hidden" name="Start" value="start" />
-											<input type="hidden" name="Poll" value="<?php echo $poll['ID']; ?>" />
-											<?php
-												if($poll['Status'] == get_poll_status_id('Ingestuurd')){
-													?>
-													<input type="submit" value="Deze enquete werd reeds ingevuld" disabled="disabled" />
-													<?php
-												}else{
-													?>
-													<input type="submit" name="answer_poll" value="Vragenlijst invullen" />
-													<?php
-												}
-											?>
-										</form>
-									</td>
-								</tr>
-								<?php
-							}
-						}
+					if($polls){
 						?>
-					</table>
+						<table>
+							<?php
+							foreach ($polls as $poll) {
+								if($poll['Reviewer'] != $poll['Reviewee']){
+									?>
+									<tr>
+										<?php $user = get_user_name($poll['Reviewee']); ?>
+										<td style="width: 75%;"><?php echo $user[0].' '.$user[1]; ?></td>
+										<td>
+											<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
+												<input type="hidden" name="Start" value="start" />
+												<input type="hidden" name="Poll" value="<?php echo $poll['ID']; ?>" />
+												<?php
+													if($poll['Status'] == get_poll_status_id('Ingestuurd')){
+														?>
+														<input type="submit" value="Deze enquete werd reeds ingevuld" disabled="disabled" />
+														<?php
+													}else{
+														?>
+														<input type="submit" name="answer_poll" value="Vragenlijst invullen" />
+														<?php
+													}
+												?>
+											</form>
+										</td>
+									</tr>
+									<?php
+								}
+							}
+							?>
+						</table>
+						<?php
+					}else{
+						echo "Er zijn geen vragenlijsten beschikbaar.";
+					}
+					?>
 				<!--<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1">Verder</a></h3>-->
 			</div>
 

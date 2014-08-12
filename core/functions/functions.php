@@ -67,7 +67,7 @@
 		}
 	}
 	function get_average_score_poll($poll, $question){
-		$batch = get_running_batch_id();
+		$batch = get_running2_batch_id();
 		$query = mysql_query("SELECT Average_Score FROM average_score_view WHERE Batch = $batch AND Poll = $poll AND Question = $question");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
@@ -104,7 +104,8 @@
 				$categories[] = array(
 					'ID' => $row['ID'],
 					'Init_date' => $row['Init_date'],
-					'Running_date' => $row['Running_date'],
+					'Running1_date' => $row['Running1_date'],
+					'Running2_date' => $row['Running2_date'],
 					'Finished_date' => $row['Finished_date'],
 					'Status' => $row['Status'],
 					'Comment' => $row['Comment']
@@ -270,8 +271,17 @@
 			return $questions;
 		}
 	}
-	function get_running_batch_id(){
-		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running')");
+	function get_running1_batch_id(){
+		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1')");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_running2_batch_id(){
+		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running2')");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -377,11 +387,45 @@
 			return $users;
 		}
 	}	
+	function get_users_not_answered_own_questions(){
+		$query = mysql_query("	SELECT *
+								FROM user
+								WHERE
+									ID = ANY(
+								        SELECT Reviewer
+								        FROM poll
+								        WHERE
+								        	Reviewer = Reviewee
+								       		AND
+								        	Status = (SELECT ID
+								                      FROM poll_status
+								                      WHERE Name = 'Niet Ingevuld'
+								                      )
+								    )
+								ORDER BY Lastname
+							");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$users[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Firstname') => $row['Firstname'],
+					stripslashes('Lastname') => $row['Lastname'],
+					stripslashes('Username') => $row['Username'],
+					stripslashes('Email') => $row['Email'],
+					stripslashes('Job_Title') => $row['Job_Title']
+				);
+			}
+			return $users;
+		}
+	}
 	
 
 	function create_poll($reviewer, $reviewee, $status){
 		$date = create_date();
-		$batch = get_running_batch_id();
+		$batch = get_running2_batch_id();
 		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer') AND Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee') AND Batch = $batch");
 		if(!$query || mysql_num_rows($query)>0 || mysql_num_rows($query) < 0){
 			if(mysql_num_rows($query) > 0) {
@@ -416,16 +460,20 @@
 		}
 	}
 	function init_batch($batch){}
+	function start_batch($id){
+		$date = create_date();
+		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'), Running1_date = '$date' WHERE ID = $id");
+	}
 	function run_batch($id){
 		$date = create_date();
-		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running'), Running_date = '$date' WHERE ID = $id");
+		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running2'), Running2_date = '$date' WHERE ID = $id");
 	}
 	function stop_batch($id){
 		$date = create_date();
 		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Finished'), Finished_date = '$date' WHERE ID = $id");
 	}
 	function add_preferred($reviewer, $reviewee, $user){
-		$batch = get_running_batch_id();
+		$batch = get_running1_batch_id();
 		if($reviewer == $reviewee){
 			echo get_text('Prohibited_to_prefer_yourself');
 		}else{
@@ -469,6 +517,24 @@
 	function change_poll_status($poll, $status){
 		$date = create_date();
 		$query = mysql_query("UPDATE poll SET Status = (SELECT ID FROM poll_status WHERE Name = '$status'), Last_Update = '$date' WHERE ID = $poll");
+	}
+	function send_reminder_phase1($user, $email){
+		$to = $email;
+		$subject = "Herinnering";
+		$message = "
+						Geachte $user,
+						<p>
+							Via deze mail willen wij u er aan herinneren dat u uw eigen vragenlijst nog niet hebt ingevuld.
+							Wij willen u daarom vriendelijk verzoeken om deze zo snel mogelijk in te vullen en door te sturen.
+						</p>
+						<p>
+							Met vriendelijke groeten,
+						</p>
+						<p>
+							Het ThreeSixtyWeb team
+						</p>
+					";
+		mail($to, $subject, $message);
 	}
 
 

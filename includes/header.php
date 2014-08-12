@@ -32,9 +32,9 @@ require('core/init.php');
 
 </head>
 <body class="body">
-	<header class="mainHeader">
+	<header class="mainHeader" <?php if(isset($_SESSION['admin_id'])){ echo 'id="mainHeader"';} ?>>
 		<img src="img/logo.png" />
-		<nav>
+		<nav id="menu">
 			<ul>
 				<li <?php if($selected_page == 'Home'){ echo 'class="active"';} ?>><a href="home.php">Home</a></li>
 				<?php
