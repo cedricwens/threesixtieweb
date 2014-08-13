@@ -8,7 +8,7 @@ $error = "";
 ?>
 <div class="content">
 	<div class="topContent">
-		Deze gebruikers hebben hun eigen vragenlijst nog niet ingevuld:
+		<?php echo get_text('These_users_have_not_filled_in_own_poll'); ?>:
 		<table>
 		<?php
 			$users = get_users_not_answered_own_questions();
@@ -19,10 +19,10 @@ $error = "";
 				}
 				?>
 				<tr>
-					<td style="width: 75%;"><b><?php echo $number; ?></b> gebruikers hebben hun eigen vragenlijst nog niet ingevuld.</td>
+					<td style="width: 80%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_own_poll'); ?>.</td>
 					<td>
 						<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-							<input type="submit" name="reminder_1" value="Stuur herinnering">
+							<input type="submit" name="reminder_1" value="<?php echo get_text('Send_reminder'); ?>">
 						</form>
 					</td>
 				</tr>
@@ -37,7 +37,7 @@ $error = "";
 									$user_email = $user['Email'];
 									send_reminder_phase1($user_name, $user_name);
 								}
-								echo "Herinnering verzonden.";
+								echo get_text('Reminder_send').'.';
 							}
 						}
 						?>
@@ -45,10 +45,10 @@ $error = "";
 				</tr>
 				<?php
 			}else{
+				echo get_text('Every_user_has_answered_own_poll_can_start_phase_2');
 				?>
-					Elke gebruiker heeft zijn eigen vragenlijst ingevuld. Fase 2 kan gestart worden.
 					<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-						<input type="submit" name="start_fase_2" value="Start fase 2">
+						<input type="submit" name="start_fase_2" value="<?php echo get_text('Start').' '.strtotower(get_text('Phase_2')); ?>">
 					</form>
 				<?php
 
@@ -58,21 +58,21 @@ $error = "";
 	</div>
 	<div class="middleContent">
 
-		<h3>Lijst van batches:</h3>
-		Er kan maar 1 batch in 'Init' state zijn, en maar 1 batch in 'Running' state. Er staat geen limiet op het aantal batches in 'Finished' state.
+		<h3><?php echo get_text('List_of_batches'); ?>:</h3>
 		<?php
-		$batches = get_batches();
+			echo get_text('Batches_text');
+			$batches = get_batches();
 		?>
 		<table id="batches">
 			<tr>
-				<th>ID</th>
-				<th>Init Date</th>
-				<th>Running Date Phase 1</th>
-				<th>Running Date Phase 2</th>
-				<th>Finished Date</th>
-				<th>Status</th>
-				<th>Comment</th>
-				<th>Action</th>
+				<th><?php echo get_text('ID'); ?></th>
+				<th><?php echo get_text('Init_date'); ?></th>
+				<th><?php echo get_text('Running_date_phase_1'); ?></th>
+				<th><?php echo get_text('Running_date_phase_2'); ?></th>
+				<th><?php echo get_text('Finished_date'); ?></th>
+				<th><?php echo get_text('Status'); ?></th>
+				<th><?php echo get_text('Comment'); ?></th>
+				<th><?php echo get_text('Action'); ?></th>
 			</tr>
 			<?php
 			foreach ($batches as $batch) {

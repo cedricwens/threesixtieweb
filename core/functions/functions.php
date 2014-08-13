@@ -164,7 +164,7 @@
 		}
 	}
 	function get_managers(){
-		$query = mysql_query("SELECT d.Name AS Department, u.Name FROM user u INNER JOIN department d ON u.ID = d.Manager");
+		$query = mysql_query("SELECT DISTINCT(d.ID) AS Department, d.Manager AS Manager FROM user_department ud INNER JOIN Department d ON ud.Department = d.ID;");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
@@ -172,7 +172,7 @@
 			while ($row = mysql_fetch_assoc($query)) {
 				$managers[] = array(
 					stripslashes('Department') => $row['Department'],
-					stripslashes('Name') => $row['Name']
+					stripslashes('Manager') => $row['Manager']
 				);
 			}
 			return $managers;
@@ -414,6 +414,24 @@
 			return $users;
 		}
 	}	
+	function get_users_order_by_id(){
+		$query = mysql_query("SELECT * FROM user");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$users[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Firstname') => $row['Firstname'],
+					stripslashes('Lastname') => $row['Lastname'],
+					stripslashes('Username') => $row['Username'],
+					stripslashes('Job_Title') => $row['Job_Title']
+				);
+			}
+			return $users;
+		}
+	}
 	function get_users_not_answered_own_questions(){
 		$query = mysql_query("	SELECT *
 								FROM user
@@ -692,7 +710,7 @@
 			<?php	
 	}
 	function get_number_of_reviews_given($id){
-		$query = mysql_query("SELECT Aantal_Reviews FROM reviews_given_view WHERE Reviewer = $id");
+		$query = mysql_query("SELECT count(*) AS Aantal_Reviews FROM reviews_given_view WHERE Reviewer = $id");
 		if(!$query || mysql_num_rows($query) <0) {
 			echo mysql_error();
 			return false;
@@ -704,7 +722,7 @@
 		}
 	}
 	function get_number_of_reviews_received($id){
-		$query = mysql_query("SELECT Aantal_Reviews FROM reviews_received_view WHERE Reviewee = $id");
+		$query = mysql_query("SELECT count(*) AS Aantal_Reviews FROM reviews_received_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
 			return false;
@@ -716,7 +734,7 @@
 		}
 	}
 	function get_number_of_poll_team_members($id){
-		$query = mysql_query("SELECT Aantal_TeamLeden FROM teammember_view WHERE Reviewee = $id");
+		$query = mysql_query("SELECT count(*) Aantal_TeamLeden FROM teammember_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
 			return false;
@@ -728,7 +746,7 @@
 		}
 	}
 	function get_number_of_poll_not_team_members($id){
-		$query = mysql_query("SELECT Aantal_NietTeamLeden FROM notteammember_view WHERE Reviewee = $id");
+		$query = mysql_query("SELECT count(*) Aantal_NietTeamLeden FROM notteammember_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
 			return false;
@@ -740,7 +758,7 @@
 		}
 	}
 	function get_number_of_poll_team_manager($id){
-		$query = mysql_query("SELECT Aantal_TeamManagers FROM teammanager_view WHERE Reviewee = $id");
+		$query = mysql_query("SELECT count(*) AS Aantal_TeamManagers FROM teammanager_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
 			return false;
@@ -752,7 +770,7 @@
 		}
 	}
 	function get_number_of_poll_not_team_manager($id){
-		$query = mysql_query("SELECT Aantal_NietTeamManagers FROM notteammanager_view WHERE Reviewee = $id");
+		$query = mysql_query("SELECT count(*) AS Aantal_NietTeamManagers FROM notteammanager_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
 			return false;
@@ -764,7 +782,7 @@
 		}
 	}
 	function get_number_of_preferred_reviewers($id){
-		$query = mysql_query("SELECT Aantal_Preferred_Reviewers FROM preferred_reviewers_view WHERE Reviewee = $id");
+		$query = mysql_query("SELECT count(*) AS Aantal_Preferred_Reviewers FROM preferred_reviewers_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
 			return false;
@@ -776,7 +794,7 @@
 		}
 	}
 	function get_number_of_preferred_reviewees($id){
-		$query = mysql_query("SELECT Aantal_Preferred_Reviewees FROM preferred_reviewees_view WHERE Reviewer = $id");
+		$query = mysql_query("SELECT count(*) AS Aantal_Preferred_Reviewees FROM preferred_reviewees_view WHERE Reviewer = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
 			return false;
@@ -788,7 +806,20 @@
 		}
 	}
 	function get_average_score($user, $question){
-		$query = mysql_query("SELECT Average_Score FROM average_score_view WHERE Reviewee = $user AND Question = $question");
+		$query = mysql_query("SELECT count(*) AS Average_Score FROM average_score_view WHERE Reviewee = $user AND Question = $question");
+		if(!$query || mysql_num_rows($query) < 0) {
+			echo mysql_error();
+			return false;
+		}else{
+			if(mysql_num_rows($query) == 0){
+				return 0;
+			}
+			return mysql_result($query, 0);
+		}
+	}
+
+	function get_team_manager($user){
+		$query = mysql_query("SELECT ID FROM teammanager_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
 			return false;
@@ -817,6 +848,7 @@
 	$categories = get_categories();
 	$polls = get_polls();
 	$users = get_users();
+	$managers = get_managers();
 	$departments = get_departments();
 	$poll_statuses = get_all_poll_statuses();
 	$number_of_users = get_number_of_users();

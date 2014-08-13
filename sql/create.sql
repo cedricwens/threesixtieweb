@@ -130,6 +130,14 @@ CREATE TABLE text_nl(
 	PRIMARY KEY (ID)
 );
 
+CREATE TABLE candidate_poll(
+	ID int NOT NULL AUTO_INCREMENT,
+	Reviewer int NOT NULL,
+	Reviewee int NOT NULL,
+	Score int,
+	PRIMARY KEY(ID)
+);
+
 ALTER TABLE user 
 	ADD CONSTRAINT un_username UNIQUE (Username);
 
@@ -201,3 +209,9 @@ ALTER TABLE user_department
 		REFERENCES user(ID),
 	ADD CONSTRAINT fk_department_user_department FOREIGN KEY (Department)
 		REFERENCES department(ID);
+
+ALTER TABLE candidate_poll
+	ADD CONSTRAINT fk_reviewer FOREIGN KEY (Reviewer)
+		REFERENCES user(ID),
+	ADD CONSTRAINT fk_reviewee FOREIGN KEY (Reviewee)
+		REFERENCES user(ID);

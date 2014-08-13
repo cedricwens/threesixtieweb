@@ -28,11 +28,11 @@ if(isset($_GET['Start'])){
 												<?php
 													if($poll['Status'] == get_poll_status_id('Ingestuurd')){
 														?>
-														<input type="submit" value="Deze enquete werd reeds ingevuld" disabled="disabled" />
+														<input type="submit" value="<?php echo get_text('Poll_already_answered'); ?>" disabled="disabled" />
 														<?php
 													}else{
 														?>
-														<input type="submit" name="answer_poll" value="Vragenlijst invullen" />
+														<input type="submit" name="answer_poll" value="<?php echo get_text('Answer_poll'); ?>" />
 														<?php
 													}
 												?>
@@ -46,10 +46,9 @@ if(isset($_GET['Start'])){
 						</table>
 						<?php
 					}else{
-						echo "Er zijn geen vragenlijsten beschikbaar.";
+						echo get_text('No_polls_found');
 					}
-					?>
-				<!--<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1">Verder</a></h3>-->
+				?>
 			</div>
 
 			<?php
@@ -66,17 +65,17 @@ if(isset($_GET['Start'])){
 				}
 				if(isset($_POST['answer_questions'])){
 					change_poll_status($poll, 'Ingestuurd');
-					$result = "<p>Je vragenlijst is succesvol doorgestuurd.</p>";
+					$result = "<p>".get_text('Poll_send_successfully')."</p>";
 				}else if(isset($_POST['save_questions'])){
 					change_poll_status($poll, 'Opgeslagen');
-					$result = "<p>Je vragenlijst is succesvol opgeslagen.</p>";
+					$result = "<p>".get_text('Poll_send_successfully')."</p>";
 				}
 				?>
 				<div class="topContent">
 					<?php echo $result; ?>
-					<p>Klik op Volgende om naar de volgende stap te gaan.</p>
-					<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&Poll=<?php echo $poll; ?>">Vorige</a></h3>
-					<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start">Volgende</a></h3>
+					<p><?php get_text('Click_next_for_next_step'); ?></p>
+					<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&Poll=<?php echo $poll; ?>"><?php echo get_text('Back'); ?></a></h3>
+					<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start"><?php echo get_text('Next'); ?></a></h3>
 				</div>
 					
 				<?php
@@ -145,27 +144,18 @@ if(isset($_GET['Start'])){
 						<?php
 						if($poll_status == get_poll_status_id('Ingestuurd')){
 							?>
-							<h3><a href="<?php $_SERVER['PHP_SELF'];?>?Start&Step=2">Verder</a></h3>
+							<h3><a href="<?php $_SERVER['PHP_SELF'];?>?Start&Step=2"><?php echo get_text('Next'); ?></a></h3>
 							<?php
 						}else{
 							?>
-							<input type="submit" value="Versturen" name="answer_questions" />
-							<input type="submit" value="Opslaan" name="save_questions" />
+							<input type="submit" value="<?php echo get_text('Send'); ?>" name="answer_questions" />
+							<input type="submit" value="<?php echo get_text('Save'); ?>" name="save_questions" />
 							<?php
 						}
 						?>
 					</form>
 				</div>
 				<?php
-				/*$poll = get_poll_by_reviewer_reviewee($_SESSION['user_id'],$_SESSION['user_id']);
-				if($poll){
-					$poll_status = get_poll_status($poll);
-					echo '<div class="topContent">';
-						include('includes/form/own_poll.php');
-					echo '</div>';
-				}else{
-					echo '<div class="topContent">Er is een fout opgetreden. Probeer later nog eens.</div>';
-				}*/
 			}
 		}
 		?>
@@ -177,12 +167,8 @@ if(isset($_GET['Start'])){
 }else{
 	?>
 	<div class="topContent">
-		Welkom bij het ThreeSixtyWeb evaluatieproject, fase 2.
-		<br />
-		We hebben het algoritme losgelaten op onze database en deze heeft dan, rekening houdend met uw voorkeuren, koppels berekend.
-		<br />
-		De voor u berekende koppels worden op de volgende pagina weergegeven. U kan vanaf nu de vragenlijsten van deze gebruikers invullen.
-		<span id="start"><a href="?Start"><h1>Bekijk vragenlijsten >></h1></a></span>
+		<?php echo get_text('Phase2_text'); ?>
+		<span id="start"><a href="?Start"><h1><?php echo get_text('View').' '.strtolower(get_text('Polls')); ?> >></h1></a></span>
 	</div>
 	<?php
 }

@@ -14,7 +14,7 @@ $errors = "";
 				$_SESSION['admin_id'] = get_admin_id('Admin');
 				header('Location: admin.php');
 			}else{
-				$errors = "Foutief wachtwoord";
+				$errors = get_text('Wrong_password');
 			}
 		}
 		
@@ -25,8 +25,9 @@ $errors = "";
 		<label for="username"><?php echo get_text('Username'); ?>: </label><input type="text" name="username" />
 		<br />
 		<label for="password"><?php echo get_text('Password'); ?>: </label><input type="password" name="password" />
+		<br />
 	<!-- consider adding a logo here dnsbelgium.png (please ask for the file)-->
-		<input type="submit" value="Login" name="login" />
+		<input type="submit" value="<?php echo get_text('Login'); ?>" name="login" />
 	</form>
 	<?php
 		if($errors != ""){
