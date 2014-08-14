@@ -135,6 +135,9 @@ CREATE TABLE candidate_poll(
 	Reviewer int NOT NULL,
 	Reviewee int NOT NULL,
 	Score int,
+	Ok_reviewee int,
+	Ok_reviewer int,
+	Ok_overall int,
 	PRIMARY KEY(ID)
 );
 
