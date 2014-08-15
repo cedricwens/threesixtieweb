@@ -8,12 +8,16 @@
 				break;
 			case 'Start':
 				start_batch($_GET['id']);
+				stop_batch(get_published_batch_id());
 				break;
 			case 'Calculate':
 				calculate_couples($_GET['id']);
 				break;
 			case 'Run':
 				run_batch($_GET['id']);
+				break;
+			case 'Publish':
+				publish_batch($_GET['id']);
 				break;
 			case 'Stop':
 				stop_batch($_GET['id']);
@@ -28,8 +32,8 @@
 		<tr>
 			<th>ID</th>
 			<th>Init Date</th>
-			<th>Running Date Phase 1</th>
-			<th>Running Date Phase 2</th>
+			<th>Phase 1</th>
+			<th>Phase 2</th>
 			<th>Finished Date</th>
 			<th>Status</th>
 			<th>Comment</th>
@@ -50,8 +54,16 @@
 					<?php include('includes/form/change_batch_status.php'); ?>
 				</td>
 			</tr>
-			
 		<?php
 		}
+		?>
+		<tr>
+			<td colspan="8">
+				<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+					<input type="submit" name="add_batch" onclick="add_new_batch();" value="Batch toevoegen" />
+				</form>
+			</td>
+		</tr>
+		<?php
 	}
 ?>

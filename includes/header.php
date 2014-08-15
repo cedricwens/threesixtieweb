@@ -10,6 +10,15 @@ require('core/init.php');
 	<!--<link rel="stylesheet" type="text/css" href="main.css">-->
 	<!-- consider adding a logo here /somewhere on the page
 				dnsbelgium.png (please ask for the file)-->
+	<style type="text/css">
+		.back{
+			display: inline;
+			margin-right: 25px;
+		}
+		.next{
+			display: inline;
+		}
+	</style>
 	<script type="text/javascript">
 		function moveItem(a, b){
 			var fromBox = document.getElementById(a),
@@ -45,6 +54,21 @@ require('core/init.php');
 		xmlhttp.open("GET","change_batch_status.php?id="+batch+"&action="+action,true);
 		xmlhttp.send();
 	}
+	function add_new_batch(){
+		if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+	  		xmlhttp=new XMLHttpRequest();
+	  	}
+		else{// code for IE6, IE5
+	  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  	}
+		xmlhttp.onreadystatechange=function(){
+	  		//if (xmlhttp.readyState==4 && xmlhttp.status==200){
+	    		document.getElementById("batches").innerHTML=xmlhttp.responseText;
+	   		//}
+	  	}	
+		xmlhttp.open("GET","add_batch.php",true);
+		xmlhttp.send();
+	}
 	</script>
 </head>
 <body class="body">
@@ -52,16 +76,22 @@ require('core/init.php');
 		<img src="img/logo.png" />
 		<nav id="menu">
 			<ul>
-				<li <?php if($selected_page == 'Home'){ echo 'class="active"';} ?>><a href="index.php">Home</a></li>
 				<?php
-					if(isset($_SESSION['user_id'])){
+					if(isset($_SESSION['user_id']) && !get_published_batch_id()){
 						?>
-						<li <?php if($selected_page == 'MyResults'){ echo 'class="active"';} ?>><a href="pdf.php?id=<?php echo $_SESSION['user_id']; ?>">My results</a></li>
+						<li <?php if($selected_page == 'Home'){ echo 'class="active"';} ?>><a href="index.php">Home</a></li>
 						<?php
 					}
+					if(isset($_SESSION['user_id']) && get_published_batch_id()){
+						?>
+						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php?id=<?php echo $_SESSION['user_id']; ?>">My results</a></li>
+						<?php
+					}
+					?>
+					<?php
 					if(isset($_SESSION['admin_id'])){
 						?>
-						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php">User</a></li>
+						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php">User Results</a></li>
 						<li <?php if($selected_page == 'Admin'){ echo 'class="active"';} ?>><a href="admin.php">Admin</a></li>
 						<?php
 					}

@@ -7,55 +7,74 @@ if(!isset($_SESSION['admin_id'])){
 $error = "";
 ?>
 <div class="content">
-	<div class="topContent">
-		<?php echo get_text('These_users_have_not_filled_in_own_poll'); ?>:
-		<table>
-		<?php
-			$users = get_users_not_answered_own_questions();
-			if($users){
-				$number = 0;
-				foreach ($users as $user) {
-					$number++;
-				}
-				?>
-				<tr>
-					<td style="width: 80%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_own_poll'); ?>.</td>
-					<td>
-						<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-							<input type="submit" name="reminder_1" value="<?php echo get_text('Send_reminder'); ?>">
-						</form>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<?php
-						if(isset($_POST['reminder_1'])){
-							$users = get_users_not_answered_own_questions();
-							if($users){
-								foreach ($users as $user) {
-									$user_name = $user['Firstname'].' '.$user['Lastname'];
-									$user_email = $user['Email'];
-									send_reminder_phase1($user_name, $user_name);
-								}
-								echo get_text('Reminder_send').'.';
-							}
+	<?php if(get_running1_batch_id() || get_running2_batch_id()){ ?>
+		<div class="topContent">
+			<table>
+			<?php
+				if(get_running1_batch_id()){
+					$users = get_users_not_answered_own_questions();
+					if($users){
+						$number = 0;
+						foreach ($users as $user) {
+							$number++;
 						}
 						?>
-					</td>
-				</tr>
-				<?php
-			}else{
-				echo get_text('Every_user_has_answered_own_poll_can_start_phase_2');
-				?>
-					<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-						<input type="submit" name="start_fase_2" value="<?php echo get_text('Start').' '.strtotower(get_text('Phase_2')); ?>">
-					</form>
-				<?php
+						<tr>
+							<td style="width: 80%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_own_poll'); ?>.</td>
+							<td>
+								<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+									<input type="submit" name="reminder_1" value="<?php echo get_text('Send_reminder'); ?>">
+								</form>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<?php
+								if(isset($_POST['reminder_1'])){
+										echo get_text('Reminder_send').'.';
+								}
+								?>
+							</td>
+						</tr>
+						<?php
+					}else{
+						echo get_text('Every_user_has_answered_own_poll_can_start_phase_2');
+					}
+				}else if(get_running2_batch_id()){
+					get_users_not_answered_other_questions();
+					if($users){
+						$number = 0;
+						foreach ($users as $user) {
+							$number++;
+						}
+						?>
+						<tr>
+							<td style="width: 80%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_other_poll'); ?>.</td>
+							<td>
+								<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+									<input type="submit" name="reminder_2" value="<?php echo get_text('Send_reminder'); ?>">
+								</form>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<?php
+								if(isset($_POST['reminder2'])){
+										echo get_text('Reminder_send').'.';
+								}
+								?>
+							</td>
+						</tr>
+						<?php
+					}else{
+						echo get_text('Every_user_has_answered_other_poll_can_start_publish_results');
+					}
+				}
 
-			}
-		?>
-		</table>
-	</div>
+			?>
+			</table>
+		</div>
+	<?php } ?>
 	<div class="middleContent">
 
 		<h3><?php echo get_text('List_of_batches'); ?>:</h3>
@@ -75,25 +94,39 @@ $error = "";
 				<th><?php echo get_text('Action'); ?></th>
 			</tr>
 			<?php
-			foreach ($batches as $batch) {
-				?>
-				<tr>
-					<td><?php echo $batch['ID']; ?></td>
-					<td><?php echo $batch['Init_date']; ?></td>
-					<td><?php echo $batch['Running1_date']; ?></td>
-					<td><?php echo $batch['Running2_date']; ?></td>
-					<td><?php echo $batch['Finished_date']; ?></td>
-					<td><?php echo get_batch_status_name($batch['Status']); ?></td>
-					<td><?php echo $batch['Comment']; ?></td>
-					<td>
-						<?php include('includes/form/change_batch_status.php'); ?>
-					</td>
-				</tr>
-				<?php
+			if($batches){
+				foreach ($batches as $batch) {
+					?>
+					<tr>
+						<td><?php echo $batch['ID']; ?></td>
+						<td><?php echo $batch['Init_date']; ?></td>
+						<td><?php echo $batch['Running1_date']; ?></td>
+						<td><?php echo $batch['Running2_date']; ?></td>
+						<td><?php echo $batch['Finished_date']; ?></td>
+						<td><?php echo get_batch_status_name($batch['Status']); ?></td>
+						<td><?php echo $batch['Comment']; ?></td>
+						<td>
+							<?php include('includes/form/change_batch_status.php'); ?>
+						</td>
+					</tr>
+					<?php
+				}
 			}
 			?>
+			<tr>
+				<td colspan="8">
+					<form action="" method="post">
+						<input type="submit" name="add_batch" onclick="add_new_batch();" value="Batch toevoegen" />
+					</form>
+				</td>
+			</tr>
 		</table>
 	</div>
+	<?php
+	/*if(isset($_POST['add_batch'])){
+		add_batch();
+	}*/
+	?>
 	<div class="bottomContent">
 		<h2><?php echo get_text('Polls'); ?>:</h2>				
 		<?php
@@ -122,7 +155,7 @@ $error = "";
 					<?php
 				}
 			}else{
-				echo "Er zijn geen polls gevonden.";
+				echo "Er zijn geen vragenlijsten gevonden.<br /><br /><br /><br />";
 			}
 			?>
 		</table>

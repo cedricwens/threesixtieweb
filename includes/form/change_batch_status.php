@@ -7,7 +7,7 @@
 		<?php
 	}else if(get_batch_status_name($batch['Status']) == 'Running1'){
 		?>
-		<input type="submit" name="change_batch_status" onclick="change_batchstatus(<?php echo $batch['ID']; ?>, 'Calculate')" value="Calculate Polls" />
+		<input type="submit" name="change_batch_status" onclick="change_batchstatus(<?php echo $batch['ID']; ?>, 'Calculate')" value="Calculate Polls" <?php if(!get_users_not_answered_own_questions()){echo 'disabled="disabled"';} ?> />
 		<?php
 	}else if(get_batch_status_name($batch['Status']) == 'Calculate'){
 		?>
@@ -15,9 +15,9 @@
 		<?php
 	}else if(get_batch_status_name($batch['Status']) == 'Running2'){
 		?>
-		<input type="submit" name="change_batch_status" onclick="change_batchstatus(<?php echo $batch['ID']; ?>, 'Stop')" value="Stop" />
+		<input type="submit" name="change_batch_status" onclick="change_batchstatus(<?php echo $batch['ID']; ?>, 'Publish')" value="Stop and Publish results" <?php if(get_users_not_answered_other_questions()){echo 'disabled="disabled"';} ?> />
 		<?php
-	}else if(get_batch_status_name($batch['Status']) == 'Finished'){
+	}else if(get_batch_status_name($batch['Status']) == 'Published'){
 		?>
 		<input type="submit" name="change_batch_status" onclick="change_batchstatus(<?php echo $batch['ID']; ?>, 'Delete')" value="Delete" disabled="disabled" />
 		<?php

@@ -164,18 +164,21 @@ function check($users){
 
 		$too_much_reviews_given = get_too_much_reviews_given();
 		$too_few_reviews_given = get_too_few_reviews_given();
-		//echo "<pre>";
-		//print_r($too_few_reviews_given);
-		//echo "</pre>";
-		foreach ($too_few_reviews_given as $too_few) {
-			if($too_few['Aantal_reviews'] < 5){
-				foreach ($too_much_reviews_given as $too_much) {
-					if($too_much['Aantal_reviews'] > 5)
-					$reviewer_polls = get_best_polls_reviewer($too_much['ID']);
-					foreach ($reviewer_polls as $reviewer_poll) {
-						echo "test";
-					}
-				}	
+		echo "<pre>";
+		print_r($too_few_reviews_given);
+		echo "</pre>";
+		if(isset($too_few_reviews_given)){
+			foreach ($too_few_reviews_given as $too_few) {
+				/*if($too_few['Aantal_reviews'] < 5){
+					foreach ($too_much_reviews_given as $too_much) {
+						if($too_much['Aantal_reviews'] > 5){
+							$reviewer_polls = get_best_polls_reviewer($too_much['ID']);
+							foreach ($reviewer_polls as $reviewer_poll) {
+								echo "test";
+							}
+						}
+					}	
+				}*/
 			}
 		}
 		//$top_polls = get_top_polls($user['ID']);

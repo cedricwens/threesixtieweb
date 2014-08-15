@@ -1,11 +1,27 @@
 <?php
 	ob_start();
+	function add_batch(){
+		$date = create_date();
+		mysql_query("INSERT INTO batch (Init_date, Running1_date, Running2_date, Finished_date, Status) VALUES ('$date', NULL, NULL, NULL, (SELECT ID FROM batch_status WHERE Name = 'Init'))");
+	}
+	function add_poll_comment($poll, $comment){
+		mysql_query("UPDATE poll SET Comment = '$comment' WHERE ID = $poll");
+	}
 	function create_date(){
 		$time = time();
 		$date = date("Y-m-d H:i:s", $time);
 		return $date;
 	}
-
+	function delete_preferred_reviewer($user){
+		$id = get_id_by_username($user);
+		$batch = get_running1_batch_id();
+		mysql_query("DELETE FROM preferred_poll WHERE User = $id AND Reviewee = $id AND Batch = $batch");
+	}
+	function delete_preferred_reviewee($user){
+		$id = get_id_by_username($user);
+		$batch = get_running1_batch_id();
+		mysql_query("DELETE FROM preferred_poll WHERE User = $id AND Reviewer = $id AND Batch = $batch");
+	}
 	function get_all_poll_statuses(){
 		$query = mysql_query("SELECT * FROM poll_status ORDER BY ID");
 		if(!$query || mysql_num_rows($query) <=0) {
@@ -138,6 +154,15 @@
 			return $categories;
 		}
 	}
+	function get_comment($poll){
+		$query = mysql_query("SELECT Comment FROM poll WHERE ID = $poll");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
 	function get_departments(){
 		$query = mysql_query("SELECT * FROM department");
 		if(!$query || mysql_num_rows($query) <=0) {
@@ -155,7 +180,7 @@
 		}
 	}
 	function get_id_by_username($username){
-		$query = mysql_query("SELECT ID FROM user WHERE Username = $username");
+		$query = mysql_query("SELECT ID FROM user WHERE Username = '$username'");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -187,8 +212,8 @@
 			return mysql_result($query,0);
 		}
 	}
-	function get_poll_by_reviewer_reviewee($reviewer, $reviewee){
-		$query = mysql_query("SELECT ID FROM poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee");
+	function get_poll_by_reviewer_reviewee_batch($reviewer, $reviewee, $batch){
+		$query = mysql_query("SELECT ID FROM poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee AND Batch = $batch");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -243,8 +268,8 @@
 			return $polls;
 		}
 	}
-	function get_polls_by_reviewer($reviewer){
-		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = $reviewer AND Reviewee != $reviewer");
+	function get_polls_by_reviewer($reviewer, $batch){
+		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = $reviewer AND Reviewee != $reviewer AND Batch = $batch");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
@@ -264,8 +289,8 @@
 			return $polls;
 		}
 	}
-	function get_preferred_polls(){
-		$query = mysql_query("SELECT * FROM preferred_poll");
+	function get_preferred_polls($batch){
+		$query = mysql_query("SELECT * FROM preferred_poll WHERE Batch = $batch");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
@@ -280,6 +305,15 @@
 				);
 			}
 			return $polls;
+		}
+	}
+	function get_published_batch_id(){
+		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Published')");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
 		}
 	}
 	function get_questions(){
@@ -309,6 +343,15 @@
 	}
 	function get_running2_batch_id(){
 		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running2')");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
+	function get_stopped_batch_id(){
+		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Finished')");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -348,7 +391,7 @@
 			echo mysql_error();
 			return false;
 		}else{
-			return mysql_fetch_row($query);
+			return mysql_fetch_row($query,0);
 		}
 	}
 	function get_user_department($id){
@@ -369,7 +412,7 @@
 			return mysql_result($query,0);
 		}
 	}
-	function get_user_name($id){
+	/*function get_user_name($id){
 		$query = mysql_query("SELECT Firstname, Lastname FROM user WHERE ID = $id");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
@@ -377,7 +420,7 @@
 		}else{
 			return mysql_fetch_row($query,0);
 		}
-	}
+	}*/
 	function get_user_type_id($type){
 		$query = mysql_query("SELECT ID FROM user_type WHERE Name = '$type'");
 		if(!$query || mysql_num_rows($query) <=0){
@@ -433,6 +476,7 @@
 		}
 	}
 	function get_users_not_answered_own_questions(){
+		$batch = get_running1_batch_id();
 		$query = mysql_query("	SELECT *
 								FROM user
 								WHERE
@@ -441,6 +485,45 @@
 								        FROM poll
 								        WHERE
 								        	Reviewer = Reviewee
+								        	/*AND
+								        	Batch = $batch*/
+								       		AND
+								        	Status = (SELECT ID
+								                      FROM poll_status
+								                      WHERE Name = 'Niet Ingevuld'
+								                      )
+								    )
+								ORDER BY Lastname
+							");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$users[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Firstname') => $row['Firstname'],
+					stripslashes('Lastname') => $row['Lastname'],
+					stripslashes('Username') => $row['Username'],
+					stripslashes('Email') => $row['Email'],
+					stripslashes('Job_Title') => $row['Job_Title']
+				);
+			}
+			return $users;
+		}
+	}
+	function get_users_not_answered_other_questions(){
+		$batch = get_running2_batch_id();
+		$query = mysql_query("	SELECT *
+								FROM user
+								WHERE
+									ID = ANY(
+								        SELECT Reviewer
+								        FROM poll
+								        WHERE
+								        	Reviewer != Reviewee
+								        	AND
+								        	Batch = $batch
 								       		AND
 								        	Status = (SELECT ID
 								                      FROM poll_status
@@ -504,19 +587,30 @@
 			/*echo get_text('Question').' '.strtolower(get_text('Answered'));*/
 		}
 	}
-	function init_batch($batch){}
-	function start_batch($id){
+	function init_batch($batch){
+
+
+	}
+	function start_batch($batch){
+		$users = get_users();
 		$date = create_date();
-		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'), Running1_date = '$date' WHERE ID = $id");
+		foreach ($users as $user) {
+			$reviewer = $user['ID'];
+			$reviewee = $user['ID'];
+			mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created, Last_Update, Batch) VALUES ($reviewer, $reviewee , (SELECT ID FROM poll_status WHERE Name = 'Niet Ingevuld'), '$date', '$date', $batch)");
+		}
+		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'), Running1_date = '$date' WHERE ID = $batch");
 	}
 	function calculate_couples($id){
 		$date = create_date();
 		$batch = get_calculating_batch_id();
-		$polls = get_preferred_polls();
-		foreach ($polls as $poll) {
-			$reviewer = $poll['Reviewer'];
-			$reviewee = $poll['Reviewee'];
-			mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_created, Last_update, Batch) VALUES($reviewer, $reviewee, (SELECT ID FROM poll_status WHERE Name = 'Niet Ingevuld'), '$date','$date',$batch)");
+		$polls = get_preferred_polls(get_running1_batch_id());
+		if($polls){
+			foreach ($polls as $poll) {
+				$reviewer = $poll['Reviewer'];
+				$reviewee = $poll['Reviewee'];
+				mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_created, Last_update, Batch) VALUES($reviewer, $reviewee, (SELECT ID FROM poll_status WHERE Name = 'Niet Ingevuld'), '$date','$date',$batch)");
+			}
 		}
 		/*mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_created, Last_update, Batch) VALUES ((SELECT Reviewer FROM preferred_poll),(SELECT Reviewee FROM preferred_poll),(SELECT ID FROM poll_status WHERE Name = 'Niet Ingevuld'),'$date','$date', $batch)");
 		$date = create_date();*/
@@ -525,6 +619,10 @@
 	function run_batch($id){
 		$date = create_date();
 		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running2'), Running2_date = '$date' WHERE ID = $id");
+	}
+	function publish_batch($id){
+		$date = create_date();
+		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Published'), Finished_date = '$date' WHERE ID = $id");
 	}
 	function stop_batch($id){
 		$date = create_date();
@@ -597,23 +695,27 @@
 
 
 	function login($username, $password, $rememberme){
-		$query = mysql_query("SELECT ID, Password FROM user WHERE Username = '$username'");
-		if(!$query || mysql_num_rows($query) <= 0){
-			echo mysql_error();
-			echo "Er is een fout opgetreden. Heb je wel een account?";
-		}else{
-			$user = mysql_fetch_row($query);
-			if(password_verify($password, $user['1'])){
-				if($rememberme == "on"){
-					setcookie("username",$username, time()+7200);
-				}else if($rememberme == ""){
-					$_SESSION['user_id'] = $user['0'];
-				}
-				header('Location: index.php');
-				exit();
+		if(get_running1_batch_id() || get_running2_batch_id() || get_published_batch_id()){
+			$query = mysql_query("SELECT ID, Password FROM user WHERE Username = '$username'");
+			if(!$query || mysql_num_rows($query) <= 0){
+				//echo mysql_error();
+				return "Er is een fout opgetreden. Heb je wel een account?";
 			}else{
-				echo "Foutief wachtwoord";
+				$user = mysql_fetch_row($query);
+				if(password_verify($password, $user['1'])){
+					if($rememberme == "on"){
+						setcookie("username",$username, time()+7200);
+					}else if($rememberme == ""){
+						$_SESSION['user_id'] = $user['0'];
+					}
+					header('Location: index.php');
+					exit();
+				}else{
+					return "Foutief wachtwoord";
+				}
 			}
+		}else{
+			return "Aanmelden is momenteel niet toegestaan. U krijgt een email zodra u terug kan aanmelden.";
 		}
 	}
 	function logged_in_redirect(){
@@ -655,7 +757,7 @@
 			return mysql_result($query,0);
 		}
 	}
-	function get_user_info($id){
+	function get_user_info($id,$batch){
 		$user 					= get_user_by_id($id);
 		$reviews_given 			= get_number_of_reviews_given($id);
 		$reviews_received 		= get_number_of_reviews_received($id);
@@ -679,9 +781,9 @@
 			<br />
 			Krijgt <b>$notteammanager_reviews</b> review(s) van andere teammanagers.
 			<br />
-			<b>$preferred_reviewers</b> van de gebruikers die $user aangaf, mogen ook effectief de vragenlijst over $user invullen.
+			<b>$preferred_reviewers</b> van de gebruikers die ".$user['Firstname']." aangaf, mogen ook effectief de vragenlijst over ".$user['Firstname']." invullen.
 			<br />
-			$user mag van <b>$preferred_reviewees</b> gebruikers die zijn had gekozen, ook effectief de vragenlijst invullen.";
+			".$user['Firstname']." mag van <b>$preferred_reviewees</b> gebruikers die zijn had gekozen, ook effectief de vragenlijst invullen.";
 			?>
 			<table>
 				<tr>
@@ -834,11 +936,11 @@
 		}
 	}
 
-	function is_preferred_reviewee($reviewer, $reviewee){
-		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee"), 0) == 1) ? true : false;
+	function is_preferred_reviewee($reviewer, $reviewee, $batch){
+		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee AND Batch = $batch"), 0) == 1) ? true : false;
 	}
-	function is_preferred_reviewer($reviewee, $reviewer){
-		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee"), 0) == 1) ? true : false;
+	function is_preferred_reviewer($reviewee, $reviewer, $batch){
+		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee AND Batch = $batch"), 0) == 1) ? true : false;
 	}
 	function sanitize($data) {
 		return htmlentities(strip_tags(mysql_real_escape_string($data)));
