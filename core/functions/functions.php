@@ -22,6 +22,9 @@
 		$batch = get_running1_batch_id();
 		mysql_query("DELETE FROM preferred_poll WHERE User = $id AND Reviewer = $id AND Batch = $batch");
 	}
+	function edit_parameter($parameter, $value){
+		mysql_query("UPDATE parameter SET Value = $value WHERE ID = $parameter");
+	}
 	function get_all_poll_statuses(){
 		$query = mysql_query("SELECT * FROM poll_status ORDER BY ID");
 		if(!$query || mysql_num_rows($query) <=0) {
@@ -188,6 +191,15 @@
 			return mysql_result($query,0);
 		}
 	}
+	function get_init_batch_id(){
+		$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Init')");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
 	function get_managers(){
 		$query = mysql_query("SELECT DISTINCT(d.ID) AS Department, d.Manager AS Manager FROM user_department ud INNER JOIN Department d ON ud.Department = d.ID;");
 		if(!$query || mysql_num_rows($query) <=0) {
@@ -210,6 +222,23 @@
 			return false;
 		}else{
 			return mysql_result($query,0);
+		}
+	}
+	function get_parameters(){
+		$query = mysql_query("SELECT * FROM parameter;");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$managers[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Name') => $row['Name'],
+					'Value' => $row['Value'],
+					stripslashes('Comment') => $row['Comment']
+				);
+			}
+			return $managers;
 		}
 	}
 	function get_poll_by_reviewer_reviewee_batch($reviewer, $reviewee, $batch){

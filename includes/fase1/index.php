@@ -33,8 +33,8 @@ if(isset($_GET['Start'])){
 					<?php echo $result; ?>
 					<p><?php echo get_text('Click_next_for_next_step'); ?></p>
 					
-					<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=1"><?php echo get_text('Back'); ?></a></h3>
-					<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2"><?php echo get_text('Next'); ?></a></h3>
+					<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1"><?php echo get_text('Back'); ?></a></h3>
+					<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=2"><?php echo get_text('Next'); ?></a></h3>
 				</div>
 					
 				<?php
@@ -90,7 +90,7 @@ if(isset($_GET['Start'])){
 				?>
 					<div class="topContent">
 						<p><?php echo get_text('End_phase1_text'); ?></p>
-						<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3"><?php echo get_text('Back'); ?></a></h3>
+						<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=3"><?php echo get_text('Back'); ?></a></h3>
 						<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>"><?php echo get_text('Exit'); ?></a></h3>
 					</div>
 					<?php

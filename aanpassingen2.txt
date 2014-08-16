@@ -14,6 +14,10 @@ X - Vorige en volgende knop naast elkaar zetten, niet onder elkaar
 X - Gebruiker kan zijn eigen resulaten/pdf zien zodra een batch op published staat
 X - Probleem met vragen en batch. Misschien toch nog een koppeling van poll en batch
 X - My results enkel beschikbaar als een batch op published staat
+Parameters aanpassen in adminpanel
+Gebruikers via mail op de hoogte brengen als running1, running2 en published state beginnen.
+Waar moet de extra commentaar van de enquete worden weergegeven?
+Herinnering mail sturen tijdens fase2 en published fase
 
 
 Hoeveel gebruikers moeten fase1 nog invullen? Dit hebben we al, maar enkel 'Niet ingevuld; wat met 'Opgeslagen'?

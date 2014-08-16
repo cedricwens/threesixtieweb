@@ -82,6 +82,7 @@ function get_top_polls($user){
 	}
 }
 function get_manager_not_top_manager(){
+	// Selecteer alle managers, behalve de hoogtste manager (Philip Du Bois)
 	$query = mysql_query("SELECT DISTINCT(d.ID) AS Department, d.Manager AS Manager FROM user_department ud INNER JOIN Department d ON ud.Department = d.ID WHERE d.Manager != (SELECT ID FROM user WHERE Username='DuBois.Philip');");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
@@ -160,27 +161,46 @@ function check($users){
 			mysql_query("UPDATE candidate_poll SET Ok_reviewer = 1 WHERE ID = $id");
 			//echo $poll['ID'].': Reviewer:'.$user['ID'].' Reviewee:'.$poll['Reviewee'].' Score:'.$poll['Score'].'<br />';
 		}
-		set_best_polls();
 
-		$too_much_reviews_given = get_too_much_reviews_given();
-		$too_few_reviews_given = get_too_few_reviews_given();
-		echo "<pre>";
+		//set_best_polls();
+		echo $user['ID'].'<br />';
+		$best_polls_reviewee_reviewer = get_best_polls_reviewee_reviewer($user['ID']);
+		/*echo "<pre>";
+		print_r($best_polls_reviewee_reviewer);
+		echo "</pre>";*/
+		foreach ($best_polls_reviewee_reviewer as $poll) {
+			$id = $poll['ID'];
+			mysql_query("UPDATE candidate_poll SET Ok_overall=1 WHERE ID = $id");
+		}
+
+
+
+
+
+
+		//$reviews_given = get_reviews_given();
+		/*echo "<pre>";
 		print_r($too_few_reviews_given);
-		echo "</pre>";
-		if(isset($too_few_reviews_given)){
-			foreach ($too_few_reviews_given as $too_few) {
-				/*if($too_few['Aantal_reviews'] < 5){
-					foreach ($too_much_reviews_given as $too_much) {
-						if($too_much['Aantal_reviews'] > 5){
-							$reviewer_polls = get_best_polls_reviewer($too_much['ID']);
+		echo "</pre>";*/
+		/*if($reviews_given){
+			foreach ($reviews_given as $too_few) { // Alle gebruikers die reviews geven
+				if($too_few['Aantal_reviews'] < 5){ // Alle gebruikers die minder dan 5 reviews geven
+					foreach ($reviews_given as $too_much) { // Alle gebruikers die reviews geven
+						if($too_much['Aantal_reviews'] > 5){ // Alle gebruikers die meer dan 5 reviews geven
+							/**
+							  * Van de gebruikers die teveel reviews geven, alle 'extra' reviews opvragen (de top_reviews, die niet de 5 beste zijn)
+							  * Dan alle gebruikers overlopen die te weinig reviews geven
+							  * Per gebruiker de beste review kiezen en deze koppelen aan de de gebruiker die te weinig reviews geeft
+							  **/
+							/*$reviewer_polls = get_best_polls_reviewer($too_much['ID']); // De beste polls van de gebruikers die teveel reviews geven
 							foreach ($reviewer_polls as $reviewer_poll) {
 								echo "test";
-							}
-						}
-					}	
-				}*/
+							}*/
+		/*				}
+					}	  
+				}
 			}
-		}
+		}*/
 		//$top_polls = get_top_polls($user['ID']);
 
 		//foreach ($top_polls as $key => $top_poll){
@@ -213,7 +233,7 @@ function get_number_of_candidate_poll_team_members($id){
 	}
 }
 
-function get_best_polls_reviewee($reviewee){
+function get_best_polls_reviewee($reviewee){ // Selecteer de 5 beste polls voor een reviewee
 	$query = mysql_query("SELECT ID, Reviewer, Score FROM candidate_poll WHERE Reviewee=$reviewee ORDER BY Score DESC LIMIT 5;");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
@@ -229,8 +249,25 @@ function get_best_polls_reviewee($reviewee){
 		return $polls;
 	}
 }
-function get_best_polls_reviewer($reviewer){
+function get_best_polls_reviewer($reviewer){ // Selecteer de 5 beste polls voor een reviewer
 	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Reviewer=$reviewer ORDER BY Score DESC LIMIT 5;");
+	if(!$query || mysql_num_rows($query) <=0) {
+		echo mysql_error();
+		return false;
+	}else{
+		while ($row = mysql_fetch_assoc($query)) {
+			$polls[] = array(
+				'ID' => $row['ID'],
+				'Reviewee' => $row['Reviewee'],
+				'Score' => $row['Score']
+			);
+		}
+		return $polls;
+	}
+}
+function get_best_polls_reviewee_reviewer($reviewer){ // Selecteer maximaal 5 polls voor elke reviewer, waarbij de polls komen uit de verzameling van 5 beste polls voor een reviewee
+	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC LIMIT 5");
+	//echo "SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC LIMIT 5";
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -260,7 +297,22 @@ function get_number_of_best_reviews_given($user){
 		return mysql_result($query, 0);
 	}
 }
-function get_too_much_reviews_given(){
+function get_reviews_given(){
+	$query = mysql_query("SELECT Reviewer, count(*) AS Aantal_reviews FROM candidate_poll WHERE Ok_overall = 1 GROUP BY Reviewer;");
+	if(!$query || mysql_num_rows($query) <=0) {
+		echo mysql_error();
+		return false;
+	}else{
+		while ($row = mysql_fetch_assoc($query)) {
+			$polls[] = array(
+				'Reviewer' => $row['Reviewer'],
+				'Aantal_reviews' => $row['Aantal_reviews']
+			);
+		}
+		return $polls;
+	}
+}
+function get_reviews_received(){
 	$query = mysql_query("SELECT Reviewee, count(*) AS Aantal_reviews FROM candidate_poll WHERE Ok_overall = 1 GROUP BY Reviewee;");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
@@ -275,22 +327,22 @@ function get_too_much_reviews_given(){
 		return $polls;
 	}
 }
-function get_too_few_reviews_given(){
-	$query = mysql_query("SELECT Reviewee, count(*) AS Aantal_reviews FROM candidate_poll WHERE Ok_overall = 1 GROUP BY Reviewee;");
+function get_best_polls_reviewer_offset($reviewer){
+	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Reviewer=$reviewer AND ok_overall = 1 ORDER BY Score;");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
 	}else{
 		while ($row = mysql_fetch_assoc($query)) {
 			$polls[] = array(
+				'ID' => $row['ID'],
 				'Reviewee' => $row['Reviewee'],
-				'Aantal_reviews' => $row['Aantal_reviews']
+				'Score' => $row['Score']
 			);
 		}
 		return $polls;
 	}
 }
-
 
 
 

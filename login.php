@@ -28,10 +28,10 @@ $error = "";
 	}else{
 		?>
 		<div class="topContent">
-			<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-				<label for="username"><?php echo get_text('Username'); ?>: </label><input type="text" name="username" />
+			<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="login">
+				<input type="text" name="username" placeholder="<?php echo get_text('Username'); ?>" required />
 				<br />
-				<label for="password"><?php echo get_text('Password'); ?>: </label><input type="password" name="password" />
+				<input type="password" name="password" placeholder="<?php echo get_text('Password'); ?>" required />
 			<!-- consider adding a logo here dnsbelgium.png (please ask for the file)-->
 				<br />
 				<input type="checkbox" name="rememberme" /><label for="rememberme">Remember me</label>
