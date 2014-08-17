@@ -165,18 +165,10 @@ function check($users){
 		//set_best_polls();
 		echo $user['ID'].'<br />';
 		$best_polls_reviewee_reviewer = get_best_polls_reviewee_reviewer($user['ID']);
-		/*echo "<pre>";
-		print_r($best_polls_reviewee_reviewer);
-		echo "</pre>";*/
 		foreach ($best_polls_reviewee_reviewer as $poll) {
 			$id = $poll['ID'];
 			mysql_query("UPDATE candidate_poll SET Ok_overall=1 WHERE ID = $id");
 		}
-
-
-
-
-
 
 		//$reviews_given = get_reviews_given();
 		/*echo "<pre>";
