@@ -37,6 +37,8 @@ $error = "";
 				<input type="checkbox" name="rememberme" /><label for="rememberme">Remember me</label>
 				<br />
 				<input type="submit" value="Login" name="login" />
+				<br />
+				<a href="forgot.php">Forgot password?</a>
 			</form>
 			<?php echo $error; ?>
 		</div>

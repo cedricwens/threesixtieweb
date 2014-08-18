@@ -432,6 +432,16 @@
 			return mysql_result($query,0);
 		}
 	}
+	function get_user_email($user){
+		$id = get_user_id($user);
+		$query = mysql_query("SELECT Email FROM user WHERE ID = $id");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
+		}
+	}
 	function get_user_id($user){
 		$query = mysql_query("SELECT ID FROM user WHERE Username = '$user'");
 		if(!$query || mysql_num_rows($query) <=0){
@@ -588,6 +598,35 @@
 		}
 		return implode($pass); //turn the array into a string
 	}
+	function resend_password($user){
+		$password = randomPassword();
+		echo $password;
+		$email = get_user_email($user);
+		$id = get_user_id($user);
+		$user = get_user_by_id($id);
+		$to = $email;
+		$subject = "Nieuw wachtwoord";
+		$message = "
+						Geachte ".$user[0].",
+						<p>
+							Hier zijn uw nieuwe gebruikersgegevens:
+							<br />
+							Gebruikersnaam: ".$user[0].".".$user[1]."
+							<br />
+							Wachtwoord: ".$password."
+						</p>
+						<p>
+							Met vriendelijke groeten,
+						</p>
+						<p>
+							Het ThreeSixtyWeb team
+						</p>
+					";
+		mail($to, $subject, $message);
+		$hashed_password = password_hash($password,PASSWORD_DEFAULT);
+		mysql_query("UPDATE user SET Password = '$hashed_password' WHERE ID = $id");
+		return "Uw nieuw wachtwoord werd verzonden naar uw emailadres.";
+	}
 	
 
 	function create_poll($reviewer, $reviewee, $status){
@@ -627,22 +666,37 @@
 		}
 	}
 	function init_batch($batch){
-		foreach ($users as $user) {
-			$password = password_hash(randomPassword(),PASSWORD_DEFAULT);
-			$id = $user['ID'];
-			mysql_query("UPDATE user SET Password = '$password' WHERE ID = $id");
-		}
 
 	}
 	function start_batch($batch){
 		$users = get_users();
 		$date = create_date();
 		foreach ($users as $user) {
+			$password = password_hash(randomPassword(),PASSWORD_DEFAULT);
+			$id = $user['ID'];
+			mysql_query("UPDATE user SET Password = '$password' WHERE ID = $id");
 			$reviewer = $user['ID'];
 			$reviewee = $user['ID'];
 			mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created, Last_Update, Batch) VALUES ($reviewer, $reviewee , (SELECT ID FROM poll_status WHERE Name = 'Niet Ingevuld'), '$date', '$date', $batch)");
 		}
 		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'), Running1_date = '$date' WHERE ID = $batch");
+		foreach ($users as $user) {
+			$to = $user['Email'];
+			$subject = "Start fase 1";
+			$message = "
+							Geachte ".$user['Firstname'].",
+							<p>
+								Fase 1 is begonnen. Zodra u zich aanmeld met uw gebruikersnaam en wachtwoord, kan u uw eigen vragenlijst invullen.
+							</p>
+							<p>
+								Met vriendelijke groeten,
+							</p>
+							<p>
+								Het ThreeSixtyWeb team
+							</p>
+						";
+			mail($to, $subject, $message);
+		}
 	}
 	function calculate_couples($id){
 		$date = create_date();
@@ -660,12 +714,49 @@
 		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Calculate') WHERE ID = $id");
 	}
 	function run_batch($id){
+		$users = get_users();
 		$date = create_date();
 		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running2'), Running2_date = '$date' WHERE ID = $id");
+		foreach ($users as $user) {
+			$to = $user['Email'];
+			$subject = "Start fase 1";
+			$message = "
+							Geachte ".$user['Firstname'].",
+							<p>
+								Fase 2 is begonnen. Zodra u zich aanmeld met uw gebruikersnaam en wachtwoord, kan u de vragenlijsten invullen.
+							</p>
+							<p>
+								Met vriendelijke groeten,
+							</p>
+							<p>
+								Het ThreeSixtyWeb team
+							</p>
+						";
+			mail($to, $subject, $message);
+		}
 	}
 	function publish_batch($id){
+		$users = get_users();
 		$date = create_date();
 		mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Published'), Finished_date = '$date' WHERE ID = $id");
+		foreach ($users as $user) {
+			$to = $user['Email'];
+			$subject = "Resultaten beschikbaar";
+			$message = "
+							Geachte ".$user['Firstname'].",
+							<p>
+								De resultaten van de vragenlijst zijn nu beschikbaar. Log in met u gebruikersnaam en wacthwoord om uw resultaten te bekijken.
+							</p>
+							<p>
+								Met vriendelijke groeten,
+							</p>
+							<p>
+								Het ThreeSixtyWeb team
+							</p>
+						";
+			mail($to, $subject, $message);
+		}
+
 	}
 	function stop_batch($id){
 		$date = create_date();
@@ -724,6 +815,24 @@
 						Geachte $user,
 						<p>
 							Via deze mail willen wij u er aan herinneren dat u uw eigen vragenlijst nog niet hebt ingevuld.
+							Wij willen u daarom vriendelijk verzoeken om deze zo snel mogelijk in te vullen en door te sturen.
+						</p>
+						<p>
+							Met vriendelijke groeten,
+						</p>
+						<p>
+							Het ThreeSixtyWeb team
+						</p>
+					";
+		mail($to, $subject, $message);
+	}
+	function send_reminder_phase2($user, $email){
+		$to = $email;
+		$subject = "Herinnering";
+		$message = "
+						Geachte $user,
+						<p>
+							Via deze mail willen wij u er aan herinneren dat u nog niet alle vragenlijsten hebt ingestuurd.
 							Wij willen u daarom vriendelijk verzoeken om deze zo snel mogelijk in te vullen en door te sturen.
 						</p>
 						<p>
@@ -965,7 +1074,6 @@
 	function get_total_reviews_to_give($id){
 		return (get_number_of_poll_team_members($id)+get_number_of_poll_not_team_members($id)+get_number_of_poll_team_manager($id)+get_number_of_poll_not_team_manager($id));
 	}
-
 	function get_team_manager($user){
 		$query = mysql_query("SELECT * FROM user u INNER JOIN Department d On u.ID = d.Manager WHERE d.ID = (SELECT Department FROM user_department WHERE User = $user);");
 		if(!$query || mysql_num_rows($query) < 0) {
@@ -978,7 +1086,6 @@
 			return mysql_result($query, 0);
 		}
 	}
-
 	function is_preferred_reviewee($reviewer, $reviewee, $batch){
 		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee AND Batch = $batch"), 0) == 1) ? true : false;
 	}

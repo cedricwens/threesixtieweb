@@ -163,18 +163,21 @@ function check($users){
 		}
 
 		//set_best_polls();
-		echo $user['ID'].'<br />';
 		$best_polls_reviewee_reviewer = get_best_polls_reviewee_reviewer($user['ID']);
+		/*echo "<pre>";
+		print_r($best_polls_reviewee_reviewer);
+		echo "</pre>";*/
 		foreach ($best_polls_reviewee_reviewer as $poll) {
 			$id = $poll['ID'];
 			mysql_query("UPDATE candidate_poll SET Ok_overall=1 WHERE ID = $id");
+			//echo "<br />UPDATE candidate_poll SET Ok_overall=1 WHERE ID = $id<br />";
 		}
 
-		//$reviews_given = get_reviews_given();
+		$reviews_given = get_reviews_given();
 		/*echo "<pre>";
 		print_r($too_few_reviews_given);
 		echo "</pre>";*/
-		/*if($reviews_given){
+		if($reviews_given){
 			foreach ($reviews_given as $too_few) { // Alle gebruikers die reviews geven
 				if($too_few['Aantal_reviews'] < 5){ // Alle gebruikers die minder dan 5 reviews geven
 					foreach ($reviews_given as $too_much) { // Alle gebruikers die reviews geven
@@ -188,11 +191,11 @@ function check($users){
 							foreach ($reviewer_polls as $reviewer_poll) {
 								echo "test";
 							}*/
-		/*				}
+						}
 					}	  
 				}
 			}
-		}*/
+		}
 		//$top_polls = get_top_polls($user['ID']);
 
 		//foreach ($top_polls as $key => $top_poll){
@@ -258,8 +261,8 @@ function get_best_polls_reviewer($reviewer){ // Selecteer de 5 beste polls voor 
 	}
 }
 function get_best_polls_reviewee_reviewer($reviewer){ // Selecteer maximaal 5 polls voor elke reviewer, waarbij de polls komen uit de verzameling van 5 beste polls voor een reviewee
-	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC LIMIT 5");
-	//echo "SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC LIMIT 5";
+	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=1 ORDER BY Score DESC LIMIT 5");
+	echo "SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=1 ORDER BY Score DESC LIMIT 5<br />";
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;

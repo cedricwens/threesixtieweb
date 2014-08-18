@@ -2,6 +2,9 @@
 $selected_page = "Admin_login";
 require('includes/header.php');
 logged_in_redirect();
+if(isset($_SESSION['admin_id'])){
+	header('Location: admin.php');
+}
 $errors = "";
 ?>
 <?php

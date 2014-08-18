@@ -15,5 +15,5 @@
 		}
 	}
 	?>
-	<input type="submit" value="Versturen" name="add_preferred_reviewers">
+	<input type="submit" value="<?php echo get_text('Send'); ?>" name="add_preferred_reviewers">
 </form>

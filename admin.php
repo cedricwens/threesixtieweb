@@ -31,7 +31,10 @@ $error = "";
 							<td colspan="2">
 								<?php
 								if(isset($_POST['reminder_1'])){
-										echo get_text('Reminder_send').'.';
+									foreach ($users as $user) {
+										send_reminder_phase1($user['Firstname'], $user['Email']);
+									}
+									echo get_text('Reminder_send').'.';
 								}
 								?>
 							</td>
@@ -41,7 +44,7 @@ $error = "";
 						echo get_text('Every_user_has_answered_own_poll_can_start_phase_2');
 					}
 				}else if(get_running2_batch_id()){
-					get_users_not_answered_other_questions();
+					$users = get_users_not_answered_other_questions();
 					if($users){
 						$number = 0;
 						foreach ($users as $user) {
@@ -60,7 +63,10 @@ $error = "";
 							<td colspan="2">
 								<?php
 								if(isset($_POST['reminder2'])){
-										echo get_text('Reminder_send').'.';
+									foreach ($users as $user) {
+										send_reminder_phase2($user['Firstname'], $user['Email']);
+									}
+									echo get_text('Reminder_send').'.';
 								}
 								?>
 							</td>
@@ -83,9 +89,9 @@ $error = "";
 			?>
 			<table>
 				<tr style="text-align:center;">
-					<th>Parameter</th>
-					<th>Waarde</th>
-					<th>Actie</th>
+					<th><?php echo get_text('Parameter'); ?></th>
+					<th><?php echo get_text('Value'); ?></th>
+					<th><?php echo get_text('Action'); ?></th>
 				</tr>
 			<?php
 			foreach ($parameters as $parameter) {
@@ -97,7 +103,7 @@ $error = "";
 						<script>
 							parameter<?php echo $parameter['ID']; ?> = document.getElementById("value<?php echo $parameter['ID']; ?>");
 						</script>
-						<td><input type="submit" value="Wijzigen" onclick="edit_parameter(<?php echo $parameter['ID']; ?>,parameter<?php echo $parameter['ID']; ?>.value);" /></td>
+						<td><input type="submit" value="<?php echo get_text('Edit'); ?>" onclick="edit_parameter(<?php echo $parameter['ID']; ?>,parameter<?php echo $parameter['ID']; ?>.value);" /></td>
 					</form>
 				</tr>
 				<?php
@@ -119,8 +125,8 @@ $error = "";
 			<tr>
 				<th><?php echo get_text('ID'); ?></th>
 				<th><?php echo get_text('Init_date'); ?></th>
-				<th><?php echo get_text('Running_date_phase_1'); ?></th>
-				<th><?php echo get_text('Running_date_phase_2'); ?></th>
+				<th><?php echo get_text('Running_phase_1'); ?></th>
+				<th><?php echo get_text('Running_phase_2'); ?></th>
 				<th><?php echo get_text('Finished_date'); ?></th>
 				<th><?php echo get_text('Status'); ?></th>
 				<th><?php echo get_text('Comment'); ?></th>
@@ -149,7 +155,7 @@ $error = "";
 			<tr>
 				<td colspan="8">
 					<form action="" method="post">
-						<input type="submit" name="add_batch" onclick="add_new_batch();" value="Batch toevoegen" />
+						<input type="submit" name="add_batch" onclick="add_new_batch();" value="<?php echo get_text('Add_batch'); ?>" />
 					</form>
 				</td>
 			</tr>
@@ -181,14 +187,15 @@ $error = "";
 					<tr>
 						<td><?php echo $poll['ID']; ?></td>
 						<td><?php echo $reviewer[0]; ?></td>
-						<td><?php echo $reviewee[1]; ?></td>
+						<td><?php echo $reviewee[0]; ?></td>
 						<td><?php echo $poll['Last_Update']; ?></td>
 						<td><a href="?view_answer=<?php echo $poll['ID']; ?>">Bekijk</a></td>
 					</tr>
 					<?php
 				}
 			}else{
-				echo "Er zijn geen vragenlijsten gevonden.<br /><br /><br /><br />";
+				echo get_text('No_polls_found');
+				echo "<br /><br /><br /><br />";
 			}
 			?>
 		</table>
@@ -276,7 +283,7 @@ $error = "";
 				?>
 				<br />
 			</select>
-			<input type="submit" value="Voeg toe" name="add_poll" />
+			<input type="submit" value="<?php echo get_text('Add_poll'); ?>" name="add_poll" />
 		</form>
 		<?php echo $error; ?>
 	</aside>
@@ -318,7 +325,7 @@ $error = "";
 			</select>
 			<br />
 			<label for="answer"><?php echo get_text('Answer'); ?>: </label><input type="text" name="answer" /><br />
-			<input type="submit" value="Beantwoord" name="answer_question"/>
+			<input type="submit" value="<?php echo get_text('Answers'); ?>" name="answer_question"/>
 		</form>
 	</aside>
 	<?php
@@ -398,7 +405,7 @@ $error = "";
 				?>
 			</select>
 			<br />
-			<input type="submit" value="Voeg toe" name="add_preferred" />
+			<input type="submit" value="<?php echo get_text('Add'); ?>" name="add_preferred" />
 		</form>
 	</aside>
 	<?php

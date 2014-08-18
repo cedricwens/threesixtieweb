@@ -94,27 +94,27 @@ require('core/init.php');
 		<nav id="menu">
 			<ul>
 				<?php
-					if(isset($_SESSION['user_id']) && !get_published_batch_id()){
+					if((isset($_SESSION['user_id']) && !get_published_batch_id()) || (strpos($_SERVER['PHP_SELF'],'forgot.php')!== false)) {
 						?>
-						<li <?php if($selected_page == 'Home'){ echo 'class="active"';} ?>><a href="index.php">Home</a></li>
+						<li <?php if($selected_page == 'Home'){ echo 'class="active"';} ?>><a href="index.php"><?php echo get_text('Home'); ?></a></li>
 						<?php
 					}
 					if(isset($_SESSION['user_id']) && get_published_batch_id()){
 						?>
-						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php?id=<?php echo $_SESSION['user_id']; ?>">My results</a></li>
+						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php?id=<?php echo $_SESSION['user_id']; ?>"><?php echo get_text('My_results'); ?></a></li>
 						<?php
 					}
 					?>
 					<?php
 					if(isset($_SESSION['admin_id'])){
 						?>
-						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php">User Results</a></li>
-						<li <?php if($selected_page == 'Admin'){ echo 'class="active"';} ?>><a href="admin.php">Admin</a></li>
+						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php"><?php echo get_text('User_results'); ?></a></li>
+						<li <?php if($selected_page == 'Admin'){ echo 'class="active"';} ?>><a href="admin.php"><?php echo get_text('Admin'); ?></a></li>
 						<?php
 					}
 					if(logged_in() || isset($_SESSION['admin_id'])){
 						?>
-						<li><a href="logout.php">Logout</a></li>
+						<li><a href="logout.php"><?php echo get_text('Logout'); ?></a></li>
 						<?php
 					}
 				?>

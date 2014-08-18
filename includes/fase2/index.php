@@ -78,7 +78,7 @@ if(isset($_GET['Start'])){
 				<div class="topContent">
 					<?php echo $result; ?>
 					<p><?php get_text('Click_next_for_next_step'); ?></p>
-					<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&Poll=<?php echo $poll; ?>"><?php echo get_text('Back'); ?></a></h3>
+					<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&amp;Poll=<?php echo $poll; ?>"><?php echo get_text('Back'); ?></a></h3>
 					<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start"><?php echo get_text('Next'); ?></a></h3>
 				</div>
 					
@@ -87,7 +87,7 @@ if(isset($_GET['Start'])){
 				?>
 				<div class="topContent">
 					<h3><?php echo $reviewee[0].' '.$reviewee[1]; ?></h3>
-					<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&Poll=<?php echo $poll; ?>">
+					<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&amp;Poll=<?php echo $poll; ?>">
 						<table class="questions">
 							<tr>
 								<th><?php get_text('Question'); ?></th>

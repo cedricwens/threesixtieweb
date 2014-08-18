@@ -1,5 +1,5 @@
 <?php
-	$connect_error = 'Sorry, we\'re experiencing connection problems.';
+	$connect_error = get_text('Connection_error');
 	mysql_connect('localhost', 'root', '') or die($connect_error);
 	/* consider using minimal privileges for app : */
 	/* dba user = root (all privs on all dbs) */

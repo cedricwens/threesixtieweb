@@ -3,4 +3,5 @@
 	$time = time();
 	$date = date("Y-m-d H:i:s", $time);
 	echo $date."<br />";
+	echo $_SERVER['PHP_SELF'];
 ?>

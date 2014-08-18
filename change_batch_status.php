@@ -4,8 +4,6 @@
 		$batch = $_GET['id'];
 		$action = $_GET['action'];
 		switch ($_GET['action']) {
-			case 'Init':
-				break;
 			case 'Start':
 				start_batch($_GET['id']);
 				stop_batch(get_published_batch_id());
