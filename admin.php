@@ -347,6 +347,7 @@ $error = "";
 					?>
 					<optgroup label="<?php echo $department['Name']; ?>">
 						<?php
+						$users = get_users();
 						foreach ($users as $user) {
 							$user_department = get_user_department($user['ID']);
 							if($user_department == $department['ID']){

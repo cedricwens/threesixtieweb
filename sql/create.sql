@@ -1,6 +1,8 @@
 /* Creatie van Database en tabellen */
 DROP DATABASE IF EXISTS threesixtyweb;
-CREATE DATABASE threesixtyweb;
+CREATE DATABASE threesixtyweb
+	DEFAULT CHARACTER SET utf8
+	DEFAULT COLLATE utf8_general_ci;
 USE threesixtyweb;
 
 CREATE TABLE user(

@@ -1,5 +1,5 @@
 <?php
-	$connect_error = get_text('Connection_error');
+	$connect_error = 'Er is een probleem opgetreden bij het verbinden met de databank. Onze excuses voor het ongemak.';
 	mysql_connect('localhost', 'root', '') or die($connect_error);
 	/* consider using minimal privileges for app : */
 	/* dba user = root (all privs on all dbs) */

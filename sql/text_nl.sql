@@ -102,5 +102,4 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('User_results', 		'Gebruikersresultaten'),
 	('Admin', 				'Beheer'),
 	('Logout', 				'Afmelden'),
-	('Connection_error', 	'Er is een probleem opgetreden bij het verbinden met de databank. Onze excuses voor het ongemak.'),
 	('Edit', 				'Wijzigen');

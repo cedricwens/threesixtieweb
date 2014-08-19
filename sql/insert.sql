@@ -84,6 +84,13 @@ INSERT INTO admin(Username, Password) VALUES
 /* Users toevoegen aan database*/
 INSERT INTO user (Firstname, Lastname, Password) VALUES
 	('Johan',		'Heylen', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+
+	('Kevin',		'Dillaerts',	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Hilde',		'Van Bree',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Cecile',		'Van der Borght','$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Veronique',	'Van der Borght','$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Jasper',		'Kesteloot',	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+
 	('Loesje',		'Hermans', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
 	('Leander',		'Dierckx', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
 	('Kristof',		'Tuyteleers', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
@@ -103,6 +110,13 @@ UPDATE user SET Username = REPLACE(CONCAT_WS('.',Lastname, Firstname), ' ','');
 /* Users koppelen aan departement */
 INSERT INTO user_department (User, Department) VALUES
 	((SELECT ID FROM user WHERE Firstname = 'Johan' 	AND Lastname = 'Heylen'), 		(SELECT ID FROM department WHERE Name = 'Development')),
+
+	((SELECT ID FROM user WHERE Firstname = 'Kevin' 	AND Lastname = 'Dillaerts'), 	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
+	((SELECT ID FROM user WHERE Firstname = 'Hilde' 	AND Lastname = 'Van Bree'), 	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
+	((SELECT ID FROM user WHERE Firstname = 'Cecile' 	AND Lastname = 'Van der Borght'),(SELECT ID FROM department WHERE Name = 'Support/Communication')),
+	((SELECT ID FROM user WHERE Firstname = 'Veronique' AND Lastname = 'Van der Borght'),(SELECT ID FROM department WHERE Name = 'Support/Communication')),
+	((SELECT ID FROM user WHERE Firstname = 'Jasper' 	AND Lastname = 'Kesteloot'),	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
+
 	((SELECT ID FROM user WHERE Firstname = 'Loesje' 	AND Lastname = 'Hermans'),		(SELECT ID FROM department WHERE Name = 'Development')),
 	((SELECT ID FROM user WHERE Firstname = 'Leander' 	AND Lastname = 'Dierckx'),		(SELECT ID FROM department WHERE Name = 'Operations')),
 	((SELECT ID FROM user WHERE Firstname = 'Kristof' 	AND Lastname = 'Tuyteleers'),	(SELECT ID FROM department WHERE Name = 'Operations')),

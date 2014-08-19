@@ -451,15 +451,6 @@
 			return mysql_result($query,0);
 		}
 	}
-	/*function get_user_name($id){
-		$query = mysql_query("SELECT Firstname, Lastname FROM user WHERE ID = $id");
-		if(!$query || mysql_num_rows($query) <=0){
-			echo mysql_error();
-			return false;
-		}else{
-			return mysql_fetch_row($query,0);
-		}
-	}*/
 	function get_user_type_id($type){
 		$query = mysql_query("SELECT ID FROM user_type WHERE Name = '$type'");
 		if(!$query || mysql_num_rows($query) <=0){
@@ -586,6 +577,15 @@
 				);
 			}
 			return $users;
+		}
+	}
+	function is_manager($user){
+		$query = mysql_query("SELECT ID FROM department WHERE Manager = $user");
+		if(!$query || mysql_num_rows($query) <=0){
+			echo mysql_error();
+			return false;
+		}else{
+			return mysql_result($query,0);
 		}
 	}
 	function randomPassword() {
