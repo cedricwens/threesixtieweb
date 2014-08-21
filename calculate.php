@@ -75,7 +75,7 @@ function calculate($users){
 }
 
 function get_top_polls($user){
-	$query = mysql_query("SELECT * FROM candidate_poll WHERE Reviewer = $user ORDER BY Score DESC LIMIT 0,5");
+	$query = mysql_query("SELECT * FROM candidate_poll WHERE Reviewer = $user ORDER BY Score DESC LIMIT 0,(SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -577,7 +577,9 @@ function check($users){
 	  **/
 }
 function get_best_polls_reviewee($reviewee){ // Selecteer de 5 beste polls voor een reviewee
-	$query = mysql_query("SELECT ID, Reviewer, Score FROM candidate_poll WHERE Reviewee=$reviewee ORDER BY Score DESC LIMIT 5;");
+	$parameter = "Aantal reviews krijgen";
+	$limit = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews krijgen'"), 0);
+	$query = mysql_query("SELECT ID, Reviewer, Score FROM candidate_poll WHERE Reviewee=$reviewee ORDER BY Score DESC LIMIT $limit");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -593,7 +595,9 @@ function get_best_polls_reviewee($reviewee){ // Selecteer de 5 beste polls voor 
 	}
 }
 function get_best_polls_reviewer($reviewer){ // Selecteer de 5 beste polls voor een reviewer
-	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Reviewer=$reviewer ORDER BY Score DESC LIMIT 5;");
+	$parameter = "Aantal reviews geven";
+	$limit = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'"), 0);
+	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Reviewer=$reviewer ORDER BY Score DESC LIMIT $limit");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -609,7 +613,9 @@ function get_best_polls_reviewer($reviewer){ // Selecteer de 5 beste polls voor 
 	}
 }
 function get_best_polls_reviewee_reviewer($reviewer){ // Selecteer maximaal 5 polls voor elke reviewer, waarbij de polls komen uit de verzameling van 5 beste polls voor een reviewee
-	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC LIMIT 5");
+	$parameter = "Aantal reviews geven";
+	$limit = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'"), 0);
+	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC LIMIT $limit");
 	//echo "SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC LIMIT 5<br />";
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
@@ -729,7 +735,9 @@ function get_best_polls_reviewer_offset($reviewer){
 	}
 }
 function get_not_top_5_best_polls($reviewer){
-	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Reviewer=$reviewer ORDER BY Score DESC LIMIT 10 OFFSET 5;");
+	// LIMIT 100 is gekozen zodat we genoeg reviews selecteren. We hebben een OFFSET nodig, en deze kan allen gebruikt worden samen met LIMIT
+	$limit = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'"), 0);
+	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Reviewer=$reviewer ORDER BY Score DESC LIMIT 100 OFFSET $limit");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -773,45 +781,35 @@ function get_number_of_reviewers($reviewee){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-	function get_candidcate_user_info($id){
-		$user 					= get_user_by_id($id);
-		$reviews_given 			= get_number_of_candidate_reviews_given($id);
-		$reviews_received 		= get_number_of_candidate_reviews_received($id);
-		$teammember_reviews		= get_number_of_candidate_poll_team_members($id);
-		$notteammember_reviews 	= get_number_of_candidate_poll_not_team_members($id);
-		$teammanager_reviews 	= get_number_of_candidate_poll_team_manager($id);
-		$notteammanager_reviews = get_number_of_candidate_poll_not_team_manager($id);
-		$preferred_reviewers 	= get_number_of_candidate_preferred_reviewers($id);
-		$preferred_reviewees 	= get_number_of_candidate_preferred_reviewees($id);
-		$questions 				= get_questions();
-		echo "
-			Heeft <b>$reviews_given</b> review geschreven.
-			<br />
-			Heeft <b>$reviews_received</b> reviews gekregen.
-			<br />
-			Krijgt review(s) van <b>$teammember_reviews</b> teamleden.
-			<br />
-			Krijgt review(s) van <b>$notteammember_reviews</b> niet-teamleden.
-			<br />
-			Krijgt <b>$teammanager_reviews</b> review(s) van zijn teammanager.
-			<br />
-			Krijgt <b>$notteammanager_reviews</b> review(s) van andere teammanagers.
-			<br />
-			<b>$preferred_reviewers</b> van de gebruikers die ".$user['Firstname']." aangaf, mogen ook effectief de vragenlijst over ".$user['Firstname']." invullen.
-			<br />
-			".$user['Firstname']." mag van <b>$preferred_reviewees</b> gebruikers die zijn had gekozen, ook effectief de vragenlijst invullen.";
-	}
-	function get_number_of_candidate_reviews_given($id){
+function get_candidcate_user_info($id){
+	$user 					= get_user_by_id($id);
+	$reviews_given 			= get_number_of_candidate_reviews_given($id);
+	$reviews_received 		= get_number_of_candidate_reviews_received($id);
+	$teammember_reviews		= get_number_of_candidate_poll_team_members($id);
+	$notteammember_reviews 	= get_number_of_candidate_poll_not_team_members($id);
+	$teammanager_reviews 	= get_number_of_candidate_poll_team_manager($id);
+	$notteammanager_reviews = get_number_of_candidate_poll_not_team_manager($id);
+	$preferred_reviewers 	= get_number_of_candidate_preferred_reviewers($id);
+	$preferred_reviewees 	= get_number_of_candidate_preferred_reviewees($id);
+	$questions 				= get_questions();
+	echo "
+		Heeft <b>$reviews_given</b> review geschreven.
+		<br />
+		Heeft <b>$reviews_received</b> reviews gekregen.
+		<br />
+		Krijgt review(s) van <b>$teammember_reviews</b> teamleden.
+		<br />
+		Krijgt review(s) van <b>$notteammember_reviews</b> niet-teamleden.
+		<br />
+		Krijgt <b>$teammanager_reviews</b> review(s) van zijn teammanager.
+		<br />
+		Krijgt <b>$notteammanager_reviews</b> review(s) van andere teammanagers.
+		<br />
+		<b>$preferred_reviewers</b> van de gebruikers die ".$user['Firstname']." aangaf, mogen ook effectief de vragenlijst over ".$user['Firstname']." invullen.
+		<br />
+		".$user['Firstname']." mag van <b>$preferred_reviewees</b> gebruikers die zijn had gekozen, ook effectief de vragenlijst invullen.";
+}
+function get_number_of_candidate_reviews_given($id){
 		$query = mysql_query("SELECT count(*) AS Aantal_Reviews FROM candidate_reviews_given_view WHERE Reviewer = $id");
 		if(!$query || mysql_num_rows($query) <0) {
 			echo mysql_error();
@@ -822,8 +820,8 @@ function get_number_of_reviewers($reviewee){
 			}
 			return mysql_result($query, 0);
 		}
-	}
-	function get_number_of_candidate_reviews_received($id){
+}
+function get_number_of_candidate_reviews_received($id){
 		$query = mysql_query("SELECT count(*) AS Aantal_Reviews FROM candidate_reviews_received_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -834,8 +832,8 @@ function get_number_of_reviewers($reviewee){
 			}
 			return mysql_result($query, 0);
 		}
-	}
-	function get_number_of_candidate_poll_team_members($id){
+}
+function get_number_of_candidate_poll_team_members($id){
 		$query = mysql_query("SELECT count(*) AS Aantal_TeamLeden FROM candidate_teammember_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -846,9 +844,8 @@ function get_number_of_reviewers($reviewee){
 			}
 			return mysql_result($query, 0);
 		}
-	}
-
-	/*function get_number_of_candidate_poll_team_members($id){
+}
+/*function get_number_of_candidate_poll_team_members($id){
 		$query = mysql_query("SELECT count(*) FROM candidate_poll WHERE reviewee=$id AND (SELECT Department FROM user_department WHERE user=reviewer) = (SELECT Department FROM user_department WHERE user = $id);");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -859,8 +856,8 @@ function get_number_of_reviewers($reviewee){
 			}
 			return mysql_result($query, 0);
 		}
-	}*/
-	function get_number_of_candidate_poll_not_team_members($id){
+}*/
+function get_number_of_candidate_poll_not_team_members($id){
 		$query = mysql_query("SELECT count(*) AS Aantal_NietTeamLeden FROM candidate_notteammember_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -871,8 +868,8 @@ function get_number_of_reviewers($reviewee){
 			}
 			return mysql_result($query, 0);
 		}
-	}
-	function get_number_of_candidate_poll_team_manager($id){
+}
+function get_number_of_candidate_poll_team_manager($id){
 		$query = mysql_query("SELECT count(*) AS Aantal_TeamManagers FROM candidate_teammanager_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -883,8 +880,8 @@ function get_number_of_reviewers($reviewee){
 			}
 			return mysql_result($query, 0);
 		}
-	}
-	function get_number_of_candidate_poll_not_team_manager($id){
+}
+function get_number_of_candidate_poll_not_team_manager($id){
 		$query = mysql_query("SELECT count(*) AS Aantal_NietTeamManagers FROM candidate_notteammanager_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -895,8 +892,8 @@ function get_number_of_reviewers($reviewee){
 			}
 			return mysql_result($query, 0);
 		}
-	}
-	function get_number_of_candidate_preferred_reviewers($id){
+}
+function get_number_of_candidate_preferred_reviewers($id){
 		$query = mysql_query("SELECT count(*) AS Aantal_Preferred_Reviewers FROM candidate_preferred_reviewers_view WHERE Reviewee = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -907,8 +904,8 @@ function get_number_of_reviewers($reviewee){
 			}
 			return mysql_result($query, 0);
 		}
-	}
-	function get_number_of_candidate_preferred_reviewees($id){
+}
+function get_number_of_candidate_preferred_reviewees($id){
 		$query = mysql_query("SELECT count(*) AS Aantal_Preferred_Reviewees FROM candidate_preferred_reviewees_view WHERE Reviewer = $id");
 		if(!$query || mysql_num_rows($query) < 0) {
 			echo mysql_error();
@@ -919,5 +916,5 @@ function get_number_of_reviewers($reviewee){
 			}
 			return mysql_result($query, 0);
 		}
-	}
+}
 ?>
