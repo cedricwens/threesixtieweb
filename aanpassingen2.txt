@@ -23,6 +23,7 @@ Wat is de vertaling van 'Batch'?
 
 
 Waar moet de extra commentaar van de enquete worden weergegeven?
+Mag dit commentaarveld maar maximaal 5 characters zijn?
 
 Hoeveel gebruikers moeten fase1 nog invullen? Dit hebben we al, maar enkel 'Niet ingevuld; wat met 'Opgeslagen'?
 	Voorstel: Opgeslagen mag, maar zodra dat iedereen heeft ingestuurd of opgeslagen, word de status van alle 'opgeslagen' vragenlijsten 		

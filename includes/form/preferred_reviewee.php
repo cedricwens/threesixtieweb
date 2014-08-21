@@ -1,5 +1,5 @@
 <h3>Van welke medewerkers wil jij de vragenlijst invullen?</h3>
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3" method="post">
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=3" method="post">
 	<?php
 	foreach ($users as $user){
 		if($user['ID'] != $_SESSION['user_id']){

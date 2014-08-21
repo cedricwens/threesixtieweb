@@ -71,7 +71,7 @@ INSERT INTO question (Category, Question, Batch) VALUES
 
 /* Departmenten toevoegen aan database */
 INSERT INTO department (Name) VALUES
-	('Support/Communication'),
+	('Support/Communications'),
 	('Operations'),
 	('Development'),
 	('Management'),
@@ -83,55 +83,76 @@ INSERT INTO admin(Username, Password) VALUES
 
 /* Users toevoegen aan database*/
 INSERT INTO user (Firstname, Lastname, Password) VALUES
-	('Johan',		'Heylen', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-
+	('Maarten',		'Bosteels', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kathleen',	'Buffels', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Dimitri',		'De Graef',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Leander',		'Dierckx', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
 	('Kevin',		'Dillaerts',	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Philip',		'Du Bois', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),	
+	('Ronald',		'Geens',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kurt',		'Gielen',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Lut',			'Goedhuys', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('David',		'Goelen', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Loesje',		'Hermans', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Johan',		'Heylen', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kevin',		'Jacquemyn', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Jasper',		'Kesteloot',	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kristof',		'Konings',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Bert',		'Maleszka',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Stijn',		'Niclaes',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Helga',		'Parijs', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Nico',		'Point',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Veerle',		'Tenier',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Kristof',		'Tuyteleers', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
 	('Hilde',		'Van Bree',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
 	('Cecile',		'Van der Borght','$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
 	('Veronique',	'Van der Borght','$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Jasper',		'Kesteloot',	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-
-	('Loesje',		'Hermans', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Leander',		'Dierckx', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Kristof',		'Tuyteleers', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Kevin',		'Jacquemyn', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Kathleen',	'Buffels', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Sven',		'Van Dyck',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
 	('Karen',		'Van Rillaer', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Helga',		'Parijs', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Philip',		'Du Bois', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),	
-	('Maarten',		'Bosteels', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('Lut',			'Goedhuys', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
+	('Pieter',		'Vandepitte',	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
 	('Peter',		'Vergote', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
-	('David',		'Goelen', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO');
+	('Koen',		'Zagers',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO');
+
+
+
 
 /* Username genereren */
 UPDATE user SET Username = REPLACE(CONCAT_WS('.',Lastname, Firstname), ' ','');
 
 /* Users koppelen aan departement */
 INSERT INTO user_department (User, Department) VALUES
-	((SELECT ID FROM user WHERE Firstname = 'Johan' 	AND Lastname = 'Heylen'), 		(SELECT ID FROM department WHERE Name = 'Development')),
-
-	((SELECT ID FROM user WHERE Firstname = 'Kevin' 	AND Lastname = 'Dillaerts'), 	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-	((SELECT ID FROM user WHERE Firstname = 'Hilde' 	AND Lastname = 'Van Bree'), 	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-	((SELECT ID FROM user WHERE Firstname = 'Cecile' 	AND Lastname = 'Van der Borght'),(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-	((SELECT ID FROM user WHERE Firstname = 'Veronique' AND Lastname = 'Van der Borght'),(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-	((SELECT ID FROM user WHERE Firstname = 'Jasper' 	AND Lastname = 'Kesteloot'),	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-
-	((SELECT ID FROM user WHERE Firstname = 'Loesje' 	AND Lastname = 'Hermans'),		(SELECT ID FROM department WHERE Name = 'Development')),
-	((SELECT ID FROM user WHERE Firstname = 'Leander' 	AND Lastname = 'Dierckx'),		(SELECT ID FROM department WHERE Name = 'Operations')),
-	((SELECT ID FROM user WHERE Firstname = 'Kristof' 	AND Lastname = 'Tuyteleers'),	(SELECT ID FROM department WHERE Name = 'Operations')),
-	((SELECT ID FROM user WHERE Firstname = 'Kevin'		AND Lastname = 'Jacquemyn'),	(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-	((SELECT ID FROM user WHERE Firstname = 'Kathleen'	AND Lastname = 'Buffels'),		(SELECT ID FROM department WHERE Name = 'Support/Communication')),
-	((SELECT ID FROM user WHERE Firstname = 'Karen' 	AND Lastname = 'Van Rillaer'),	(SELECT ID FROM department WHERE Name = 'Finance/HR')),
-	((SELECT ID FROM user WHERE Firstname = 'Helga' 	AND Lastname = 'Parijs'),		(SELECT ID FROM department WHERE Name = 'Finance/HR')),
-	((SELECT ID FROM user WHERE Firstname = 'Philip' 	AND Lastname = 'Du Bois'),		(SELECT ID FROM department WHERE Name = 'Management')),
-	((SELECT ID FROM user WHERE Firstname = 'Maarten' 	AND Lastname = 'Bosteels'),		(SELECT ID FROM department WHERE Name = 'Management')),
-	((SELECT ID FROM user WHERE Firstname = 'Lut'		AND Lastname = 'Goedhuys'),		(SELECT ID FROM department WHERE Name = 'Management')),
-	((SELECT ID FROM user WHERE Firstname = 'Peter' 	AND Lastname = 'Vergote'),		(SELECT ID FROM department WHERE Name = 'Management')),
-	((SELECT ID FROM user WHERE Firstname = 'David' 	AND Lastname = 'Goelen'),		(SELECT ID FROM department WHERE Name = 'Management'));
+	((SELECT ID FROM user WHERE Firstname = 'Maarten'	AND Lastname = 'Bosteels'), 	(SELECT ID FROM department WHERE Name = 'Management')),
+	((SELECT ID FROM user WHERE Firstname = 'Kathleen'	AND Lastname = 'Buffels'), 		(SELECT ID FROM department WHERE Name = 'Support/Communications')),
+	((SELECT ID FROM user WHERE Firstname = 'Dimitri'	AND Lastname = 'De Graef'),		(SELECT ID FROM department WHERE Name = 'Operations')),
+	((SELECT ID FROM user WHERE Firstname = 'Leander'	AND Lastname = 'Dierckx'), 		(SELECT ID FROM department WHERE Name = 'Operations')),
+	((SELECT ID FROM user WHERE Firstname = 'Kevin'		AND Lastname = 'Dillaerts'),	(SELECT ID FROM department WHERE Name = 'Support/Communications')),
+	((SELECT ID FROM user WHERE Firstname = 'Philip'	AND Lastname = 'Du Bois'), 		(SELECT ID FROM department WHERE Name = 'Management')),	
+	((SELECT ID FROM user WHERE Firstname = 'Ronald'	AND Lastname = 'Geens'),		(SELECT ID FROM department WHERE Name = 'Management')),
+	((SELECT ID FROM user WHERE Firstname = 'Kurt'		AND Lastname = 'Gielen'),		(SELECT ID FROM department WHERE Name = 'Operations')),
+	((SELECT ID FROM user WHERE Firstname = 'Lut'		AND Lastname = 'Goedhuys'), 	(SELECT ID FROM department WHERE Name = 'Management')),
+	((SELECT ID FROM user WHERE Firstname = 'David'		AND Lastname = 'Goelen'), 		(SELECT ID FROM department WHERE Name = 'Management')),
+	((SELECT ID FROM user WHERE Firstname = 'Loesje'	AND Lastname = 'Hermans'), 		(SELECT ID FROM department WHERE Name = 'Development')),
+	((SELECT ID FROM user WHERE Firstname = 'Johan'		AND Lastname = 'Heylen'), 		(SELECT ID FROM department WHERE Name = 'Development')),
+	((SELECT ID FROM user WHERE Firstname = 'Kevin'		AND Lastname = 'Jacquemyn'), 	(SELECT ID FROM department WHERE Name = 'Development')),
+	((SELECT ID FROM user WHERE Firstname = 'Jasper'	AND Lastname = 'Kesteloot'),	(SELECT ID FROM department WHERE Name = 'Support/Communications')),
+	((SELECT ID FROM user WHERE Firstname = 'Kristof'	AND Lastname = 'Konings'),		(SELECT ID FROM department WHERE Name = 'Development')),
+	((SELECT ID FROM user WHERE Firstname = 'Bert'		AND Lastname = 'Maleszka'),		(SELECT ID FROM department WHERE Name = 'Development')),
+	((SELECT ID FROM user WHERE Firstname = 'Stijn'		AND Lastname = 'Niclaes'),		(SELECT ID FROM department WHERE Name = 'Development')),
+	((SELECT ID FROM user WHERE Firstname = 'Helga'		AND Lastname = 'Parijs'), 		(SELECT ID FROM department WHERE Name = 'Finance/HR')),
+	((SELECT ID FROM user WHERE Firstname = 'Nico'		AND Lastname = 'Point'),		(SELECT ID FROM department WHERE Name = 'Operations')),
+	((SELECT ID FROM user WHERE Firstname = 'Veerle'	AND Lastname = 'Tenier'),		(SELECT ID FROM department WHERE Name = 'Operations')),
+	((SELECT ID FROM user WHERE Firstname = 'Kristof'	AND Lastname = 'Tuyteleers'), 	(SELECT ID FROM department WHERE Name = 'Operations')),
+	((SELECT ID FROM user WHERE Firstname = 'Hilde'		AND Lastname = 'Van Bree'),		(SELECT ID FROM department WHERE Name = 'Support/Communications')),
+	((SELECT ID FROM user WHERE Firstname = 'Cecile'	AND Lastname = 'Van der Borght'),(SELECT ID FROM department WHERE Name = 'Support/Communications')),
+	((SELECT ID FROM user WHERE Firstname = 'Veronique'	AND Lastname = 'Van der Borght'),(SELECT ID FROM department WHERE Name = 'Support/Communications')),
+	((SELECT ID FROM user WHERE Firstname = 'Sven'		AND Lastname = 'Van Dyck'),		(SELECT ID FROM department WHERE Name = 'Operations')),
+	((SELECT ID FROM user WHERE Firstname = 'Karen'		AND Lastname = 'Van Rillaer'), 	(SELECT ID FROM department WHERE Name = 'Finance/HR')),
+	((SELECT ID FROM user WHERE Firstname = 'Pieter'	AND Lastname = 'Vandepitte'),	(SELECT ID FROM department WHERE Name = 'Development')),
+	((SELECT ID FROM user WHERE Firstname = 'Peter'		AND Lastname = 'Vergote'), 		(SELECT ID FROM department WHERE Name = 'Management')),
+	((SELECT ID FROM user WHERE Firstname = 'Koen'		AND Lastname = 'Zagers'),		(SELECT ID FROM department WHERE Name = 'Operations'));
 
 /* Managers toevoegen aan department*/
-UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Lut' AND Lastname = 'Goedhuys') WHERE Name = 'Support/Communication';
+UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Lut' AND Lastname = 'Goedhuys') WHERE Name = 'Support/Communications';
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'David' AND Lastname = 'Goelen') WHERE Name = 'Operations';
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Maarten' AND Lastname = 'Bosteels') WHERE Name = 'Development';
 UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Philip' AND Lastname = 'Du Bois') WHERE Name = 'Management';

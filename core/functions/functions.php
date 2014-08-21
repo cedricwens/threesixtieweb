@@ -580,7 +580,7 @@
 		}
 	}
 	function is_manager($user){
-		$query = mysql_query("SELECT ID FROM department WHERE Manager = $user");
+		$query = mysql_query("SELECT count(*) FROM department WHERE Manager = $user");
 		if(!$query || mysql_num_rows($query) <=0){
 			echo mysql_error();
 			return false;
@@ -1087,10 +1087,10 @@
 		}
 	}
 	function is_preferred_reviewee($reviewer, $reviewee, $batch){
-		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee AND Batch = $batch"), 0) == 1) ? true : false;
+		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee AND User = $reviewer AND Batch = $batch"), 0) == 1) ? true : false;
 	}
 	function is_preferred_reviewer($reviewee, $reviewer, $batch){
-		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee AND Batch = $batch"), 0) == 1) ? true : false;
+		return(mysql_result(mysql_query("SELECT COUNT(*) FROM preferred_poll WHERE Reviewer = $reviewer AND Reviewee = $reviewee AND User = $reviewee AND Batch = $batch"), 0) == 1) ? true : false;
 	}
 	function sanitize($data) {
 		return htmlentities(strip_tags(mysql_real_escape_string($data)));
