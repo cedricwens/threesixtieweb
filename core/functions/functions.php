@@ -4,6 +4,14 @@
 		$date = create_date();
 		mysql_query("INSERT INTO batch (Init_date, Running1_date, Running2_date, Finished_date, Status) VALUES ('$date', NULL, NULL, NULL, (SELECT ID FROM batch_status WHERE Name = 'Init'))");
 	}
+	function add_comment($reviewee, $comment){
+		$reviewer = $_SESSION['user_id'];
+		$batch = get_running2_batch_id();
+		$date = create_date();
+		$poll_status = mysql_result(mysql_query("SELECT ID FROM poll_status WHERE Name = 'Commentaar'"),0);
+		mysql_query("INSERT INTO Poll (Reviewer, Reviewee, Comment, Status, Time_Created, Last_Update, Batch) VALUES ($reviewer, $reviewee, '$comment', $poll_status, '$date', '$date', $batch) ON DUPLICATE KEY UPDATE Comment = '$comment', Last_Update = '$date'");
+		echo mysql_error();
+	}
 	function add_poll_comment($poll, $comment){
 		mysql_query("UPDATE poll SET Comment = '$comment' WHERE ID = $poll");
 	}
@@ -215,6 +223,22 @@
 			return $managers;
 		}
 	}
+	function get_not_reviewed_users($reviewer){
+		$query = mysql_query("SELECT ID, Firstname, Lastname FROM user WHERE ID NOT IN (SELECT Reviewee FROM poll WHERE Reviewer = $reviewer)");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$managers[] = array(
+					'ID' => $row['ID'],
+					stripslashes('Firstname') => $row['Firstname'],
+					stripslashes('Lastname') => $row['Lastname']
+				);
+			}
+			return $managers;
+		}
+	}
 	function get_number_of_users(){
 		$query = mysql_query("SELECT count(ID) FROM user");
 		if(!$query || mysql_num_rows($query) <=0){
@@ -222,6 +246,23 @@
 			return false;
 		}else{
 			return mysql_result($query,0);
+		}
+	}
+	function get_only_comment_polls($reviewer, $batch){
+		$query = mysql_query("SELECT ID, Reviewee, Comment, Status FROM poll WHERE Status = (SELECT ID FROM poll_status WHERE Name = 'Commentaar') AND Reviewer = $reviewer AND Batch = $batch");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$managers[] = array(
+					'ID' => $row['ID'],
+					'Reviewee' => $row['Reviewee'],
+					stripslashes('Comment') => $row['Comment'],
+					'Status' => $row['Status']
+				);
+			}
+			return $managers;
 		}
 	}
 	function get_parameters(){
@@ -298,7 +339,7 @@
 		}
 	}
 	function get_polls_by_reviewer($reviewer, $batch){
-		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = $reviewer AND Reviewee != $reviewer AND Batch = $batch");
+		$query = mysql_query("SELECT * FROM poll WHERE Reviewer = $reviewer AND Reviewee != $reviewer AND Status != (SELECT ID FROM poll_status WHERE Name = 'Commentaar') AND Batch = $batch");
 		if(!$query || mysql_num_rows($query) <=0) {
 			echo mysql_error();
 			return false;
@@ -919,6 +960,7 @@
 		$notteammanager_reviews = get_number_of_poll_not_team_manager($id);
 		$preferred_reviewers 	= get_number_of_preferred_reviewers($id);
 		$preferred_reviewees 	= get_number_of_preferred_reviewees($id);
+		$comments 				= get_comments($id);
 		$questions 				= get_questions();
 		echo "
 			Heeft <b>$reviews_given</b> review geschreven.
@@ -962,6 +1004,12 @@
 				?>
 			</table>
 			<?php	
+		echo "<h3>Extra commentaar:</h3>";
+		foreach ($comments as $comment) {
+			?>
+				<div class="comment"><?php echo $comment['Comment']; ?></div>
+			<?php
+		}
 	}
 	function get_number_of_reviews_given($id){
 		$query = mysql_query("SELECT count(*) AS Aantal_Reviews FROM reviews_given_view WHERE Reviewer = $id");
@@ -1057,6 +1105,20 @@
 				return 0;
 			}
 			return mysql_result($query, 0);
+		}
+	}
+	function get_comments($id){
+		$query = mysql_query("SELECT Comment FROM poll WHERE Reviewee = $id AND Comment != 'NULL'");
+		if(!$query || mysql_num_rows($query) <=0) {
+			echo mysql_error();
+			return false;
+		}else{
+			while ($row = mysql_fetch_assoc($query)) {
+				$comments[] = array(
+					stripslashes('Comment') => $row['Comment']
+				);
+			}
+			return $comments;
 		}
 	}
 	function get_average_score($user, $question){

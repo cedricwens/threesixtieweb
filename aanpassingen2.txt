@@ -20,13 +20,18 @@ X - Herinnering mail sturen tijdens fase2
 X - wachtwoord vergeten
 Mail functionaliteit testen
 Wat is de vertaling van 'Batch'?
+Mogelijkheid om commentaar te schrijven over iemand waar je geen review van mag geven
 
 
 Waar moet de extra commentaar van de enquete worden weergegeven?
-Mag dit commentaarveld maar maximaal 5 characters zijn?
+Mag dit commentaarveld maar maximaal 500 characters zijn?
 
 Hoeveel gebruikers moeten fase1 nog invullen? Dit hebben we al, maar enkel 'Niet ingevuld; wat met 'Opgeslagen'?
 	Voorstel: Opgeslagen mag, maar zodra dat iedereen heeft ingestuurd of opgeslagen, word de status van alle 'opgeslagen' vragenlijsten 		
 		omgezet naar "ingestuurd". Zodat met fase2 kan begonnen worden. Op deze manier moeten de gebruikers niet onnodig worden lastiggevallen. Een andere mogelijkheid is natuurlijk om deze gebruikers toch op de hoogte te brengen, want het staat weldegelijk in de inleiding vermeld, dat de vragenlijsten ingestuurd moeten worden, en niet opgeslagen.
 Hoeveel gebruikers moeten fase2 nog invullen?
 	Voorstel; Identiek aan fase1
+
+
+
+Het is niet mogelijk om te zeggen dat iedereen minstens x van zijn preferred reviews moet krijgen. Want het is ook mogleijk dat een gebruiker geen preferred reviews aanduid.

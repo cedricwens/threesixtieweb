@@ -27,18 +27,18 @@ $error = "";
 		<?php
 	}else{
 		?>
-		<div class="topContent">
+		<div class="centerContent">
 			<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="login">
 				<input type="text" name="username" placeholder="<?php echo get_text('Username'); ?>" required />
 				<br />
 				<input type="password" name="password" placeholder="<?php echo get_text('Password'); ?>" required />
 			<!-- consider adding a logo here dnsbelgium.png (please ask for the file)-->
 				<br />
-				<input type="checkbox" name="rememberme" /><label for="rememberme">Remember me</label>
+				<input type="checkbox" name="rememberme" /><label for="rememberme"><?php echo get_text('Remember_me'); ?></label>
 				<br />
-				<input type="submit" value="Login" name="login" />
+				<input type="submit" value="<?php echo get_text('Login'); ?>" name="login" />
 				<br />
-				<a href="forgot.php">Forgot password?</a>
+				<a href="forgot.php"><?php echo get_text('Forgot_password'); ?>?</a>
 			</form>
 			<?php echo $error; ?>
 		</div>

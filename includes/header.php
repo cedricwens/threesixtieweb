@@ -101,7 +101,7 @@ require('core/init.php');
 					}
 					if(isset($_SESSION['user_id']) && get_published_batch_id()){
 						?>
-						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php?id=<?php echo $_SESSION['user_id']; ?>"><?php echo get_text('My_results'); ?></a></li>
+						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php"><?php echo get_text('My_results'); ?></a></li>
 						<?php
 					}
 					?>

@@ -162,7 +162,8 @@ UPDATE department SET Manager = (SELECT ID FROM user WHERE Firstname = 'Peter' A
 INSERT INTO poll_status (Name) VALUES 
 	('Niet ingevuld'),
 	('Opgeslagen'),
-	('Ingestuurd');
+	('Ingestuurd'),
+	('Commentaar');
 
 /* Eigen polls toevoegen aan database */
 /*INSERT INTO poll (Reviewer, Reviewee, Comment, Status, Time_Created, Last_Update, Batch) VALUES

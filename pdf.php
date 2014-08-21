@@ -88,8 +88,8 @@ if(isset($_GET['id']) && $_GET['id'] = $_SESSION['user_id']){
 	$notteammanager_reviews = get_number_of_poll_not_team_manager($id);
 	$preferred_reviewers 	= get_number_of_preferred_reviewers($id);
 	$preferred_reviewees 	= get_number_of_preferred_reviewees($id);
+	$comments 				= get_comments($id);
 	$questions 				= get_questions();
-
 
 	$pdf = new PDF();
 	$pdf->AliasNbPages();
@@ -122,10 +122,23 @@ if(isset($_GET['id']) && $_GET['id'] = $_SESSION['user_id']){
 	foreach ($questions as $key => $question) {
 		$pdf->SetFont('Arial','',12);
 		$pdf->Cell(10,3,$key+1,0,0);
-		$pdf->MultiCell(175,3,$question['Question'],0,'L');
+		$pdf->MultiCell(175,5,$question['Question'],0,'L');
 		$pdf->SetFont('Arial','B',12);
 		$pdf->Cell(10);
 		$pdf->Cell(5,10,"Gemiddelde score: ".get_average_score($id, $question['ID']),0,0);
+		$pdf->Ln(10);
+		if($pdf->GetY()>250){
+			$pdf->AddPage();
+		}	
+	}
+	$pdf->Ln(5);
+	$pdf->SetFont('Arial','B',12);
+	$pdf->Cell(175,10,"Extra commentaar",0,'C');
+	$pdf->Ln(10);
+	foreach ($comments as $comment) {
+		$pdf->SetFont('Arial','',12);
+		$pdf->SetMargins(10,10,10,10);
+		$pdf->MultiCell(175,5,$comment['Comment'],1,'L');
 		$pdf->Ln(10);
 		if($pdf->GetY()>250){
 			$pdf->AddPage();

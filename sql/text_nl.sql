@@ -60,6 +60,7 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Back', 'Vorige'),
 	('Poll_send_successfully', 'De vragenlijst is succesvol doorgestuurd.'),
 	('Poll_saved_successfully', 'Je vragenlijst is succesvol opgeslagen.'),
+	('Comment_added_successfully','Je commentaar is succesvol toegevoegd.'),
 	('Click_next_for_next_step', 'Klik op Volgende om naar de volgende stap te gaan.'),
 	('Select_x_users_at_least', 'Gelieve minstens x gebruikers te selecteren.'),
 	('End_phase1_text', '<p>U bent aan het einde gekomen van fase 1.</p>
@@ -72,7 +73,6 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Send', 'Versturen'),
 	('Save', 'Opslaan'),
 	('These_users_have_not_filled_in_own_poll', 'Deze gebruikers hebben hun eigen vragenlijst nog niet ingevuld'),
-	('Login', 'Login'),
 	('Wrong_password', 'Foutief wachtwoord'),
 	('Users_have_not_filled_in_own_poll', 'gebruikers hebben hun eigen vragenlijst nog niet ingevuld'),
 	('Users_have_not_filled_in_other_poll', 'gebruikers hebben de andere vragenlijsten nog niet ingevuld'),
@@ -102,4 +102,10 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('User_results', 		'Gebruikersresultaten'),
 	('Admin', 				'Beheer'),
 	('Logout', 				'Afmelden'),
-	('Edit', 				'Wijzigen');
+	('Edit', 				'Wijzigen'),
+	('Remember_me',			'Aangemeld blijven'),
+	('Forgot_password',		'Wachtwoord vergeten'),
+	('Login',				'Aanmelden'),
+	('Reset_password',		'Stuur mij een nieuw wachtwoord'),
+	('Edit_comment',		'Commentaar bewerken'),
+	('PDF',					'PDF');

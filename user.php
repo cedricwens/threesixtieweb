@@ -14,7 +14,18 @@ if(!isset($_SESSION['user_id']) && !isset($_SESSION['admin_id'])){
 	<?php } ?>
 	<div class="topContent">
 		<?php
-		if (isset($_POST['user'])) {
+		if (isset($_SESSION['user_id'])) {
+			if(get_published_batch_id()){
+				$user = $_SESSION['user_id'];
+				$name = get_user_by_id($user);
+				$batch = get_published_batch_id();
+				echo "<h2>".get_text('Information')." ".strtolower(get_text('About')).": $name[0] $name[1]</h2>";
+				?>
+				<p><a href="pdf.php?id=<?php echo $_SESSION['user_id']; ?>"><?php echo get_text('View').' '.get_text('PDF'); ?></a></p>
+				<?php
+				get_user_info($user,$batch);
+			}
+		}else if (isset($_POST['user'])) {
 			if(empty($_POST['user'])){
 				echo get_text('Please_choose_a_user');
 			}else{
@@ -24,20 +35,9 @@ if(!isset($_SESSION['user_id']) && !isset($_SESSION['admin_id'])){
 				$batch = get_published_batch_id();
 				echo "<h2>".get_text('Information')." ".strtolower(get_text('About')).": $name[0] $name[1]</h2>";
 				?>
-				<p><a href="pdf.php?id=<?php echo $id; ?>">Bekijk PDF</a></p>
+				<p><a href="pdf.php?id=<?php echo $id; ?>"><?php echo get_text('View').' '.get_text('PDF'); ?></a></p>
 				<?php
 				get_user_info($id,$batch);
-			}
-		} else if (isset($_SESSION['user_id'])) {
-			if(get_published_batch_id()){
-				$user = $_SESSION['user_id'];
-				$name = get_user_by_id($user);
-				$batch = get_published_batch_id();
-				echo "<h2>".get_text('Information')." ".strtolower(get_text('About')).": $name[0] $name[1]</h2>";
-				?>
-				<p><a href="pdf.php?id=<?php echo $_SESSION['user_id']; ?>">Bekijk PDF</a></p>
-				<?php
-				get_user_info($user,$batch);
 			}
 		}
 		?>

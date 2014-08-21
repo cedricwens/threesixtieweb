@@ -248,19 +248,19 @@ while ($success == 0) {
 		if(get_number_of_candidate_poll_not_team_manager($user['ID']) > 2){
 			$test++;
 		}
-		//echo get_number_of_candidate_poll_not_team_manager($user['ID'])."-";	
+		echo get_number_of_candidate_poll_not_team_manager($user['ID'])."-";	
 		if(get_number_of_candidate_poll_team_members($user['ID']) > 2){
 			$test++;
 		}
-		//echo "<b>".get_number_of_candidate_poll_team_members($user['ID'])."</b>-";	
-		if(get_number_of_candidate_preferred_reviewers($user['ID']) < 2){
+		echo "<b>".get_number_of_candidate_poll_team_members($user['ID'])."</b>-";	
+		/*if(get_number_of_candidate_preferred_reviewers($user['ID']) < 2){
 			$test++;
 		}
 		echo get_number_of_candidate_preferred_reviewers($user['ID'])."-";	
 		if(get_number_of_candidate_preferred_reviewees($user['ID']) < 3){
 			$test++;
 		}
-		echo "<b>".get_number_of_candidate_preferred_reviewees($user['ID'])."</b>-";	
+		echo "<b>".get_number_of_candidate_preferred_reviewees($user['ID'])."</b>-";	*/
 	}
 	echo "<br />";
 	if($test > 0){

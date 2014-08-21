@@ -23,7 +23,7 @@ $errors = "";
 		
 	}
 ?>
-<div class="topContent">
+<div class="centerContent">
 	<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="login">
 		<input type="text" name="username" placeholder="<?php echo get_text('Username'); ?>" required />
 		<br />
