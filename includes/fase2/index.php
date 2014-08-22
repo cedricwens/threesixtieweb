@@ -11,7 +11,7 @@ if(isset($_GET['Start'])){
 			<?php
 		}
 		if(!isset($_GET['Poll'])){
-			if(/*!empty($_POST['user']) && !empty($_POST['comment']) && */isset($_POST['add_comment'])){
+			if(!empty($_POST['user']) && !empty($_POST['comment']) && isset($_POST['add_comment'])){
 				$id = $_POST['user'];
 				$comment = $_POST['comment'];
 				add_comment($id, $comment);

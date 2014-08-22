@@ -8,17 +8,6 @@ require('core/init.php');
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!--<link rel="stylesheet" type="text/css" href="main.css">-->
-	<!-- consider adding a logo here /somewhere on the page
-				dnsbelgium.png (please ask for the file)-->
-	<style type="text/css">
-		.back{
-			display: inline;
-			margin-right: 25px;
-		}
-		.next{
-			display: inline;
-		}
-	</style>
 	<script type="text/javascript">
 		function moveItem(a, b){
 			var fromBox = document.getElementById(a),
@@ -46,13 +35,14 @@ require('core/init.php');
 		else{// code for IE6, IE5
 	  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	  	}
+	  	xmlhttp.open("GET","change_batch_status.php?id="+batch+"&action="+action,true);
 		xmlhttp.onreadystatechange=function(){
-	  		//if (xmlhttp.readyState==4 && xmlhttp.status==200){
-	    		document.getElementById("batches").innerHTML=xmlhttp.responseText;
-	    		location.reload();
-	   		//}
+			console.log ('xmlhttp : ' + xmlhttp.readyState + ', ' + xmlhttp.status);
+	  		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+	    			document.getElementById("batches").innerHTML=xmlhttp.responseText;
+	    			location.reload();
+	   		}
 	  	}	
-		xmlhttp.open("GET","change_batch_status.php?id="+batch+"&action="+action,true);
 		xmlhttp.send();
 	}
 	function add_new_batch(){
@@ -62,13 +52,14 @@ require('core/init.php');
 		else{// code for IE6, IE5
 	  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	  	}
+	  	xmlhttp.open("GET","add_batch.php",true);
 		xmlhttp.onreadystatechange=function(){
-	  		//if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			console.log ('xmlhttp : ' + xmlhttp.readyState + ', ' + xmlhttp.status);
+	  		if (xmlhttp.readyState==4 && xmlhttp.status==200){
 	    		document.getElementById("batches").innerHTML=xmlhttp.responseText;
 	    		location.reload();
-	   		//}
+	 	  	}
 	  	}	
-		xmlhttp.open("GET","add_batch.php",true);
 		xmlhttp.send();
 	}
 	function edit_parameter(parameter, value){

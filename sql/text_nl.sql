@@ -97,6 +97,7 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Delete', 				'Verwijder'),
 	('Stop_and_publish_results', 'Stop en publiceer resultaten'),
 	('Calculate_polls', 	'Vragenlijsten berekenen'),
+	('View_calculated_polls', 'Bekijk berekende vragenlijsten'),
 	('Home', 				'Index'),
 	('My_results',			'Mijn resultaten'),
 	('User_results', 		'Gebruikersresultaten'),

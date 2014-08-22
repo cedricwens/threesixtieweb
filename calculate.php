@@ -13,52 +13,33 @@ set_time_limit(60);
 $selected_page = "Home";
 require('includes/header.php');
 $users = get_users_order_by_id();
-
-
-
-//init($users);
-$success = 0;
-$test = 0;
-$iteration = 0;
-//echo "Voor elke gebruiker staat hier het aantal keer dat hij gereviewed wordt door een manager. 1 regel is 1 keer het algoritme uitvoeren<br />";
-//echo "In het vetgedrukt staat het aantal teamleden waarvan een gebruiker reviews krijgt<br />";
-
-while ($success == 0) {
-	$test = 0;
-	init($users);
+if(isset($_GET['id'])){
+	if(isset($_POST['recalculate'])){
+		calculate_couples($_GET['id']);
+		header('Location: calculate.php?id='.$_GET['id']);
+	}else if(isset($_POST['accept'])){
+		accept_calculated_polls($_GET['id']);
+		header('Location: admin.php');
+	}
+	echo '<div class="content">';
 	foreach ($users as $user) {
-		if(get_number_of_candidate_poll_not_team_manager($user['ID']) > 2){
-			$test++;
-		}
-		echo get_number_of_candidate_poll_not_team_manager($user['ID'])."-";	
-		if(get_number_of_candidate_poll_team_members($user['ID']) > 2){
-			$test++;
-		}
-		echo "<b>".get_number_of_candidate_poll_team_members($user['ID'])."</b>-";	
-		/*if(get_number_of_candidate_preferred_reviewers($user['ID']) < 2){
-			$test++;
-		}
-		echo get_number_of_candidate_preferred_reviewers($user['ID'])."-";	
-		if(get_number_of_candidate_preferred_reviewees($user['ID']) < 3){
-			$test++;
-		}
-		echo "<b>".get_number_of_candidate_preferred_reviewees($user['ID'])."</b>-";	*/
+		$user_name = get_user_by_id($user['ID']);
+		echo '<div class="topContent">';
+		echo '<h3>'.$user_name[0].' '.$user_name[1].'</h3>';
+		get_candidate_user_info($user['ID']);
+		echo '</div>';
 	}
-	echo "<br />";
-	if($test > 0){
-		$success = 0;
-	}else{
-		$success = 1;
-	}
-
+	echo '</div>';
+	?>
+	<aside class="topSidebar">
+		<form action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $_GET['id']; ?>" method="post">
+			<input type="hidden" name="batch_id" value="<?php echo $_GET['id']; ?>" />
+			<input type="submit" name="recalculate" value="Herberekenen" />
+			<input type="submit" name="accept" value="Aanvaarden" />
+		</form>
+	</aside>
+	<?php
 }
-foreach ($users as $user) {
-	echo get_number_of_candidate_poll_not_team_manager($user['ID'])."-";
-}
-if(isset($_GET['user'])){
-	get_candidate_user_info($_GET['user']);
-}
-$number_of_polls=-1000000;
 
 
 ?>

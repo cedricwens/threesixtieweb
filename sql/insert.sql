@@ -24,6 +24,7 @@ INSERT INTO batch_status (Name, Description) VALUES
 	('Init', 	'Deze batch is geinitialiseerd en kan gestart worden'),
 	('Running1', 'Dit is een actieve batch in fase 1'),
 	('Calculate', 'De polls van deze batch kunnen berekend worden'),
+	('Accepted', 'De berekende polls zijn aanvaard'),
 	('Running2', 'Dit is een actieve batch in fase 2'),
 	('Published','De resultaten van deze batch zijn toegangkelijk voor de gebruikers'),
 	('Finished','Deze batch is afgelopen');
@@ -202,7 +203,7 @@ INSERT INTO poll_status (Name) VALUES
 INSERT INTO parameter (Name, Value) VALUES
 	('Aantal reviews geven', 5),
 	('Aantal reviews krijgen', 5),
-	('Maximum aantal reviews door (niet eigen) manager', 1),
+	('Maximum aantal reviews door (niet eigen) manager', 2),
 	('Minimaal aantal reviews dat reviewer geeft aan gebruikers die hij heeft geselecteerd', 3),
 	('Maximum aantal reviews uit eigen departement', 2),
 	('Minimum aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd', 2);
