@@ -61,7 +61,6 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Poll_send_successfully', 'De vragenlijst is succesvol doorgestuurd.'),
 	('Poll_saved_successfully', 'Je vragenlijst is succesvol opgeslagen.'),
 	('Comment_added_successfully','Je commentaar is succesvol toegevoegd.'),
-	('Click_next_for_next_step', 'Klik op Volgende om naar de volgende stap te gaan.'),
 	('Select_x_users_at_least', 'Gelieve minstens x gebruikers te selecteren.'),
 	('End_phase1_text', '<p>U bent aan het einde gekomen van fase 1.</p>
 						<p>Zodra alle gebruikers fase 1 hebben afgerond, zal fase 2 beginnen.</p>
@@ -109,4 +108,6 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Login',				'Aanmelden'),
 	('Reset_password',		'Stuur mij een nieuw wachtwoord'),
 	('Edit_comment',		'Commentaar bewerken'),
-	('PDF',					'PDF');
+	('Delete_comment',		'Commentaar verwijderen'),
+	('PDF',					'PDF'),
+	('End',					'Einde');

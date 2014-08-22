@@ -147,7 +147,9 @@ if(isset($_GET['id']) && $_GET['id'] = $_SESSION['user_id']){
 		}
 	}
 	$pdf->Ln(5);
-
+	$pdf->SetFont('Arial','',8);
+	$pdf->MultiCell(173,10, 'Indien u graag meer informatie wil over uw resultaten, of deze resultaten graag met iemand bespreekt, dan kan dit.', 0, 'L');
+	$pdf->Ln(5);
 	$pdf->Output();
 }		
 

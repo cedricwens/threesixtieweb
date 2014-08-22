@@ -5,11 +5,11 @@
 		if($user['ID'] != $_SESSION['user_id']){
 			if(is_preferred_reviewee($_SESSION['user_id'], $user['ID'], get_running1_batch_id())){
 				?>
-				<input type="checkbox" name="preferred_reviewee[]" value="<?php echo $user['Username']; ?>" checked /><?php echo $user['Firstname'].' '.$user['Lastname']; ?><br />
+				<input type="checkbox" name="preferred_reviewee[]" id="<?php echo $user['Username']; ?>" value="<?php echo $user['Username']; ?>" checked /><label for="<?php echo $user['Username']; ?>"><?php echo $user['Lastname'].' '.$user['Firstname']; ?></label><br />
 				<?php
 			}else{
 				?>
-				<input type="checkbox" name="preferred_reviewee[]" value="<?php echo $user['Username']; ?>" /><?php echo $user['Firstname'].' '.$user['Lastname']; ?><br />
+				<input type="checkbox" name="preferred_reviewee[]" id="<?php echo $user['Username']; ?>" value="<?php echo $user['Username']; ?>" /><label for="<?php echo $user['Username']; ?>"><?php echo $user['Lastname'].' '.$user['Firstname']; ?></label><br />
 				<?php
 			}
 		}

@@ -24,6 +24,12 @@ function create_date(){
 	$date = date("Y-m-d H:i:s", $time);
 	return $date;
 }
+function delete_comment($id){
+	$id = (int) $id;
+	$reviewer = (int)$_SESSION['user_id'];
+	mysql_query("DELETE FROM poll WHERE ID = $id and Reviewer = $reviewer");
+	header('Location: index.php?Start');
+}
 function delete_preferred_reviewer($user){
 	$user = sanitize($user);
 	$id = get_id_by_username($user);

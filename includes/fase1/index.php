@@ -31,40 +31,33 @@ if(isset($_GET['Start'])){
 				?>
 				<div class="topContent">
 					<?php echo $result; ?>
-					<p><?php echo get_text('Click_next_for_next_step'); ?></p>
-					
+					<p>Klik op volgende om gebruikers te selecteren die de vragenlijst over jou mogen invullen.</p>
+					<p>Klik op vorige om terug naar de vragenlijst te gaan.</p>
 					<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1"><?php echo get_text('Back'); ?></a></h3>
 					<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=2"><?php echo get_text('Next'); ?></a></h3>
 				</div>
 					
 				<?php
 			}else if(isset($_POST['add_preferred_reviewers'])){
-				//if(isset($_POST['preferred_reviewer'])){
-					
+				$preferred_reviewers = false;
+				if(isset($_POST['preferred_reviewer'])){
 					$preferred_reviewers = $_POST['preferred_reviewer'];
-					$reviewee = get_username_by_id($_SESSION['user_id']);
-					delete_preferred_reviewer($reviewee);
+				}
+				$reviewee = get_username_by_id($_SESSION['user_id']);
+				delete_preferred_reviewer($reviewee);
+				if($preferred_reviewers){
 					foreach ($preferred_reviewers as $preferred_reviewer){
 						add_preferred($preferred_reviewer, $reviewee, $reviewee);
 					}
-				//}
-					?>
-					<div class="topContent">
-						<p><?php echo get_text('Click_next_for_next_step'); ?></p>
-						<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=2"><?php echo get_text('Back'); ?></a></h3>
-						<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=3"><?php echo get_text('Next'); ?></a></h3>
-					</div>
-					<?php
-				/*}else{
-					$error = get_text('Select_x_users_at_least');
-					?>
-					<div class="topContent">
-						<?php echo $error; ?>
-						<br />
-						<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=2"><?php echo get_text('Back'); ?></a></h3>
-					</div>
-					<?php
-				}*/
+				}
+				?>
+				<div class="topContent">
+					<p>Klik op volgende om gebruikers te selecteren over wie jij de vragenlijst wil invullen.</p>
+					<p>Klik op vorige om terug te gaan naar jouw keuzes.</p>
+					<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=2"><?php echo get_text('Back'); ?></a></h3>
+					<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=3"><?php echo get_text('Next'); ?></a></h3>
+				</div>
+				<?php
 			}else if(isset($_POST['add_preferred_reviewees'])){
 				if(isset($_POST['preferred_reviewee'])){
 					$preferred_reviewees = $_POST['preferred_reviewee'];
@@ -73,18 +66,7 @@ if(isset($_GET['Start'])){
 					foreach ($preferred_reviewees as $preferred_reviewee){
 						add_preferred($reviewer, $preferred_reviewee, $reviewer);
 					}
-					
-				}/*else{
-					$error = get_text('Select_x_users_at_least');
-					?>
-					<div class="topContent">
-						<?php echo $error; ?>
-						<br />
-						<h3><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&Step=3"><?php echo get_text('Back'); ?></a></h3>
-					</div>
-					<?php
-					$success = false;
-				}*/
+				}
 				$success = true;
 				if($success){
 				?>
