@@ -19,6 +19,13 @@ function add_poll_comment($poll, $comment){
 	$comment = sanitize($comment);
 	mysql_query("UPDATE poll SET Comment = '$comment' WHERE ID = $poll");
 }
+function add_question($question, $category){
+	$question = sanitize($question);
+	$category = sanitize($category);
+	mysql_query("INSERT INTO question (Category, Question) VALUES ((SELECT ID FROM category WHERE Name = '$category'), '$question')");
+	echo mysql_error();
+	header('Location: admin.php');
+}
 function create_date(){
 	$time = time();
 	$date = date("Y-m-d H:i:s", $time);
@@ -41,6 +48,13 @@ function delete_preferred_reviewee($user){
 	$id = get_id_by_username($user);
 	$batch = get_running1_batch_id();
 	mysql_query("DELETE FROM preferred_poll WHERE User = $id AND Reviewer = $id AND Batch = $batch");
+}
+function delete_question($id){
+	$id = (int) $id;
+	mysql_query("DELETE FROM answer WHERE Question = $id");
+	mysql_query("DELETE FROM question WHERE ID = $id");
+	echo mysql_error();
+	header('Location: admin.php');
 }
 function edit_parameter($parameter, $value){
 	$parameter = (int) $parameter;
@@ -332,6 +346,16 @@ function get_poll_reviewee($poll){
 		return mysql_result($query,0);
 	}
 }
+function get_poll_reviewer($poll){
+	$poll = (int) $poll;
+	$query = mysql_query("SELECT Reviewer FROM poll WHERE ID = $poll");
+	if(!$query || mysql_num_rows($query) <=0){
+		echo mysql_error();
+		return false;
+	}else{
+		return mysql_result($query,0);
+	}
+}
 function get_poll_status($poll){
 	$poll = (int) $poll;
 	$query = mysql_query("SELECT Status FROM poll WHERE ID = $poll");
@@ -424,7 +448,7 @@ function get_published_batch_id(){
 	}
 }
 function get_questions(){
-	$query = mysql_query("SELECT * FROM question");
+	$query = mysql_query("SELECT * FROM question ORDER BY Category, ID");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -714,6 +738,11 @@ function resend_password($user){
 	$hashed_password = password_hash($password,PASSWORD_DEFAULT);
 	mysql_query("UPDATE user SET Password = '$hashed_password' WHERE ID = $id");
 	return "Uw nieuw wachtwoord werd verzonden naar uw emailadres.";
+}
+function save_question($id, $question){
+	$id = (int) $id;
+	$question = sanitize($question);
+	mysql_query("UPDATE question SET Question = '$question' WHERE ID = $id");
 }
 
 function create_poll($reviewer, $reviewee, $status){
@@ -1046,7 +1075,7 @@ function get_user_info($id,$batch){
 	$comments 				= get_comments($id);
 	$questions 				= get_questions();
 	echo "
-	Heeft <b>$reviews_given</b> review geschreven.
+	Heeft <b>$reviews_given</b> review(s) geschreven.
 	<br />
 	Heeft <b>$reviews_received</b> reviews gekregen.
 	<br />
@@ -1062,6 +1091,7 @@ function get_user_info($id,$batch){
 	<br />
 	".$user['Firstname']." mag van <b>$preferred_reviewees</b> gebruikers die zijn had gekozen, ook effectief de vragenlijst invullen.";
 	?>
+	<h3><?php echo get_Text('Average_score'); ?></h3>
 	<table>
 		<tr>
 			<th></th>
@@ -1278,6 +1308,7 @@ function get_best_polls_reviewee($reviewee){ // Selecteer de 5 beste polls voor 
 	$parameter = "Aantal reviews krijgen";
 	$limit = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews krijgen'"), 0);
 	$query = mysql_query("SELECT ID, Reviewer, Score FROM candidate_poll WHERE Reviewee=$reviewee ORDER BY Score DESC LIMIT $limit");
+	//$query = mysql_query("SELECT ID, Reviewer, Score FROM candidate_poll WHERE Reviewee=$reviewee ORDER BY Score DESC");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -1296,8 +1327,8 @@ function get_best_polls_reviewer($reviewer){ // Selecteer de 5 beste polls voor 
 	$reviewer = (int) $reviewer;
 	$parameter = "Aantal reviews geven";
 	$limit = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'"), 0);
-
 	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Reviewer=$reviewer ORDER BY Score DESC LIMIT $limit");
+	//$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Reviewer=$reviewer ORDER BY Score DESC");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -1316,7 +1347,8 @@ function get_best_polls_reviewee_reviewer($reviewer){ // Selecteer maximaal 5 po
 	$reviewer = (int) $reviewer;
 	$parameter = "Aantal reviews geven";
 	$limit = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'"), 0);
-	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC LIMIT $limit");
+	//$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC LIMIT $limit");
+	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC");
 	//echo "SELECT ID, Reviewee, Score FROM candidate_poll WHERE Ok_reviewee=1 AND Reviewer=$reviewer ORDER BY Score DESC LIMIT 5<br />";
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
@@ -1487,7 +1519,7 @@ function get_candidate_user_info($id){
 	$preferred_reviewees 	= get_number_of_candidate_preferred_reviewees($id);
 	$questions 				= get_questions();
 	echo "
-	Heeft <b>$reviews_given</b> review geschreven.
+	Heeft <b>$reviews_given</b> review(s) geschreven.
 	<br />
 	Heeft <b>$reviews_received</b> reviews gekregen.
 	<br />
@@ -1858,6 +1890,56 @@ function update_candidate_poll_score($poll, $score){
 	$score = (int) $score;
 	$query = mysql_query("UPDATE candidate_poll SET Score = $score WHERE ID = $poll;");
 }
+function get_manager_reviews_received(){
+	$query = mysql_query("SELECT Reviewee, sum(Ok_overall) AS Aantal_reviews FROM candidate_poll WHERE Reviewer = ANY (SELECT Manager FROM department) GROUP BY Reviewee");
+	if(!$query || mysql_num_rows($query) <=0) {
+		echo mysql_error();
+		return false;
+	}else{
+		while ($row = mysql_fetch_assoc($query)) {
+			$polls[] = array(
+				'Reviewee' => $row['Reviewee'],
+				'Aantal_reviews' => $row['Aantal_reviews']
+				);
+		}
+		return $polls;
+	}
+}
+function get_manager_reviews_received_reviewee($reviewee){
+	$reviewee = (int) $reviewee;
+	$query = mysql_query("SELECT Reviewee, sum(Ok_overall) AS Aantal_reviews FROM candidate_poll WHERE Reviewer = ANY (SELECT Manager FROM department) AND Reviewee = $reviewee GROUP BY Reviewee");
+	if(!$query || mysql_num_rows($query) <=0) {
+		echo mysql_error();
+		return false;
+	}else{
+		while ($row = mysql_fetch_assoc($query)) {
+			$polls[] = array(
+				'Reviewee' => $row['Reviewee'],
+				'Aantal_reviews' => $row['Aantal_reviews']
+				);
+		}
+		return $polls;
+	}
+}
+function get_worst_manager_polls($reviewee){
+	echo 'reviewee:'.$reviewee;
+	$query = mysql_query("SELECT * FROM candidate_poll WHERE Reviewee = $reviewee AND Reviewer = ANY (SELECT Manager FROM department) AND Ok_overall = 1 ORDER BY Score LIMIT 100 OFFSET 1");
+	if(!$query || mysql_num_rows($query) <=0) {
+		echo mysql_error();
+		return false;
+	}else{
+		while ($row = mysql_fetch_assoc($query)) {
+			$polls[] = array(
+				'ID' => $row['ID'],
+				'Reviewer' => $row['Reviewer'],
+				'Reviewee' => $row['Reviewee'],
+				'Score' => $row['Score'],
+				'Ok_overall' => $row['Ok_overall']
+				);
+		}
+		return $polls;
+	}
+}
 foreach ($users as $user) {
 	//echo get_number_of_candidate_poll_not_team_manager($user['ID'])."-";
 }
@@ -1869,6 +1951,7 @@ $number_of_polls= -1000000;
 function check($users){
 	$number_of_reviews_given = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name ='Aantal reviews geven'"), 0);
 	$number_of_reviews_received = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name ='Aantal reviews krijgen'"), 0);
+	$number_of_manager_reviews_received = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Maximum aantal reviews door (niet eigen) manager'"), 0);
 	shuffle($users);
 	foreach ($users as $user) {
 		$get_best_polls_reviewee = get_best_polls_reviewee($user['ID']);
@@ -1889,10 +1972,44 @@ function check($users){
 		if($best_polls_reviewee_reviewer){
 			foreach ($best_polls_reviewee_reviewer as $poll) {
 				$id = $poll['ID'];
-				mysql_query("UPDATE candidate_poll SET Ok_overall=1 WHERE ID = $id");
+				mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id");
 			}
 		}
 	}
+	$manager_reviews_received = get_manager_reviews_received();
+	$too_many_manager_received = array();
+	if($manager_reviews_received){
+		foreach ($manager_reviews_received as $reviews_per_reviewer) {
+			if($reviews_per_reviewer['Aantal_reviews'] > $number_of_manager_reviews_received){
+				$too_many_manager_received[] = $reviews_per_reviewer;
+			}
+		}
+	}
+	while(!empty($too_many_manager_received)){
+		//print_r($too_many_manager_received);
+		// De slechtste review met een reviewer verwijderen
+		foreach ($too_many_manager_received as $too_many_manager) {
+			$polls = get_worst_manager_polls($too_many_manager['Reviewee']);	
+			if($polls){
+				foreach ($polls as $poll){
+					$id = $poll['ID'];
+					mysql_query("UPDATE candidate_poll SET Ok_overall = 0 WHERE ID = $id");
+					mysql_error();
+				}
+			}	
+		}
+
+		$manager_reviews_received = get_manager_reviews_received();
+		$too_many_manager_received = array();
+		if($manager_reviews_received){
+		foreach ($manager_reviews_received as $reviews_per_reviewer) {
+			if($reviews_per_reviewer['Aantal_reviews'] > $number_of_manager_reviews_received){
+				$too_many_manager_received[] = $reviews_per_reviewer;
+			}
+		}
+	}
+	}
+
 	$reviews_given = get_reviews_given();
 	$too_few_given = array();
 	$too_many_given = array();
@@ -1929,7 +2046,6 @@ function check($users){
 	echo"too_many_received";
 	print_r($too_many_received);*/
 	while(!empty($too_many_given) && !empty($too_many_received)){
-		echo "eerste while";
 		$polls = array();
 		foreach($too_many_given as $too_many_reviewer){
 			foreach($too_many_received as $too_many_reviewee){
@@ -1982,7 +2098,7 @@ function check($users){
 		}
 	}
 	while(!empty($too_many_given)){
-		print_r($too_many_given);
+		//print_r($too_many_given);
 		//echo "Tweede while";
 		foreach($too_many_given as $too_many_reviewer){
 			$polls = get_not_top_5_best_polls($too_many_reviewer['Reviewer']);
@@ -2039,27 +2155,9 @@ function check($users){
 	echo "----------------------------------------<br/>";*/
 	global $number_of_polls;
 	while((!empty($too_few_given) && !empty($too_few_received)) && $number_of_polls != get_overall_ok_polls()){
+		echo "number_of_polls: $number_of_polls";
 		//print_r($too_few_given);
-		//echo "<br />";
-		//print_r($too_few_received);
-		//echo "<br />";
-		//echo "number of polls:".$number_of_polls."get_overall_ok_polls:".get_overall_ok_polls();
 		$number_of_polls = get_overall_ok_polls();
-		/*print_r($too_few_given);
-		echo"<br/>";
-		print_r($too_few_received)."<br />";
-		foreach($too_few_given as $too_few_reviewer){
-			$reviewer = $too_few_reviewer['Reviewer'];
-			echo $reviewer." {";
-			$polls = get_candidate_polls_by_reviewer($reviewer);
-			if($polls){
-				foreach($polls as $poll){
-					echo $poll['Reviewee'].",";
-				}
-			}
-			echo "}<br />";
-		}
-		echo "----------------------------------------<br/>";*/
 		$polls = array();
 		foreach($too_few_given as $too_few_reviewer){
 			foreach($too_few_received as $too_few_reviewee){
@@ -2080,7 +2178,13 @@ function check($users){
 				$id_best_poll = $poll['ID'];
 			}
 		}
-		mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id_best_poll");
+		$reviewer = get_poll_reviewer($id_best_poll);
+		print_r(get_manager_reviews_received_reviewee($reviewer));
+		if((get_manager_reviews_received_reviewee($reviewer) < $number_of_manager_reviews_received) && is_manager($reviewer)){
+			mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id_best_poll");
+		}else if(!is_manager($reviewer)){
+			mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id_best_poll");
+		}
 		$reviews_given = get_reviews_given();
 		$too_few_given = array();
 		$too_many_given = array();

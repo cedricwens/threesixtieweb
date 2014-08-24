@@ -116,13 +116,13 @@ $error = "";
 	?>
 	<div class="middleContent">
 
-		<h3><?php echo get_text('List_of_batches'); ?>:</h3>
+		<h2><?php echo get_text('List_of_batches'); ?>:</h2>
 		<?php
 			echo get_text('Batches_text');
 			$batches = get_batches();
 		?>
 		<table id="batches">
-			<tr>
+			<tr style="text-align:center;">
 				<th><?php echo get_text('ID'); ?></th>
 				<th><?php echo get_text('Init_date'); ?></th>
 				<th><?php echo get_text('Running_phase_1'); ?></th>
@@ -152,21 +152,17 @@ $error = "";
 				}
 			}
 			?>
-			<tr>
-				<td colspan="8">
-					<form action="" method="post">
-						<input type="submit" name="add_batch" onclick="add_new_batch();" value="<?php echo get_text('Add_batch'); ?>" />
-					</form>
-				</td>
-			</tr>
 		</table>
+		<form action="" method="post">
+			<input type="submit" name="add_batch" onclick="add_new_batch();" value="<?php echo get_text('Add_batch'); ?>" />
+		</form>
 	</div>
 	<?php
 	/*if(isset($_POST['add_batch'])){
 		add_batch();
 	}*/
 	?>
-	<div class="bottomContent">
+	<!--<div class="bottomContent">
 		<h2><?php echo get_text('Polls'); ?>:</h2>				
 		<?php
 		if($polls){
@@ -257,6 +253,133 @@ $error = "";
 			}
 		}
 		?>
+	</div>-->
+	<div class="bottomContent">
+		<h2><?php echo get_text('Questions'); ?></h2>
+		<?php
+		if(isset($_POST['edit'])){
+			?>
+			<div id="questions">
+				<?php
+				$categories = get_categories();
+				if($categories){
+					foreach ($categories as $category) {
+						?>
+						<tr>
+							<td colspan="3"><h3><?php echo $category['Name']; ?></h3></td>
+						</tr>
+						<?php
+						foreach ($questions as $key=>$question) {
+							if($question['Category'] == $category['ID']){
+								?>
+								<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+									<table>
+										<tr>
+											<?php
+												if($question['ID'] == $_POST['question_id']){
+													?>
+													<td width="90%"><textarea class="comment" id="question"><?php echo $question['Question']; ?></textarea></td>
+													<?php
+												}else{
+													?>
+													<td width="90%"><?php echo $key+1; echo ". ".$question['Question']; ?></td>
+													<?php
+												}
+											?>
+											<td>
+												<input type="hidden" name="question_id" id="question_id" value="<?php echo $question['ID']; ?>" />
+												<?php
+												if($question['ID'] == $_POST['question_id']){
+													?>
+													<script>
+													var question = document.getElementById('question');
+													var question_id = document.getElementById('question_id');
+													</script>
+													<input type="submit" name="save" onclick="save_question(question_id.value, question.value)" value="<?php echo get_text('Save'); ?>" />
+													<?php
+												}else{
+													?>
+													<input type="submit" name="edit" value="<?php echo get_text('Edit'); ?>" />
+													</td>
+													<td>
+														<input type="submit" name="delete" value="<?php echo get_text('Delete'); ?>" />
+													<?php
+												}
+												?>
+											</td>
+										</tr>
+									</table>
+								</form>
+								<?php
+							}
+						}
+					}
+				}
+			?>
+			</div>
+			<?php
+		}else if(isset($_POST['delete'])){
+			delete_question($_POST['question_id']);
+		}else if(isset($_POST['add']) && !empty($_POST['question'])){
+			add_question($_POST['question'], $_POST['category']);
+		}else{
+			?>
+			<div id="questions">
+				<?php
+				$categories = get_categories();
+				if($categories){
+					foreach ($categories as $category) {
+						?>
+						<table>
+							<tr>
+								<td colspan="3"><h3><?php echo $category['Name']; ?></h3></td>
+							</tr>
+						</table>
+						<?php
+						foreach ($questions as $key=>$question) {
+							if($question['Category'] == $category['ID']){
+								?>
+								<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+									<table>
+										<tr>
+											<td width="90%"><?php echo $key+1; echo '. '.$question['Question']; ?></td>
+											<td>
+												<input type="hidden" name="question_id" value="<?php echo $question['ID']; ?>" />
+												<input type="submit" name="edit" value="<?php echo get_text('Edit'); ?>" />
+											</td>
+											<td>
+												<input type="submit" name="delete" value="<?php echo get_text('Delete'); ?>" />
+											</td>
+										</tr>
+									</table>
+								</form>
+								<?php
+							}
+						}
+					}
+				}
+				?>
+				<h3><?php echo get_text('Add_question'); ?></h3>
+				<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+					<textarea name="question" class="comment"></textarea>
+					<select name="category">
+						<?php 
+						$categories = get_categories();
+						if($categories){
+							foreach ($categories as $category) {
+								?>
+								<option value="<?php echo $category['Name']; ?>"><?php echo $category['Name']; ?></option>
+								<?php
+							}
+						}
+						?>
+					</select>
+					<input type="submit" name="add" value="<?php echo get_text('Add'); ?>">
+				</form>
+			</div>
+			<?php
+		}
+		?>
 	</div>
 </div>
 <?php
@@ -297,10 +420,10 @@ $error = "";
 					?>
 					<optgroup label="<?php echo $category['Name']; ?>">
 						<?php
-						foreach ($questions as $question) {
+						foreach ($questions as $key=>$question) {
 							if($question['Category'] == $category['ID']){
 								?>
-								<option value="<?php echo $question['ID']; ?>"><?php echo $question['ID'].'. '.$question['Question']; ?></option>
+								<option value="<?php echo $question['ID']; ?>"><?php echo $key+1; echo ". ".$question['Question']; ?></option>
 								<?php
 							}
 						}

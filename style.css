@@ -9,6 +9,9 @@ body{
 textarea{
 	font-family: Arial, 'Lucida Sans Unicode';
 }
+h1,h2,h3{
+	color: #009EE3;
+}
 a{
 	text-decoration: none;
 }
@@ -218,6 +221,13 @@ textarea.comment{
 	resize: none;
 	width: 95%;
 	height: 150px;
+}
+#batches{
+	border-collapse: collapse;
+}
+td#batches, th#batches{
+	border: 1px solid #bbbbbb;
+	padding: 5px;
 }
 
 @media only screen and (min-width: 150px) and (max-width: 600px){

@@ -110,4 +110,6 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Edit_comment',		'Commentaar bewerken'),
 	('Delete_comment',		'Commentaar verwijderen'),
 	('PDF',					'PDF'),
-	('End',					'Einde');
+	('End',					'Einde'),
+	('Add_question',		'Vraag toevoegen'),
+	('Average_score',		'Gemiddelde score');
