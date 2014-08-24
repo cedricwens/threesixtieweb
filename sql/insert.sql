@@ -79,8 +79,8 @@ INSERT INTO department (Name) VALUES
 	('Finance/HR');
 
 /* Admin toevoegen aan database */
-INSERT INTO admin(Username, Password) VALUES
-	('Admin', '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO');
+INSERT INTO admin(Username, Password, Email) VALUES
+	('Admin', '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'admin@admin.com');
 
 /* Users toevoegen aan database*/
 INSERT INTO user (Firstname, Lastname, Password) VALUES

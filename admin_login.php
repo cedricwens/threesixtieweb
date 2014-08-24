@@ -12,15 +12,7 @@ $errors = "";
 
 		$username = $_POST['username'];
 		$password = $_POST['password'];
-		if($username == "Admin"){
-			if(password_verify($password, '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO')){
-				$_SESSION['admin_id'] = get_admin_id('Admin');
-				header('Location: admin.php');
-			}else{
-				$errors = get_text('Wrong_password');
-			}
-		}
-		
+		$errors = admin_login($username, $password);		
 	}
 ?>
 <div class="centerContent">
@@ -29,8 +21,9 @@ $errors = "";
 		<br />
 		<input type="password" name="password" placeholder="<?php echo get_text('Password'); ?>" required/>
 		<br />
-	<!-- consider adding a logo here dnsbelgium.png (please ask for the file)-->
 		<input type="submit" value="<?php echo get_text('Login'); ?>" name="login" />
+		<br />
+		<a href="admin_forgot.php"><?php echo get_text('Forgot_password'); ?>?</a>
 	</form>
 	<?php
 		if($errors != ""){

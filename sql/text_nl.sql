@@ -112,4 +112,20 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('PDF',					'PDF'),
 	('End',					'Einde'),
 	('Add_question',		'Vraag toevoegen'),
-	('Average_score',		'Gemiddelde score');
+	('Average_score',		'Gemiddelde score'),
+	('Add_user',			'Gebruiker toevoegen'),
+	('Firstname',			'Voornaam'),
+	('Lastname',			'Achternaam'),
+	('Department',			'Departement'),
+	('Admin_intro', 		'	<h2>Admin paneel</h2>
+								<p>Welkom op het adminpaneel.</p>
+								<p>Hier kan u onder andere:
+									<ul>
+										<li>Nieuwe batches starten</li>
+										<li>Gebruikers toevoegen</li>
+										<li>Resultaten van de gebruikers bekijken</li>
+									</ul>
+								</p>
+								<p>Om een nieuwe batch te starten, dient u hieronder op <i>Batch toevoegen</i> te klikken.</p>'),
+	('Email',				'Email'),
+	('Job_title',			'Functie');

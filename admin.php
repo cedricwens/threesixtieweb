@@ -7,7 +7,9 @@ if(!isset($_SESSION['admin_id'])){
 $error = "";
 ?>
 <div class="content">
-	<?php if(get_running1_batch_id() || get_running2_batch_id()){ ?>
+	<?php
+	if(get_running1_batch_id() || get_running2_batch_id()){
+		?>
 		<div class="topContent">
 			<table>
 			<?php
@@ -80,7 +82,7 @@ $error = "";
 			?>
 			</table>
 		</div>
-	<?php
+		<?php
 	}else if(get_init_batch_id()){
 		?>
 		<div class="topContent" id="parameter">
@@ -110,6 +112,12 @@ $error = "";
 			}
 			?>
 			</table>
+		</div>
+		<?php
+	}else{
+		?>
+		<div class="topContent">
+			<?php echo get_text('Admin_intro'); ?>
 		</div>
 		<?php
 	}
@@ -153,14 +161,147 @@ $error = "";
 			}
 			?>
 		</table>
-		<form action="" method="post">
-			<input type="submit" name="add_batch" onclick="add_new_batch();" value="<?php echo get_text('Add_batch'); ?>" />
+		<?php
+		if(isset($_POST['add_batch'])){
+			add_batch();
+		}
+		?>
+		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+			<input type="submit" name="add_batch" value="<?php echo get_text('Add_batch'); ?>" />
 		</form>
 	</div>
 	<?php
-	/*if(isset($_POST['add_batch'])){
-		add_batch();
-	}*/
+	 if(get_init_batch_id()){
+		?>
+		<div class="bottomContent">
+			<h2><?php echo get_text('Questions'); ?></h2>
+			<?php
+			if(isset($_POST['edit'])){
+				?>
+				<div id="questions">
+					<?php
+					$categories = get_categories();
+					if($categories){
+						foreach ($categories as $category) {
+							?>
+							<tr>
+								<td colspan="3"><h3><?php echo $category['Name']; ?></h3></td>
+							</tr>
+							<?php
+							foreach ($questions as $key=>$question) {
+								if($question['Category'] == $category['ID']){
+									?>
+									<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+										<table>
+											<tr>
+												<?php
+													if($question['ID'] == $_POST['question_id']){
+														?>
+														<td width="90%"><textarea class="comment" id="question"><?php echo $question['Question']; ?></textarea></td>
+														<?php
+													}else{
+														?>
+														<td width="90%"><?php echo $key+1; echo ". ".$question['Question']; ?></td>
+														<?php
+													}
+												?>
+												<td>
+													<input type="hidden" name="question_id" id="question_id" value="<?php echo $question['ID']; ?>" />
+													<?php
+													if($question['ID'] == $_POST['question_id']){
+														?>
+														<script>
+														var question = document.getElementById('question');
+														var question_id = document.getElementById('question_id');
+														</script>
+														<input type="submit" name="save" onclick="save_question(question_id.value, question.value)" value="<?php echo get_text('Save'); ?>" />
+														<?php
+													}else{
+														?>
+														<input type="submit" name="edit" value="<?php echo get_text('Edit'); ?>" />
+														</td>
+														<td>
+															<input type="submit" name="delete" value="<?php echo get_text('Delete'); ?>" />
+														<?php
+													}
+													?>
+												</td>
+											</tr>
+										</table>
+									</form>
+									<?php
+								}
+							}
+						}
+					}
+				?>
+				</div>
+				<?php
+			}else if(isset($_POST['delete'])){
+				delete_question($_POST['question_id']);
+			}else if(isset($_POST['add']) && !empty($_POST['question'])){
+				add_question($_POST['question'], $_POST['category']);
+			}else{
+				?>
+				<div id="questions">
+					<?php
+					$categories = get_categories();
+					if($categories){
+						foreach ($categories as $category) {
+							?>
+							<table>
+								<tr>
+									<td colspan="3"><h3><?php echo $category['Name']; ?></h3></td>
+								</tr>
+							</table>
+							<?php
+							foreach ($questions as $key=>$question) {
+								if($question['Category'] == $category['ID']){
+									?>
+									<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+										<table>
+											<tr>
+												<td width="90%"><?php echo $key+1; echo '. '.$question['Question']; ?></td>
+												<td>
+													<input type="hidden" name="question_id" value="<?php echo $question['ID']; ?>" />
+													<input type="submit" name="edit" value="<?php echo get_text('Edit'); ?>" />
+												</td>
+												<td>
+													<input type="submit" name="delete" value="<?php echo get_text('Delete'); ?>" />
+												</td>
+											</tr>
+										</table>
+									</form>
+									<?php
+								}
+							}
+						}
+					}
+					?>
+					<h3><?php echo get_text('Add_question'); ?></h3>
+					<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+						<textarea name="question" class="comment"></textarea>
+						<select name="category">
+							<?php 
+							$categories = get_categories();
+							if($categories){
+								foreach ($categories as $category) {
+									?>
+									<option value="<?php echo $category['Name']; ?>"><?php echo $category['Name']; ?></option>
+									<?php
+								}
+							}
+							?>
+						</select>
+						<input type="submit" name="add" value="<?php echo get_text('Add'); ?>">
+					</form>
+				</div>
+				<?php
+			}
+			?>
+		</div>
+		<?php
+	}
 	?>
 	<!--<div class="bottomContent">
 		<h2><?php echo get_text('Polls'); ?>:</h2>				
@@ -254,143 +395,51 @@ $error = "";
 		}
 		?>
 	</div>-->
-	<div class="bottomContent">
-		<h2><?php echo get_text('Questions'); ?></h2>
-		<?php
-		if(isset($_POST['edit'])){
-			?>
-			<div id="questions">
-				<?php
-				$categories = get_categories();
-				if($categories){
-					foreach ($categories as $category) {
-						?>
-						<tr>
-							<td colspan="3"><h3><?php echo $category['Name']; ?></h3></td>
-						</tr>
-						<?php
-						foreach ($questions as $key=>$question) {
-							if($question['Category'] == $category['ID']){
-								?>
-								<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-									<table>
-										<tr>
-											<?php
-												if($question['ID'] == $_POST['question_id']){
-													?>
-													<td width="90%"><textarea class="comment" id="question"><?php echo $question['Question']; ?></textarea></td>
-													<?php
-												}else{
-													?>
-													<td width="90%"><?php echo $key+1; echo ". ".$question['Question']; ?></td>
-													<?php
-												}
-											?>
-											<td>
-												<input type="hidden" name="question_id" id="question_id" value="<?php echo $question['ID']; ?>" />
-												<?php
-												if($question['ID'] == $_POST['question_id']){
-													?>
-													<script>
-													var question = document.getElementById('question');
-													var question_id = document.getElementById('question_id');
-													</script>
-													<input type="submit" name="save" onclick="save_question(question_id.value, question.value)" value="<?php echo get_text('Save'); ?>" />
-													<?php
-												}else{
-													?>
-													<input type="submit" name="edit" value="<?php echo get_text('Edit'); ?>" />
-													</td>
-													<td>
-														<input type="submit" name="delete" value="<?php echo get_text('Delete'); ?>" />
-													<?php
-												}
-												?>
-											</td>
-										</tr>
-									</table>
-								</form>
-								<?php
-							}
-						}
-					}
-				}
-			?>
-			</div>
-			<?php
-		}else if(isset($_POST['delete'])){
-			delete_question($_POST['question_id']);
-		}else if(isset($_POST['add']) && !empty($_POST['question'])){
-			add_question($_POST['question'], $_POST['category']);
-		}else{
-			?>
-			<div id="questions">
-				<?php
-				$categories = get_categories();
-				if($categories){
-					foreach ($categories as $category) {
-						?>
-						<table>
-							<tr>
-								<td colspan="3"><h3><?php echo $category['Name']; ?></h3></td>
-							</tr>
-						</table>
-						<?php
-						foreach ($questions as $key=>$question) {
-							if($question['Category'] == $category['ID']){
-								?>
-								<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-									<table>
-										<tr>
-											<td width="90%"><?php echo $key+1; echo '. '.$question['Question']; ?></td>
-											<td>
-												<input type="hidden" name="question_id" value="<?php echo $question['ID']; ?>" />
-												<input type="submit" name="edit" value="<?php echo get_text('Edit'); ?>" />
-											</td>
-											<td>
-												<input type="submit" name="delete" value="<?php echo get_text('Delete'); ?>" />
-											</td>
-										</tr>
-									</table>
-								</form>
-								<?php
-							}
-						}
-					}
-				}
-				?>
-				<h3><?php echo get_text('Add_question'); ?></h3>
-				<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-					<textarea name="question" class="comment"></textarea>
-					<select name="category">
-						<?php 
-						$categories = get_categories();
-						if($categories){
-							foreach ($categories as $category) {
-								?>
-								<option value="<?php echo $category['Name']; ?>"><?php echo $category['Name']; ?></option>
-								<?php
-							}
-						}
-						?>
-					</select>
-					<input type="submit" name="add" value="<?php echo get_text('Add'); ?>">
-				</form>
-			</div>
-			<?php
-		}
-		?>
-	</div>
+	
 </div>
 <?php
-		if(isset($_POST['add_poll'])){
+		/*if(isset($_POST['add_poll'])){
 			$reviewer 	= $_POST['reviewer'];
 			$reviewee 	= $_POST['reviewee'];
 			$status		= $_POST['status'];
 			$error = create_poll($reviewer,$reviewee,$status);
+		}*/
+		if(isset($_POST['add_user'])){
+			$firstname 	= $_POST['firstname'];
+			$lastname 	= $_POST['lastname'];
+			$department	= $_POST['department'];
+			$email 		= $_POST['email'];
+			if(!empty($_POST['job_title'])){
+				$job_title = $_POST['job_title'];
+				$error = add_user($firstname,$lastname,$department,$email,$job_title);
+			}else{
+				$error = add_user($firstname,$lastname,$department,$email,NULL);
+			}
 		}
 	?>
 	<aside class="topSidebar">
+		<h2><?php echo get_text('Add_user'); ?></h2>
+		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+			<label for="firstname"><?php echo get_text('Firstname'); ?>: </label><input type="text" name="firstname" required /><br />
+			<label for="lastname"><?php echo get_text('Lastname'); ?>: </label><input type="text" name="lastname" required /><br />
+			<label for="department"><?php echo get_text('Department'); ?>: </label>
+			<select name="department">
+				<?php
+				foreach ($departments as $department) {
+					?>
+					<option value="<?php echo $department['Name']; ?>"><?php echo $department['Name']; ?></option>
+					<?php
+				}
+				?>
+				<br />
+			</select>
+			<label for="email"><?php echo get_text('Email'); ?>: </label><input type="text" name="email" required /><br />
+			<label for="job_title"><?php echo get_text('Job_title'); ?>: </label><input type="text" name="job_title" /><br />
+			<input type="submit" value="<?php echo get_text('Add_user'); ?>" name="add_user" />
+		</form>
+		<?php echo $error; ?>
+	</aside>
+	<!--<aside class="topSidebar">
 		<h2><?php echo get_text('Add_poll'); ?></h2>
 		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 			<label for="reviewer">Reviewer: </label><input type="text" name="reviewer" /><br />
@@ -409,7 +458,7 @@ $error = "";
 			<input type="submit" value="<?php echo get_text('Add_poll'); ?>" name="add_poll" />
 		</form>
 		<?php echo $error; ?>
-	</aside>
+	</aside>-->
 	<aside class="middleSidebar">
 		<h2><?php echo get_text('Add_answer'); ?></h2>
 		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">

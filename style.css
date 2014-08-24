@@ -224,6 +224,7 @@ textarea.comment{
 }
 #batches{
 	border-collapse: collapse;
+	width: 100%;
 }
 td#batches, th#batches{
 	border: 1px solid #bbbbbb;

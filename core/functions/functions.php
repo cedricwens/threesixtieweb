@@ -3,6 +3,7 @@ ob_start();
 function add_batch(){
 	$date = create_date();
 	mysql_query("INSERT INTO batch (Init_date, Running1_date, Running2_date, Finished_date, Status) VALUES ('$date', NULL, NULL, NULL, (SELECT ID FROM batch_status WHERE Name = 'Init'))");
+	header('Location: admin.php');
 }
 function add_comment($reviewee, $comment){
 	$reviewee = (int) $reviewee;
@@ -25,6 +26,21 @@ function add_question($question, $category){
 	mysql_query("INSERT INTO question (Category, Question) VALUES ((SELECT ID FROM category WHERE Name = '$category'), '$question')");
 	echo mysql_error();
 	header('Location: admin.php');
+}
+function add_user($firstname, $lastname, $department, $email, $job_title){
+	$firstname = sanitize($firstname);
+	$lastname = sanitize($lastname);
+	$department = sanitize($department);
+	$username = $lastname.'.'.$firstname;
+	$password = password_hash(randomPassword(),PASSWORD_DEFAULT);
+	$email = sanitize($email);
+	$job_title = sanitize($job_title);
+	mysql_query("INSERT INTO user (Firstname, Lastname, Username, Password, Email, Job_Title) VALUES ('$firstname', '$lastname', '$username', '$password', '$email', '$job_title') ON DUPLICATE KEY UPDATE Firstname = '$firstname', Lastname = '$lastname', Username = '$username', Password = '$password', Email = '$email', Job_Title = '$job_title'");
+	$id = mysql_insert_id();
+	mysql_query("INSERT INTO user_department (User, Department) VALUES ((SELECT ID FROM user WHERE Username = '$username'), (SELECT ID FROM Department WHERE Name = '$department')) ON DUPLICATE KEY UPDATE User = (SELECT ID FROM user WHERE Username = '$username'), Department = (SELECT ID FROM Department WHERE Name = '$department')");
+	mysql_error();
+	//header('Location: admin.php');
+	//exit();
 }
 function create_date(){
 	$time = time();
@@ -528,6 +544,16 @@ function get_user_by_id($id){
 		return mysql_fetch_row($query,0);
 	}
 }
+function get_admin_by_id($id){
+	$id = (int) $id;
+	$query = mysql_query("SELECT Username FROM admin WHERE ID = $id");
+	if(!$query || mysql_num_rows($query) <=0){
+		echo mysql_error();
+		return false;
+	}else{
+		return mysql_fetch_row($query,0);
+	}
+}
 function get_user_department($id){
 	$id = (int) $id;
 	$query = mysql_query("SELECT Department FROM user_department WHERE User = $id");
@@ -549,9 +575,30 @@ function get_user_email($user){
 		return mysql_result($query,0);
 	}
 }
+function get_admin_email($admin){
+	$admin = sanitize($admin);
+	$id = get_admin_id($admin);
+	$query = mysql_query("SELECT Email FROM admin WHERE ID = $id");
+	if(!$query || mysql_num_rows($query) <=0){
+		echo mysql_error();
+		return false;
+	}else{
+		return mysql_result($query,0);
+	}
+}
 function get_user_id($user){
 	$user = sanitize($user);
-	$query = mysql_query("SELECT ID FROM user WHERE Username = '$user'");
+	$query = mysql_query("SELECT ID FROM user WHERE UPPER(Username) = UPPER('$user')");
+	if(!$query || mysql_num_rows($query) <=0){
+		echo mysql_error();
+		return false;
+	}else{
+		return mysql_result($query,0);
+	}
+}
+function get_admin_id($admin){
+	$admin = sanitize($admin);
+	$query = mysql_query("SELECT ID FROM admin WHERE UPPER(Username) = UPPER('$admin')");
 	if(!$query || mysql_num_rows($query) <=0){
 		echo mysql_error();
 		return false;
@@ -739,6 +786,36 @@ function resend_password($user){
 	mysql_query("UPDATE user SET Password = '$hashed_password' WHERE ID = $id");
 	return "Uw nieuw wachtwoord werd verzonden naar uw emailadres.";
 }
+function resend_admin_password($admin){
+	$admin = sanitize($admin);
+	$password = randomPassword();
+	echo $password;
+	$email = get_admin_email($admin);
+	$id = get_admin_id($admin);
+	$admin = get_admin_by_id($id);
+	$to = $email;
+	$subject = "Nieuw wachtwoord";
+	$message = "
+	Geachte ".$admin[0].",
+	<p>
+		Hier zijn uw nieuwe gebruikersgegevens:
+		<br />
+		Gebruikersnaam: ".$admin[0]."
+		<br />
+		Wachtwoord: ".$password."
+	</p>
+	<p>
+		Met vriendelijke groeten,
+	</p>
+	<p>
+		Het ThreeSixtyWeb team
+	</p>
+	";
+	mail($to, $subject, $message);
+	$hashed_password = password_hash($password,PASSWORD_DEFAULT);
+	mysql_query("UPDATE admin SET Password = '$hashed_password' WHERE ID = $id");
+	return "Uw nieuw wachtwoord werd verzonden naar uw emailadres.";
+}
 function save_question($id, $question){
 	$id = (int) $id;
 	$question = sanitize($question);
@@ -751,7 +828,7 @@ function create_poll($reviewer, $reviewee, $status){
 	$status = (int) $status;
 	$date = create_date();
 	$batch = get_running2_batch_id();
-	$query = mysql_query("SELECT * FROM poll WHERE Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer') AND Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee') AND Batch = $batch");
+	$query = mysql_query("SELECT * FROM poll WHERE Reviewer = (SELECT ID FROM user WHERE UPPER(Username) = UPPER('$reviewer')) AND Reviewee = (SELECT ID FROM user WHERE UPPER(Username) = UPPER('$reviewee')) AND Batch = $batch");
 	if(!$query || mysql_num_rows($query)>0 || mysql_num_rows($query) < 0){
 		if(mysql_num_rows($query) > 0) {
 			return get_text('Poll_already_exists');
@@ -759,7 +836,7 @@ function create_poll($reviewer, $reviewee, $status){
 			return mysql_error();
 		}
 	}else{
-		$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created, Last_Update, Batch) VALUES ((SELECT ID FROM user WHERE Username = '$reviewer'),(SELECT ID FROM user WHERE Username = '$reviewee'), (SELECT ID FROM poll_status WHERE Name = '$status'), '$date', '$date', $batch)");
+		$query = mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created, Last_Update, Batch) VALUES ((SELECT ID FROM user WHERE UPPER(Username) = UPPER('$reviewer')),(SELECT ID FROM user WHERE UPPER(Username) = UPPER('$reviewee')), (SELECT ID FROM poll_status WHERE Name = '$status'), '$date', '$date', $batch)");
 		if(!$query) {
 			return mysql_error();
 		}else{
@@ -925,11 +1002,11 @@ function add_preferred($reviewer, $reviewee, $user){
 		$query = mysql_query("	SELECT *
 			FROM preferred_poll
 			WHERE (
-				Reviewer = (SELECT ID FROM user WHERE Username = '$reviewer')
+				Reviewer = (SELECT ID FROM user WHERE UPPER(Username) = UPPER('$reviewer'))
 				AND
-				Reviewee = (SELECT ID FROM user WHERE Username = '$reviewee')
+				Reviewee = (SELECT ID FROM user WHERE UPPER(Username) = UPPER('$reviewee'))
 				AND
-				User = (SELECT ID FROM user WHERE Username = '$user')
+				User = (SELECT ID FROM user WHERE UPPER(Username) = UPPER('$user')),
 				AND
 				Batch = $batch
 				)
@@ -938,15 +1015,15 @@ function add_preferred($reviewer, $reviewee, $user){
 			echo mysql_error();
 		}else if(mysql_num_rows($query) == 0){
 			$query = mysql_query("	INSERT INTO preferred_poll (Reviewer, Reviewee, User, Batch) VALUES (
-				(SELECT ID FROM user WHERE Username = '$reviewer'),
-				(SELECT ID FROM user WHERE Username = '$reviewee'),
-				(SELECT ID FROM user WHERE Username = '$user'),
+				(SELECT ID FROM user WHERE UPPER(Username) = UPPER('$reviewer')),
+				(SELECT ID FROM user WHERE UPPER(Username) = UPPER('$reviewee')),
+				(SELECT ID FROM user WHERE UPPER(Username) = UPPER('$user')),
 				$batch
 				)
 			ON DUPLICATE KEY UPDATE
-			Reviewer = 	(SELECT ID FROM user WHERE Username = '$reviewer'),
-			Reviewee = 	(SELECT ID FROM user WHERE Username = '$reviewee'),
-			User = 		(SELECT ID FROM user WHERE Username ='$user'),
+			Reviewer = 	(SELECT ID FROM user WHERE UPPER(Username) = UPPER('$reviewer')),
+			Reviewee = 	(SELECT ID FROM user WHERE UPPER(Username) = UPPER('$reviewee')),
+			User = 		(SELECT ID FROM user WHERE UPPER(Username) = UPPER('$user')),
 			Batch =		$batch
 			");
 			if(!$query){
@@ -1012,7 +1089,7 @@ function login($username, $password, $rememberme){
 	$password = sanitize($password);
 	$rememberme = sanitize($rememberme);
 	if(get_running1_batch_id() || get_running2_batch_id() || get_published_batch_id()){
-		$query = mysql_query("SELECT ID, Password FROM user WHERE Username = '$username'");
+		$query = mysql_query("SELECT ID, Password FROM user WHERE UPPER(Username) = UPPER('$username')");
 		if(!$query || mysql_num_rows($query) <= 0){
 				//echo mysql_error();
 			return "Er is een fout opgetreden. Heb je wel een account?";
@@ -1034,6 +1111,24 @@ function login($username, $password, $rememberme){
 		return "Aanmelden is momenteel niet toegestaan. U krijgt een email zodra u terug kan aanmelden.";
 	}
 }
+function admin_login($username, $password){
+	$username = sanitize($username);
+	$password = sanitize($password);
+	$query = mysql_query("SELECT ID, Password FROM admin WHERE UPPER(Username) = UPPER('$username')");
+	if(!$query || mysql_num_rows($query) <= 0){
+			//echo mysql_error();
+		return "Er is een fout opgetreden.";
+	}else{
+		$user = mysql_fetch_row($query);
+		if(password_verify($password, $user['1'])){
+			$_SESSION['admin_id'] = $user['0'];
+			header('Location: admin.php');
+			exit();
+		}else{
+			return "Foutief wachtwoord";
+		}
+	}
+}
 function logged_in_redirect(){
 	if(logged_in() === true){
 		header('Location: index.php');
@@ -1047,17 +1142,6 @@ function protect_page(){
 	if(logged_in() === false){
 		header('Location: login.php');
 		exit();
-	}
-}
-
-function get_admin_id($name){
-	$name = sanitize($name);
-	$query = mysql_query("SELECT ID FROM admin WHERE Username = '$name");
-	if(!$query || mysql_num_rows($query) <=0){
-		echo mysql_error();
-		return false;
-	}else{
-		return mysql_result($query,0);
 	}
 }
 function get_user_info($id,$batch){
@@ -1719,7 +1803,7 @@ function get_top_polls($user){
 }
 function get_manager_not_top_manager(){
 	// Selecteer alle managers, behalve de hoogtste manager (Philip Du Bois)
-	$query = mysql_query("SELECT DISTINCT(d.ID) AS Department, d.Manager AS Manager FROM user_department ud INNER JOIN Department d ON ud.Department = d.ID WHERE d.Manager != (SELECT ID FROM user WHERE Username='DuBois.Philip');");
+	$query = mysql_query("SELECT DISTINCT(d.ID) AS Department, d.Manager AS Manager FROM user_department ud INNER JOIN Department d ON ud.Department = d.ID WHERE d.Manager != (SELECT ID FROM user WHERE ID = (SELECT Manager FROM department WHERE Name = 'Management'))");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;

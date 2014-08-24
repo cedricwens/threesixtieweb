@@ -45,23 +45,6 @@ require('core/init.php');
 	  	}	
 		xmlhttp.send();
 	}
-	function add_new_batch(){
-		if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-	  		xmlhttp=new XMLHttpRequest();
-	  	}
-		else{// code for IE6, IE5
-	  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	  	}
-	  	xmlhttp.open("GET","add_batch.php",true);
-		xmlhttp.onreadystatechange=function(){
-			console.log ('xmlhttp : ' + xmlhttp.readyState + ', ' + xmlhttp.status);
-	  		if (xmlhttp.readyState==4 && xmlhttp.status==200){
-	    		document.getElementById("batches").innerHTML=xmlhttp.responseText;
-	    		location.reload();
-	 	  	}
-	  	}	
-		xmlhttp.send();
-	}
 	function edit_parameter(parameter, value){
 		if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 	  		xmlhttp=new XMLHttpRequest();
