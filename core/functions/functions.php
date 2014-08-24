@@ -39,8 +39,8 @@ function add_user($firstname, $lastname, $department, $email, $job_title){
 	$id = mysql_insert_id();
 	mysql_query("INSERT INTO user_department (User, Department) VALUES ((SELECT ID FROM user WHERE Username = '$username'), (SELECT ID FROM Department WHERE Name = '$department')) ON DUPLICATE KEY UPDATE User = (SELECT ID FROM user WHERE Username = '$username'), Department = (SELECT ID FROM Department WHERE Name = '$department')");
 	mysql_error();
-	//header('Location: admin.php');
-	//exit();
+	header('Location: admin.php');
+	exit();
 }
 function create_date(){
 	$time = time();
