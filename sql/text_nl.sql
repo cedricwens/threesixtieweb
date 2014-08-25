@@ -83,8 +83,8 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('List_of_batches', 	'Lijst van batches'),
 	('Batches_text', 		"Er kan maar 1 batch in 'Init' state zijn, en maar 1 batch in 'Running' state. Er staat geen limiet op het aantal batches in 'Finished' state."),
 	('Init_date', 			'Initialisatie'),
-	('Running_phase_1', 	'Start fase 1'),
-	('Running_phase_2', 	'Start fase 2'),
+	('Start_phase_1',	 	'Start fase 1'),
+	('Start_phase_2', 		'Start fase 2'),
 	('Finished_date', 		'Einde'),
 	('Status', 				'Status'),
 	('Comment', 			'Commentaar'),
@@ -128,4 +128,45 @@ INSERT INTO text_nl (Name, Text) VALUES
 								</p>
 								<p>Om een nieuwe batch te starten, dient u hieronder op <i>Batch toevoegen</i> te klikken.</p>'),
 	('Email',				'Email'),
-	('Job_title',			'Functie');
+	('Job_title',			'Functie'),
+	('New_password',		'Nieuw wachtwoord'),
+	('Mail_footer',			'<p>
+								Met vriendelijke groeten,
+							</p>
+							<p>
+								Het ThreeSixtyWeb team
+							</p>'),
+	('New_user_credentials','Hier zijn uw nieuwe gebruikersgegevens'),
+	('New_password_send',	'Uw nieuw wachtwoord werd verzonden naar uw emailadres.'),
+	('Dear',				'Geachte'),
+	('Mail_phase_1',		'<p>
+								Fase 1 is begonnen. Zodra u zich aanmeld met uw gebruikersnaam en wachtwoord, kan u uw eigen vragenlijst invullen.
+							</p>'),
+	('Results_available',	'Resultaten beschikbaar'),
+	('Mail_phase_2',		'<p>
+								Fase 2 is begonnen. Zodra u zich aanmeld met uw gebruikersnaam en wachtwoord, kan u de vragenlijsten invullen.
+							</p>'),
+	('Mail_results_available','	<p>
+									De resultaten van de vragenlijst zijn nu beschikbaar. Log in met u gebruikersnaam en wacthwoord om uw resultaten te bekijken.
+								</p>'),
+	('Reminder',			'Herinnering'),
+	('Reminder_own_poll',	'<p>
+								Via deze mail willen wij u er aan herinneren dat u uw eigen vragenlijst nog niet hebt ingevuld.
+								Wij willen u daarom vriendelijk verzoeken om deze zo snel mogelijk in te vullen en door te sturen.
+							</p>'),
+	('Reminder_other_polls','<p>
+								Via deze mail willen wij u er aan herinneren dat u nog niet alle vragenlijsten hebt ingestuurd.
+								Wij willen u daarom vriendelijk verzoeken om deze zo snel mogelijk in te vullen en door te sturen.
+							</p>'),
+	('Login_not_allowed',	'Aanmelden is momenteel niet toegestaan. U krijgt een email zodra u terug kan aanmelden.'),
+	('Error_occured',		'Er is een fout opgetreden.'),
+	('Do_you_have_account',	'Heb je wel een account?'),
+	('Reviews_written',		'Vragenlijsten ingevuld'),
+	('Reviews_received',	'Beoordelingen ontvangen'),
+	('Reviews_from_teammember', 		'Beoordelingen ontvangen van teamleden'),
+	('Reviews_from_not_teammember', 	'Beoordelingen ontvangen van niet-teamleden'),
+	('Reviews_from_teammanager', 		'Beoordelingen ontvangen van teammanager'),
+	('Reviews_from_not_teammanager', 	'Beoordelingen ontvangen van niet-teammanagers'),
+	('Reviews_from_preferred_reviewer',	'Aantal beoordelingen gekregen van gekozen gebruikers'),
+	('Reviews_given_to_preferred_reviewee', 'Aantal beoordelingen gegeven aan gekozen gebruikers'),
+	('Extra_comment',		'Extra commentaar');

@@ -203,7 +203,7 @@ INSERT INTO poll_status (Name) VALUES
 INSERT INTO parameter (Name, Value) VALUES
 	('Aantal reviews geven', 5),
 	('Aantal reviews krijgen', 5),
-	('Maximum aantal reviews door (niet eigen) manager', 2),
+	('Maximum aantal reviews door (niet eigen) manager', 1),
 	('Minimaal aantal reviews dat reviewer geeft aan gebruikers die hij heeft geselecteerd', 3),
 	('Maximum aantal reviews uit eigen departement', 2),
 	('Minimum aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd', 2);

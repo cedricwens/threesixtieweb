@@ -9,14 +9,14 @@
  * 		JA=	 [0;	-10]
  * 		NEE= [10; 	20]
  **/
-set_time_limit(60);
+set_time_limit(10);
 $selected_page = "Home";
 require('includes/header.php');
 $users = get_users_order_by_id();
 if(isset($_GET['id'])){
 	if(isset($_POST['recalculate'])){
 		calculate_couples($_GET['id']);
-		header('Location: calculate.php?id='.$_GET['id']);
+		//header('Location: calculate.php?id='.$_GET['id']);
 	}else if(isset($_POST['accept'])){
 		accept_calculated_polls($_GET['id']);
 		header('Location: admin.php');

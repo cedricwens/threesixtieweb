@@ -24,9 +24,9 @@ if(isset($_GET['id']) && isset($_GET['question'])){
 									<input type="hidden" name="question_id" value="<?php echo $question['ID']; ?>" />
 									<input type="submit" name="edit" value="<?php echo get_text('Edit'); ?>" />
 								</td>
-								<td>
+								<!--<td>
 									<input type="submit" name="delete" value="<?php echo get_text('Delete'); ?>" />
-								</td>
+								</td>-->
 							</tr>
 						</table>
 					</form>

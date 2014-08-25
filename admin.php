@@ -133,8 +133,8 @@ $error = "";
 			<tr style="text-align:center;">
 				<th><?php echo get_text('ID'); ?></th>
 				<th><?php echo get_text('Init_date'); ?></th>
-				<th><?php echo get_text('Running_phase_1'); ?></th>
-				<th><?php echo get_text('Running_phase_2'); ?></th>
+				<th><?php echo get_text('Start_phase_1'); ?></th>
+				<th><?php echo get_text('Start_phase_2'); ?></th>
 				<th><?php echo get_text('Finished_date'); ?></th>
 				<th><?php echo get_text('Status'); ?></th>
 				<th><?php echo get_text('Comment'); ?></th>
@@ -219,9 +219,9 @@ $error = "";
 													}else{
 														?>
 														<input type="submit" name="edit" value="<?php echo get_text('Edit'); ?>" />
-														</td>
+														<!--</td>
 														<td>
-															<input type="submit" name="delete" value="<?php echo get_text('Delete'); ?>" />
+															<input type="submit" name="delete" value="<?php echo get_text('Delete'); ?>" />-->
 														<?php
 													}
 													?>
@@ -266,9 +266,9 @@ $error = "";
 													<input type="hidden" name="question_id" value="<?php echo $question['ID']; ?>" />
 													<input type="submit" name="edit" value="<?php echo get_text('Edit'); ?>" />
 												</td>
-												<td>
+												<!--<td>
 													<input type="submit" name="delete" value="<?php echo get_text('Delete'); ?>" />
-												</td>
+												</td>-->
 											</tr>
 										</table>
 									</form>
@@ -420,9 +420,9 @@ $error = "";
 	<aside class="topSidebar">
 		<h2><?php echo get_text('Add_user'); ?></h2>
 		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-			<label for="firstname"><?php echo get_text('Firstname'); ?>: </label><input type="text" name="firstname" required /><br />
-			<label for="lastname"><?php echo get_text('Lastname'); ?>: </label><input type="text" name="lastname" required /><br />
-			<label for="department"><?php echo get_text('Department'); ?>: </label>
+			<label for="firstname"><?php echo get_text('Firstname'); ?>: </label><br /><input type="text" name="firstname" required /><br />
+			<label for="lastname"><?php echo get_text('Lastname'); ?>: </label><br /><input type="text" name="lastname" required /><br />
+			<label for="department"><?php echo get_text('Department'); ?>: </label><br />
 			<select name="department">
 				<?php
 				foreach ($departments as $department) {
@@ -432,9 +432,9 @@ $error = "";
 				}
 				?>
 				<br />
-			</select>
-			<label for="email"><?php echo get_text('Email'); ?>: </label><input type="text" name="email" required /><br />
-			<label for="job_title"><?php echo get_text('Job_title'); ?>: </label><input type="text" name="job_title" /><br />
+			</select><br />
+			<label for="email"><?php echo get_text('Email'); ?>: </label><br /><input type="text" name="email" required /><br />
+			<label for="job_title"><?php echo get_text('Job_title'); ?>: </label><br /><input type="text" name="job_title" /><br />
 			<input type="submit" value="<?php echo get_text('Add_user'); ?>" name="add_user" />
 		</form>
 		<?php echo $error; ?>
@@ -459,7 +459,7 @@ $error = "";
 		</form>
 		<?php echo $error; ?>
 	</aside>-->
-	<aside class="middleSidebar">
+	<!--<aside class="middleSidebar">
 		<h2><?php echo get_text('Add_answer'); ?></h2>
 		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
 			<label for="question"><?php echo get_text('Question'); ?>: </label>
@@ -499,7 +499,7 @@ $error = "";
 			<label for="answer"><?php echo get_text('Answer'); ?>: </label><input type="text" name="answer" /><br />
 			<input type="submit" value="<?php echo get_text('Answers'); ?>" name="answer_question"/>
 		</form>
-	</aside>
+	</aside>-->
 	<?php
 	if(isset($_POST['answer_question'])){
 		$question = $_POST['question'];
@@ -508,7 +508,7 @@ $error = "";
 		answer($poll, $question, $answer);
 	}
 	?>
-	<aside class="bottomSidebar">
+	<!--<aside class="bottomSidebar">
 		<h2><?php echo get_text('Preferences'); ?></h2>
 		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
 			<label for="me">Ik ben: </label>
@@ -580,7 +580,7 @@ $error = "";
 			<br />
 			<input type="submit" value="<?php echo get_text('Add'); ?>" name="add_preferred" />
 		</form>
-	</aside>
+	</aside>-->
 	<?php
 	if(isset($_POST['add_preferred'])){
 		$me = $_POST['me'];

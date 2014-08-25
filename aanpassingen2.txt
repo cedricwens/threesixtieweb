@@ -20,7 +20,7 @@ X - Herinnering mail sturen tijdens fase2
 X - wachtwoord vergeten
 Mail functionaliteit testen
 Wat is de vertaling van 'Batch'?
-Mogelijkheid om commentaar te schrijven over iemand waar je geen review van mag geven
+X - Mogelijkheid om commentaar te schrijven over iemand waar je geen review van mag geven
 
 
 Waar moet de extra commentaar van de enquete worden weergegeven?

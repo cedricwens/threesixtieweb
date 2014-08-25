@@ -39,12 +39,13 @@ if(isset($_GET['Start'])){
 					
 				<?php
 			}else if(isset($_POST['add_preferred_reviewers'])){
+				
 				$preferred_reviewers = false;
 				if(isset($_POST['preferred_reviewer'])){
 					$preferred_reviewers = $_POST['preferred_reviewer'];
 				}
 				$reviewee = get_username_by_id($_SESSION['user_id']);
-				delete_preferred_reviewer($reviewee);
+				delete_preferred_reviewer($reviewee, get_running1_batch_id());
 				if($preferred_reviewers){
 					foreach ($preferred_reviewers as $preferred_reviewer){
 						add_preferred($preferred_reviewer, $reviewee, $reviewee);
