@@ -2218,7 +2218,14 @@ function check($users){
 		}
 	}
 	global $number_of_polls;
-	while((!empty($too_few_given) && !empty($too_few_received))) {
+	$counter = 0;
+	while((!empty($too_few_given) && !empty($too_few_received)) && $counter != 10) {
+		if($number_of_polls == get_overall_ok_polls()){
+			$counter++;
+		}else{
+			$counter = 0;
+		}
+		echo "number_of_polls:".$number_of_polls;
 		echo "<br />too_few_given:";
 		foreach ($too_few_given as $too_few_give) {
 			echo $too_few_give['Reviewer'].',';
@@ -2250,15 +2257,15 @@ function check($users){
 		$score = 0;
 		$poll = 0;
 
-		//$key = array_rand($polls, 1);
-		//$poll = $polls[$key];
+		$key = array_rand($polls, 1);
+		$poll = $polls[$key];
 		
-		foreach ($polls as $candidate_poll) {
+		/*foreach ($polls as $candidate_poll) {
 			if($score < $candidate_poll['Score']){
 				$score = $candidate_poll['Score'];
 				$poll = $candidate_poll;
 			}
-		}
+		}*/
 		echo "gekozen poll:".$poll['ID'];
 		$reviewer = get_candidate_poll_reviewer($poll['ID']);
 		$reviewee = get_candidate_poll_reviewee($poll['ID']);
@@ -2283,6 +2290,85 @@ function check($users){
 			mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id");
 			echo "toegevoegd optie 2 wer:$reviewer-wee:$reviewee<br />";
 		}
+		$reviews_given = get_reviews_given();
+		$too_few_given = array();
+		$too_many_given = array();
+		$exact_given = array();
+		if($reviews_given){
+			foreach ($reviews_given as $reviews_per_reviewer) { 				// Alle gebruikers die reviews geven
+				if($reviews_per_reviewer['Aantal_reviews'] < $number_of_reviews_given){				// Alle gebruikers die minder dan 5 reviews geven
+					$too_few_given[] = $reviews_per_reviewer;
+				}else if($reviews_per_reviewer['Aantal_reviews'] > $number_of_reviews_given){			// Alle gebruikers die meer dan 5 reviews geven
+					$too_many_given[] = $reviews_per_reviewer;
+				}else if($reviews_per_reviewer['Aantal_reviews'] == $number_of_reviews_given){			// Alle gebruikers die 5 reviews geven
+					$exact_given[] = $reviews_per_reviewer;
+				}
+			}
+		}
+		$reviews_received = get_reviews_received();
+		$too_few_received = array();
+		$too_many_received = array();
+		$exact_received = array();
+		if($reviews_received){
+			foreach ($reviews_received as $reviews_per_reviewee) { 				// Alle gebruikers die reviews krijgen
+				if($reviews_per_reviewee['Aantal_reviews'] < $number_of_reviews_received){				// Alle gebruikers die minder dan 5 reviews krijgen
+					$too_few_received[] = $reviews_per_reviewee;
+				}else if($reviews_per_reviewee['Aantal_reviews'] > $number_of_reviews_received){			// Alle gebruikers die meer dan 5 reviews krijgen
+					$too_many_received[] = $reviews_per_reviewee;
+				}else if($reviews_per_reviewee['Aantal_reviews'] == $number_of_reviews_received){			// Alle gebruikers die 5 reviews krijgen
+					$exact_received[] = $reviews_per_reviewee;
+				}
+			}
+		}
+		echo "<br />too_few_given:";
+		foreach ($too_few_given as $too_few_give) {
+			echo $too_few_give['Reviewer'].',';
+		}
+		echo "<br />too_few_received:";
+		foreach ($too_few_received as $too_few_receive) {
+			echo $too_few_receive['Reviewee'].',';
+		}
+	}
+	while((!empty($too_few_given) && !empty($too_few_received))) {
+		$polls = array();
+		foreach($too_few_given as $too_few_reviewer){
+			foreach($too_few_received as $too_few_reviewee){
+				//echo "eerste reviewer: ".$too_few_reviewer['Reviewer'];
+				//echo "eerste reviewee: ".$too_few_reviewee['Reviewee'];
+				$poll = get_candidate_poll($too_few_reviewer['Reviewer'], $too_few_reviewee['Reviewee']);
+				//echo "poll:";
+				//print_r($poll);
+				if($poll){
+					if($poll[0]['Ok_overall'] == 0){
+						$polls[] = $poll[0];
+						//print_r($poll[0]);
+					}
+				}
+			}
+		}
+		//echo "polls:"; print_r($polls);echo "<br/><br><br >";
+		$score = 0;
+		$poll = 0;
+
+		//$key = array_rand($polls, 1);
+		//$poll = $polls[$key];
+		
+		foreach ($polls as $candidate_poll) {
+			if($score <= $candidate_poll['Score']){
+				$score = $candidate_poll['Score'];
+				$poll = $candidate_poll;
+			}
+		}
+		echo "gekozen poll:".$poll['ID'];
+		$reviewer = get_candidate_poll_reviewer($poll['ID']);
+		$reviewee = get_candidate_poll_reviewee($poll['ID']);
+
+
+		$id = $poll['ID'];
+		mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id");
+
+
+
 		$reviews_given = get_reviews_given();
 		$too_few_given = array();
 		$too_many_given = array();
