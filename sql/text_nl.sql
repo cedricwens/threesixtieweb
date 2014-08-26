@@ -173,4 +173,5 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Reviews_from_preferred_reviewer',	'Aantal beoordelingen gekregen van gekozen gebruikers'),
 	('Reviews_given_to_preferred_reviewee', 'Aantal beoordelingen gegeven aan gekozen gebruikers'),
 	('Extra_comment',		'Extra commentaar'),
-	('No_managers_found',	'Geen managers gevonden');
+	('No_managers_found',	'Geen managers gevonden'),
+	('Edit_or_delete_users', 'Wijzig of verwijder gebruikers');

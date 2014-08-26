@@ -7,7 +7,7 @@ if(!isset($_SESSION['admin_id'])){
 ?>
 
 <div class="topContent">
-	<h2><?php echo get_text('Edit').' en '.strtolower(get_text('Delete')).' '.strtolower(get_text('Users')); ?></h2>
+	<h2><?php echo get_text('Edit_or_delete_users')); ?></h2>
 	<div class="users">
 		<table>
 			<tr>
