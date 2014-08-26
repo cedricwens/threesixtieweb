@@ -39,6 +39,8 @@ if(!isset($_SESSION['user_id']) && !isset($_SESSION['admin_id'])){
 				<?php
 				get_user_info($id,$batch);
 			}
+		}else{
+			echo "<p>" . get_text('Please_choose_a_user') . ".</p>";
 		}
 		?>
 	</div>

@@ -29,11 +29,6 @@ INSERT INTO batch_status (Name, Description) VALUES
 	('Published','De resultaten van deze batch zijn toegangkelijk voor de gebruikers'),
 	('Finished','Deze batch is afgelopen');
 
-/* Batch toevoegen aan database */
-/*INSERT INTO batch (Init_date, Running1_date, Running2_date, Finished_date, Status) VALUES
-	('2014-08-08 15:53:02', NULL, NULL, NULL, (SELECT ID FROM batch_status WHERE Name = 'Init')),
-	('2014-08-07 15:53:02', NULL, NULL, NULL, (SELECT ID FROM batch_status WHERE Name = 'Init'));*/
-
 /* Vragen toevoegen aan database */
 INSERT INTO question (Category, Question, Batch) VALUES
 	((SELECT ID FROM category WHERE Name = 'Professionaliteit'), 'Is enthousiast over zijn/haar vakgebied', 															(SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Init'))),
@@ -166,39 +161,6 @@ INSERT INTO poll_status (Name) VALUES
 	('Ingestuurd'),
 	('Commentaar');
 
-/* Eigen polls toevoegen aan database */
-/*INSERT INTO poll (Reviewer, Reviewee, Comment, Status, Time_Created, Last_Update, Batch) VALUES
-	((SELECT ID FROM user WHERE Firstname = 'Johan'		AND Lastname='Heylen'), 	(SELECT ID FROM user WHERE Firstname = 'Johan'	 	AND Lastname='Heylen'),		NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Loesje'	AND Lastname='Hermans'), 	(SELECT ID FROM user WHERE Firstname = 'Loesje' 	AND Lastname='Hermans'),	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Leander'	AND Lastname='Dierckx'), 	(SELECT ID FROM user WHERE Firstname = 'Leander' 	AND Lastname='Dierckx'),	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Kristof'	AND Lastname='Tuyteleers'), (SELECT ID FROM user WHERE Firstname = 'Kristof' 	AND Lastname='Tuyteleers'), NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Kevin'		AND Lastname='Jacquemyn'), 	(SELECT ID FROM user WHERE Firstname = 'Kevin'	 	AND Lastname='Jacquemyn'),	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Kathleen'	AND Lastname='Buffels'), 	(SELECT ID FROM user WHERE Firstname = 'Kathleen' 	AND Lastname='Buffels'),	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Karen'		AND Lastname='Van Rillaer'),(SELECT ID FROM user WHERE Firstname = 'Karen'	 	AND Lastname='Van Rillaer'),NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Helga'		AND Lastname='Parijs'), 	(SELECT ID FROM user WHERE Firstname = 'Helga'	 	AND Lastname='Parijs'),		NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Philip'	AND Lastname='Du Bois'), 	(SELECT ID FROM user WHERE Firstname = 'Philip'	 	AND Lastname='Du Bois'),	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Maarten'	AND Lastname='Bosteels'), 	(SELECT ID FROM user WHERE Firstname = 'Maarten'	AND Lastname='Bosteels'),	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Lut'		AND Lastname='Goedhuys'), 	(SELECT ID FROM user WHERE Firstname = 'Lut'	 	AND Lastname='Goedhuys'),	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Peter'		AND Lastname='Vergote'), 	(SELECT ID FROM user WHERE Firstname = 'Peter'	 	AND Lastname='Vergote'),	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'David'		AND Lastname='Goelen'), 	(SELECT ID FROM user WHERE Firstname = 'David'	 	AND Lastname='Goelen'),		NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:49:00', '2014-08-06 09:49:00', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1')));*/
-
-
-
-/* Polls toevoegen aan database */
-/*INSERT INTO poll (Reviewer, Reviewee, Comment, Status, Time_Created, Last_Update, Batch) VALUES
-	((SELECT ID FROM user WHERE Firstname = 'Johan' 	AND Lastname='Heylen'), 	(SELECT ID FROM user WHERE Firstname = 'Leander' 	AND Lastname='Dierckx'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:30:32', '2014-08-05 11:30:32', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Peter' 	AND Lastname='Vergote'), 	(SELECT ID FROM user WHERE Firstname = 'Maarten' 	AND Lastname='Bosteels'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:40', '2014-08-05 11:44:40', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Helga' 	AND Lastname='Parijs'), 	(SELECT ID FROM user WHERE Firstname = 'Karen' 		AND Lastname='Van Rillaer'),NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 11:44:53', '2014-08-05 11:44:53', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Johan' 	AND Lastname='Heylen'), 	(SELECT ID FROM user WHERE Firstname = 'Lut' 		AND Lastname='Goedhuys'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:06:30', '2014-08-05 13:06:30', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Johan' 	AND Lastname='Heylen'), 	(SELECT ID FROM user WHERE Firstname = 'Peter' 		AND Lastname='Vergote'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 13:31:39', '2014-08-05 13:31:39', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Karen' 	AND Lastname='Van Rillaer'),(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:09', '2014-08-05 15:55:09', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Kathleen' 	AND Lastname='Buffels'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:31', '2014-08-05 15:55:31', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'David' 	AND Lastname='Goelen'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:45', '2014-08-05 15:55:45', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Loesje' 	AND Lastname='Hermans'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:55:53', '2014-08-05 15:55:53', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Helga' 	AND Lastname='Parijs'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 15:56:03', '2014-08-05 15:56:03', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Maarten' 	AND Lastname='Bosteels'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:25:17', '2014-08-05 16:25:17', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Peter' 	AND Lastname='Vergote'), 	(SELECT ID FROM user WHERE Firstname = 'Johan' 		AND Lastname='Heylen'), 	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-04 16:39:56', '2014-08-05 16:39:56', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'))),
-	((SELECT ID FROM user WHERE Firstname = 'Philip'	AND Lastname='Du Bois'), 	(SELECT ID FROM user WHERE Firstname = 'Maarten' 	AND Lastname='Bosteels'),	NULL, (SELECT ID FROM poll_status WHERE Name = 'Niet ingevuld'), '2014-08-05 09:47:50', '2014-08-06 09:47:50', (SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1')));*/
 /* Parameters toevoegen aan database */
 INSERT INTO parameter (Name, Value) VALUES
 	('Aantal reviews geven', 5),
@@ -206,7 +168,7 @@ INSERT INTO parameter (Name, Value) VALUES
 	('Maximum aantal reviews door (niet eigen) manager', 1),
 	('Minimaal aantal reviews dat reviewer geeft aan gebruikers die hij heeft geselecteerd', 3),
 	('Maximum aantal reviews uit eigen departement', 2),
-	('Minimum aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd', 2);
+	('Minimaal aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd', 2);
 
 /* Antwoord mogelijkheden toevoegen aan database */
 INSERT INTO answer_enum (Name, Description) VALUES
