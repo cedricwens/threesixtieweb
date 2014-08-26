@@ -109,9 +109,6 @@ INSERT INTO user (Firstname, Lastname, Password) VALUES
 	('Peter',		'Vergote', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO'),
 	('Koen',		'Zagers',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO');
 
-
-
-
 /* Username genereren */
 UPDATE user SET Username = REPLACE(CONCAT_WS('.',Lastname, Firstname), ' ','');
 

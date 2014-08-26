@@ -98,8 +98,9 @@ require('core/init.php');
 					<?php
 					if(isset($_SESSION['admin_id'])){
 						?>
-						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php"><?php echo get_text('User_results'); ?></a></li>
 						<li <?php if($selected_page == 'Admin'){ echo 'class="active"';} ?>><a href="admin.php"><?php echo get_text('Admin'); ?></a></li>
+						<li <?php if($selected_page == 'Users'){ echo 'class="active"';} ?>><a href="users.php"><?php echo get_text('Users'); ?></a></li>
+						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php"><?php echo get_text('User_results'); ?></a></li>
 						<?php
 					}
 					if(logged_in() || isset($_SESSION['admin_id'])){

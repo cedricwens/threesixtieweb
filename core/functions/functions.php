@@ -15,6 +15,11 @@ function add_comment($reviewee, $comment){
 	mysql_query("INSERT INTO Poll (Reviewer, Reviewee, Comment, Status, Time_Created, Last_Update, Batch) VALUES ($reviewer, $reviewee, '$comment', $poll_status, '$date', '$date', $batch) ON DUPLICATE KEY UPDATE Comment = '$comment', Last_Update = '$date'");
 	echo mysql_error();
 }
+function add_department($name, $manager){
+	$name = sanitize($name);
+	$manager = (int) $manager;
+	mysql_query("INSERT INTO department (Name, Manager) VALUES ($name, $manager)");
+}
 function add_poll_comment($poll, $comment){
 	$poll = (int) $poll;
 	$comment = sanitize($comment);
@@ -71,6 +76,12 @@ function delete_question($id){
 	mysql_query("DELETE FROM question WHERE ID = $id");
 	echo mysql_error();
 	header('Location: admin.php');
+}
+function delete_user($id){
+	$id = (int) $id;
+	mysql_query("DELETE FROM user_department WHERE User = $id");
+	mysql_query("DELETE FROM user WHERE ID = $id");
+	header('Location: users.php');
 }
 function edit_parameter($parameter, $value){
 	$parameter = (int) $parameter;
@@ -228,6 +239,16 @@ function get_comment($poll){
 		return mysql_result($query,0);
 	}
 }
+function get_department_name($id){
+	$id = (int) $id;
+	$query = mysql_query("SELECT Name FROM department WHERE ID = $id");
+	if(!$query || mysql_num_rows($query) <=0) {
+		echo mysql_error();
+		return false;
+	}else{
+		return mysql_result($query, 0);
+	}
+}
 function get_departments(){
 	$query = mysql_query("SELECT * FROM department");
 	if(!$query || mysql_num_rows($query) <=0) {
@@ -276,9 +297,9 @@ function get_managers(){
 		return $categories;
 	}
 }
-function get_not_reviewed_users($reviewer){
-	$reviewer = (int) $reviewer;
-	$query = mysql_query("SELECT ID, Firstname, Lastname FROM user WHERE ID NOT IN (SELECT Reviewee FROM poll WHERE Reviewer = $reviewer)");
+function get_managers_info(){
+	$query = mysql_query("SELECT ID, Firstname, Lastname, Username FROM user WHERE ID IN (SELECT User FROM user_department WHERE Department = (SELECT ID FROM department WHERE Name = 'Management'))");
+	echo mysql_error();
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -287,10 +308,28 @@ function get_not_reviewed_users($reviewer){
 			$managers[] = array(
 				'ID' => $row['ID'],
 				stripslashes('Firstname') => $row['Firstname'],
-				stripslashes('Lastname') => $row['Lastname']
+				stripslashes('Lastname') => $row['Lastname'],
+				stripslashes('Username') => $row['Username'],
 				);
 		}
 		return $managers;
+	}
+}
+function get_not_reviewed_users($reviewer){
+	$reviewer = (int) $reviewer;
+	$query = mysql_query("SELECT ID, Firstname, Lastname FROM user WHERE ID NOT IN (SELECT Reviewee FROM poll WHERE Reviewer = $reviewer)");
+	if(!$query || mysql_num_rows($query) <=0) {
+		echo mysql_error();
+		return false;
+	}else{
+		while ($row = mysql_fetch_assoc($query)) {
+			$users[] = array(
+				'ID' => $row['ID'],
+				stripslashes('Firstname') => $row['Firstname'],
+				stripslashes('Lastname') => $row['Lastname']
+				);
+		}
+		return $users;
 	}
 }
 function get_number_of_users(){
@@ -311,14 +350,14 @@ function get_only_comment_polls($reviewer, $batch){
 		return false;
 	}else{
 		while ($row = mysql_fetch_assoc($query)) {
-			$managers[] = array(
+			$polls[] = array(
 				'ID' => $row['ID'],
 				'Reviewee' => $row['Reviewee'],
 				stripslashes('Comment') => $row['Comment'],
 				'Status' => $row['Status']
 				);
 		}
-		return $managers;
+		return $polls;
 	}
 }
 function get_parameters(){
@@ -328,14 +367,14 @@ function get_parameters(){
 		return false;
 	}else{
 		while ($row = mysql_fetch_assoc($query)) {
-			$managers[] = array(
+			$parameters[] = array(
 				'ID' => $row['ID'],
 				stripslashes('Name') => $row['Name'],
 				'Value' => $row['Value'],
 				stripslashes('Comment') => $row['Comment']
 				);
 		}
-		return $managers;
+		return $parameters;
 	}
 }
 function get_poll_by_reviewer_reviewee_batch($reviewer, $reviewee, $batch){
@@ -593,6 +632,16 @@ function get_user_email($user){
 		return mysql_result($query,0);
 	}
 }
+function get_user_email_by_id($id){
+	$id = (int) $id;
+	$query = mysql_query("SELECT Email FROM user WHERE ID = $id");
+	if(!$query || mysql_num_rows($query) <=0){
+		echo mysql_error();
+		return false;
+	}else{
+		return mysql_result($query,0);
+	}
+}
 function get_admin_email($admin){
 	$admin = sanitize($admin);
 	$id = get_admin_id($admin);
@@ -826,6 +875,17 @@ function save_question($id, $question){
 	$id = (int) $id;
 	$question = sanitize($question);
 	mysql_query("UPDATE question SET Question = '$question' WHERE ID = $id");
+}
+function save_user($id, $firstname, $lastname, $email, $department){
+	$id = (int) $id;
+	$firstname = sanitize($firstname);
+	$lastname = sanitize($lastname);
+	$email = sanitize($email);
+	$department = sanitize($department);
+	mysql_query("UPDATE user SET Firstname = '$firstname', Lastname = '$lastname', Email = '$email' WHERE ID = $id");
+	mysql_query("UPDATE user_department SET Department = (SELECT ID FROM department WHERE Name = '$department') WHERE User = $id");
+	echo mysql_error();
+	header('Location: users.php');
 }
 
 function create_poll($reviewer, $reviewee, $status){

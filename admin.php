@@ -1,6 +1,6 @@
 <?php
 $selected_page = "Admin";
-require('includes/header.php');
+require_once('includes/header.php');
 if(!isset($_SESSION['admin_id'])){
 	header('Location:admin_login.php');
 }
@@ -415,15 +415,19 @@ $error = "";
 			}else{
 				$error = add_user($firstname,$lastname,$department,$email,NULL);
 			}
+		}else if(isset($_POST['add_department'])){
+			$department = $_POST['department'];
+			$manager = $_POST['manager'];
+			add_department($department, $manager);
 		}
 	?>
 	<aside class="topSidebar">
 		<h2><?php echo get_text('Add_user'); ?></h2>
 		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-			<label for="firstname"><?php echo get_text('Firstname'); ?>: </label><br /><input type="text" name="firstname" required /><br />
-			<label for="lastname"><?php echo get_text('Lastname'); ?>: </label><br /><input type="text" name="lastname" required /><br />
+			<label for="firstname"><?php echo get_text('Firstname'); ?>: </label><br /><input type="text" id="firstname" name="firstname" required /><br />
+			<label for="lastname"><?php echo get_text('Lastname'); ?>: </label><br /><input type="text" id="lastname" name="lastname" required /><br />
 			<label for="department"><?php echo get_text('Department'); ?>: </label><br />
-			<select name="department">
+			<select id="department" name="department">
 				<?php
 				foreach ($departments as $department) {
 					?>
@@ -431,11 +435,36 @@ $error = "";
 					<?php
 				}
 				?>
+			</select><br />
+			<label for="email"><?php echo get_text('Email'); ?>: </label><br /><input type="text" id="email" name="email" required /><br />
+			<label for="job_title"><?php echo get_text('Job_title'); ?>: </label><br /><input type="text" id="job_title" name="job_title" /><br />
+			<input type="submit" value="<?php echo get_text('Add_user'); ?>" name="add_user" />
+		</form>
+		<?php echo $error; ?>
+	</aside>
+	<aside class="middleSidebar">
+		<h2><?php echo get_text('Add_department'); ?></h2>
+		<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+			<label for="user_department"><?php echo get_text('Department'); ?>: </label><br /><input type="text" id="user_department" name="department" required /><br />
+			<label for="manager"><?php echo get_text('Manager'); ?>: <br />
+			<select id="manager" name="manager">
+				<?php
+				$managers = get_managers_info();
+				if($managers){
+					foreach ($managers as $manager) {
+						?>
+						<option value="<?php echo $manager['ID']; ?>"><?php echo $manager['Lastname'].' '.$manager['Firstname']; ?></option>
+						<?php
+					}
+				}else{
+					?>
+					<option value=""><?php echo get_text('No_managers_found'); ?></option>
+					<?php
+				}
+				?>
 				<br />
 			</select><br />
-			<label for="email"><?php echo get_text('Email'); ?>: </label><br /><input type="text" name="email" required /><br />
-			<label for="job_title"><?php echo get_text('Job_title'); ?>: </label><br /><input type="text" name="job_title" /><br />
-			<input type="submit" value="<?php echo get_text('Add_user'); ?>" name="add_user" />
+			<input type="submit" value="<?php echo get_text('Add_department'); ?>" name="add_department" />
 		</form>
 		<?php echo $error; ?>
 	</aside>

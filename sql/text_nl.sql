@@ -7,6 +7,7 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Username', 	'Gebruikersnaam'),
 	('Password', 	'Wachtwoord'),
 	('User', 		'Gebruiker'),
+	('Users',		'Gebruikers'),
 	('Reviewer', 	'Reviewer'),
 	('Reviewee', 	'Reviewee'),
 	('Poll', 		'Vragenlijst'),
@@ -114,9 +115,11 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Add_question',		'Vraag toevoegen'),
 	('Average_score',		'Gemiddelde score'),
 	('Add_user',			'Gebruiker toevoegen'),
+	('Add_department',		'Departement toevoegen'),
 	('Firstname',			'Voornaam'),
 	('Lastname',			'Achternaam'),
 	('Department',			'Departement'),
+	('Manager',				'Manager'),
 	('Admin_intro', 		'	<h2>Admin paneel</h2>
 								<p>Welkom op het adminpaneel.</p>
 								<p>Hier kan u onder andere:
@@ -169,4 +172,5 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Reviews_from_not_teammanager', 	'Beoordelingen ontvangen van niet-teammanagers'),
 	('Reviews_from_preferred_reviewer',	'Aantal beoordelingen gekregen van gekozen gebruikers'),
 	('Reviews_given_to_preferred_reviewee', 'Aantal beoordelingen gegeven aan gekozen gebruikers'),
-	('Extra_comment',		'Extra commentaar');
+	('Extra_comment',		'Extra commentaar'),
+	('No_managers_found',	'Geen managers gevonden');

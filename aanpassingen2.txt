@@ -3,10 +3,10 @@ TODO:
 Privileges instelling in connect.php
 X - Preferred user opslaan / doorsturen. Doorsturen is voldoende.
 X - Init batch, batch toevoegen in admin panel, batch verwijderen. Batch verwijderen is bijzaak, dit kan nog niet
-?? Vragen toevoegen via admin panel
+X - Vragen toevoegen via admin panel
 X - Calculate polls mag pas zodra elke gebruiker zijn eigen vragenlijst heeft ingevuld.
-X-Inloggen uitschakelen tijdens Calculate Polls. Wordt terug geactiveerd zodra fase 2 wordt gestart.
-Gebruikersnaam en wachtwoord doorsturen via mail.
+X - Inloggen uitschakelen tijdens Calculate Polls. Wordt terug geactiveerd zodra fase 2 wordt gestart.
+X - Gebruikersnaam en wachtwoord doorsturen via mail.
 X - Batch toevoegen aan views
 X _ Mogelijkheid om toch poll te bekijken van gebruiker die al ingevuld is
 X - Vrij tekst veld. Niet toegevoegd bij eigen poll
@@ -21,10 +21,10 @@ X - wachtwoord vergeten
 Mail functionaliteit testen
 Wat is de vertaling van 'Batch'?
 X - Mogelijkheid om commentaar te schrijven over iemand waar je geen review van mag geven
+Mogelijkheid om bij 'gebruiker toevoegen' ook een admin in te stellen
 
 
-Waar moet de extra commentaar van de enquete worden weergegeven?
-Mag dit commentaarveld maar maximaal 500 characters zijn?
+X - Waar moet de extra commentaar van de enquete worden weergegeven?
 
 Hoeveel gebruikers moeten fase1 nog invullen? Dit hebben we al, maar enkel 'Niet ingevuld; wat met 'Opgeslagen'?
 	Voorstel: Opgeslagen mag, maar zodra dat iedereen heeft ingestuurd of opgeslagen, word de status van alle 'opgeslagen' vragenlijsten 		
@@ -34,4 +34,4 @@ Hoeveel gebruikers moeten fase2 nog invullen?
 
 
 
-Het is niet mogelijk om te zeggen dat iedereen minstens x van zijn preferred reviews moet krijgen. Want het is ook mogleijk dat een gebruiker geen preferred reviews aanduid.
+Het is niet mogelijk om te zeggen dat iedereen minstens x van zijn preferred reviews moet krijgen. Want het is ook mogelijk dat een gebruiker geen preferred reviews aanduid.
