@@ -100,6 +100,7 @@ require('core/init.php');
 						?>
 						<li <?php if($selected_page == 'Admin'){ echo 'class="active"';} ?>><a href="admin.php"><?php echo get_text('Admin'); ?></a></li>
 						<li <?php if($selected_page == 'Users'){ echo 'class="active"';} ?>><a href="users.php"><?php echo get_text('Users'); ?></a></li>
+						<li <?php if($selected_page == 'Departments'){ echo 'class="active"';} ?>><a href="departments.php"><?php echo get_text('Departments'); ?></a></li>
 						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php"><?php echo get_text('User_results'); ?></a></li>
 						<?php
 					}
