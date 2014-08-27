@@ -64,9 +64,9 @@ require('core/init.php');
 	</script>
 	<script>
 		$(window).scroll(function() {
-			if($(this).scrollTop() > 106){
+			if($(this).scrollTop() > 133){
 				document.getElementById('menu').className = "menu_fixed";
-				document.getElementById('mainContent').style.paddingTop = "118px";
+				document.getElementById('mainContent').style.paddingTop = "62px";
 			}
 			else{
 				document.getElementById('mainContent').style.paddingTop = "";

@@ -28,7 +28,7 @@ if(get_batch_status_name($batch['Status']) == 'Calculate'){
 			<?php
 		}else if(get_batch_status_name($batch['Status']) == 'Published'){
 			?>
-			<input type="submit" name="change_batch_status" onclick="change_batchstatus(<?php echo $batch['ID']; ?>, 'Delete')" value="<?php echo get_text('Delete'); ?>" disabled="disabled" />
+			<!--<input type="submit" name="change_batch_status" onclick="change_batchstatus(<?php echo $batch['ID']; ?>, 'Delete')" value="<?php echo get_text('Delete'); ?>" disabled="disabled" />-->
 			<?php
 		}
 		?>

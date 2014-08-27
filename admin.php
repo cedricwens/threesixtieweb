@@ -57,7 +57,7 @@ $add_department_message = "";
 						}
 						?>
 						<tr>
-							<td><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_other_poll'); ?>.</td>
+							<td style="width: 100%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_other_poll'); ?>.</td>
 							<td>
 								<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 									<input type="submit" name="reminder_2" value="<?php echo get_text('Send_reminder'); ?>">

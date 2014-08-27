@@ -16,10 +16,9 @@ $users = get_users_order_by_id();
 if(isset($_GET['id'])){
 	if(isset($_POST['recalculate'])){
 		calculate_couples($_GET['id']);
-		//header('Location: calculate.php?id='.$_GET['id']);
+		header('Location: calculate.php?id='.$_GET['id']);
 	}else if(isset($_POST['accept'])){
 		accept_calculated_polls($_GET['id']);
-		header('Location: admin.php');
 	}
 	echo '<div class="content">';
 	foreach ($users as $user) {

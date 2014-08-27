@@ -94,6 +94,7 @@ CREATE TABLE poll_status(
 
 CREATE TABLE parameter(
 	ID int NOT NULL AUTO_INCREMENT,
+	Short_name varchar(255) NOT NULL,
 	Name varchar(255) NOT NULL,
 	Value int NOT NULL,
 	Comment varchar(255),
@@ -195,7 +196,7 @@ ALTER TABLE poll_status
 	ADD CONSTRAINT un_status UNIQUE(Name);
 
 ALTER TABLE parameter
-	ADD CONSTRAINT un_parameter UNIQUE(Name);
+	ADD CONSTRAINT un_parameter UNIQUE(Short_name);
 
 ALTER TABLE batch
 	ADD CONSTRAINT fk_batch FOREIGN KEY (Status)

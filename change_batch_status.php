@@ -6,8 +6,9 @@
 			$action = $_GET['action'];
 			switch ($_GET['action']) {
 				case 'Start':
-					start_batch($_GET['id']);
 					stop_batch(get_published_batch_id());
+					start_batch($_GET['id']);
+					
 					break;
 				case 'Calculate':
 					calculate_couples($_GET['id']);

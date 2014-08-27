@@ -19,9 +19,8 @@ FROM poll p
 WHERE
     p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd')
     AND
-    p.Reviewee != p.Reviewer
+    p.Reviewee != p.Reviewer;
 	/*the own review is not added here -- this is correct*/
-GROUP BY p.Reviewee;
 
 CREATE OR REPLACE VIEW teammember_view AS
 SELECT *
@@ -49,8 +48,7 @@ WHERE
                 WHERE User = p.Reviewee
             )
             /* get reviewers being member of reviewee's department */
-    )
-GROUP BY p.Reviewee;
+    );
 
 CREATE OR REPLACE VIEW notteammember_view AS
 SELECT *
@@ -73,8 +71,7 @@ WHERE
             WHERE User = p.Reviewee
         )
 		/*exclude members of your department regardless them being manager */
-    )
-GROUP BY Reviewee;
+    );
 
 CREATE OR REPLACE VIEW teammanager_view AS
 SELECT *
@@ -90,8 +87,7 @@ WHERE
             FROM user_department
             WHERE ID = p.Reviewee
         )
-    )
-GROUP BY Reviewee;
+    );
 
 CREATE OR REPLACE VIEW notteammanager_view AS
 SELECT *
@@ -108,8 +104,7 @@ WHERE
            		FROM user_department
             	WHERE User = p.Reviewee
         	)
-    )
-GROUP BY Reviewee;
+    );
 
 CREATE OR REPLACE VIEW preferred_reviewers_view AS
 SELECT DISTINCT(p.ID), p.Reviewer, p.Reviewee, p.Status, p.Batch

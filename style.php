@@ -323,7 +323,7 @@ table tr:nth-child(even){
 		width: 100%;
 	}
 }
-@media only screen and (min-width: 150px) and (max-width: 950px){
+@media only screen and (min-width: 150px) and (max-width: 1350px){
 	.body{
 		width: 90%;
 		font-size: 95%;

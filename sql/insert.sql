@@ -163,13 +163,13 @@ INSERT INTO poll_status (Name) VALUES
 /* Hoe worden parameters door php opgehaald ? via ID  of via beschrijving ? */
 /* een ID (numeriek is weinig zeggend voor de lezer*/
 /*short name column needs to be unique */
-INSERT INTO parameter (Name, Value) VALUES
-	('Aantal reviews geven', 5),
-	('Aantal reviews krijgen', 5),
-	('Maximum aantal reviews door (niet eigen) manager', 1),
-	('Minimaal aantal reviews dat reviewer geeft aan gebruikers die hij heeft geselecteerd', 3),
-	('Maximum aantal reviews uit eigen departement', 2),
-	('Minimaal aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd', 2);
+INSERT INTO parameter (Short_name, Name, Value) VALUES
+	('Reviews_to_give', 'Aantal reviews geven', 5),
+	('Reviews_to_receive', 'Aantal reviews krijgen', 5),
+	('Reviews_by_not_teammanager', 'Maximum aantal reviews door (niet eigen) manager', 1),
+	('Reviews_selected_reviewees', 'Minimaal aantal reviews dat reviewer geeft aan gebruikers die hij heeft geselecteerd', 3),
+	('Reviews_own_department', 'Maximum aantal reviews uit eigen departement', 2),
+	('Reviews_selected_reviewers', 'Minimaal aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd', 2);
 
 /* Antwoord mogelijkheden toevoegen aan database */
 INSERT INTO answer_enum (Name, Description) VALUES

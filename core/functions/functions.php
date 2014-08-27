@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 ob_start();
 function add_batch(){
 	$date = create_date();
@@ -219,7 +220,7 @@ function get_batches(){
 	}
 }
 function get_calculating_batch_id(){
-	$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Running1')");
+	$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Calculate')");
 	if(!$query || mysql_num_rows($query) <=0){
 		echo mysql_error();
 		return false;
@@ -392,6 +393,7 @@ function get_parameters(){
 		while ($row = mysql_fetch_assoc($query)) {
 			$parameters[] = array(
 				'ID' => $row['ID'],
+				stripslashes('Short_Name') => $row['Short_name'],
 				stripslashes('Name') => $row['Name'],
 				'Value' => $row['Value'],
 				stripslashes('Comment') => $row['Comment']
@@ -997,22 +999,22 @@ function calculate_couples($id){
 		calculate_possible_polls($users);
 		$success = 1;
 		foreach ($users as $user) {
-			if(get_number_of_candidate_reviews_given($user['ID']) < mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'"),0)){
+			if(get_number_of_candidate_reviews_given($user['ID']) < mysql_result(mysql_query("SELECT Value FROM parameter WHERE Short_name = 'Reviews_to_give'"),0)){
 				$success = 0;
 				//echo "Oorzaak: if te weinig reviews geven, user: ".$user['ID'].'<br />';
 				break;
 			}
-			if(get_number_of_candidate_reviews_received($user['ID']) < mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews krijgen'"),0)){
+			if(get_number_of_candidate_reviews_received($user['ID']) < mysql_result(mysql_query("SELECT Value FROM parameter WHERE Short_name = 'Reviews_to_receive'"),0)){
 				$success = 0;
 				//echo "Oorzaak: if te weinig reviews krijgen, user: ".$user['ID'].'<br />';
 				break;
 			}
-			/*if(get_number_of_candidate_poll_managers($user['ID']) > mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Maximum aantal reviews door (niet eigen) manager'"),0)){
+			/*if(get_number_of_candidate_poll_managers($user['ID']) > mysql_result(mysql_query("SELECT Value FROM parameter WHERE Short_name = 'Reviews_by_not_teammanager'"),0)){
 				$success = 0;
 				//echo "Oorzaak: if Maximum aantal reviews door (niet eigen) manager, user: ".$user['ID'].'<br />';
 				break;
 			}*/
-			if(get_number_of_candidate_poll_team_members($user['ID']) > mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Maximum aantal reviews uit eigen departement'"),0)){
+			if(get_number_of_candidate_poll_team_members($user['ID']) > mysql_result(mysql_query("SELECT Value FROM parameter WHERE Short_name = 'Reviews_own_department'"),0)){
 				$success = 0;
 				//echo "Oorzaak: if Maximum aantal reviews uit eigen departement, user: ".$user['ID'].'<br />';
 				break;
@@ -1036,6 +1038,7 @@ function accept_calculated_polls($id){
 		}
 	}
 	mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Accepted') WHERE ID = $id");
+	header('Location: admin.php');
 }
 function run_batch($id){
 	$id = (int) $id;
@@ -1572,7 +1575,7 @@ function get_best_polls_reviewer_offset($reviewer){
 function get_not_top_5_best_polls($reviewer){
 	// LIMIT 100 is gekozen zodat we genoeg reviews selecteren. We hebben een OFFSET nodig, en deze kan allen gebruikt worden samen met LIMIT
 	$reviewer = (int) $reviewer;
-	$limit = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'"), 0);
+	$limit = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Short_name = 'Reviews_to_give'"), 0);
 	$query = mysql_query("SELECT ID, Reviewee, Score FROM candidate_poll WHERE Reviewer=$reviewer ORDER BY Score DESC LIMIT 100 OFFSET $limit");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
@@ -1816,7 +1819,7 @@ function calculate($users){
 
 function get_top_polls($user){
 	$user = (int) $user;
-	$query = mysql_query("SELECT * FROM candidate_poll WHERE Reviewer = $user ORDER BY Score DESC LIMIT 0,(SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'");
+	$query = mysql_query("SELECT * FROM candidate_poll WHERE Reviewer = $user ORDER BY Score DESC LIMIT 0,(SELECT Value FROM parameter WHERE Name = 'Reviews_to_give'");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -2076,10 +2079,10 @@ if(isset($_GET['user'])){
 }
 
 function check($users){
-	$number_of_reviews_given = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name ='Aantal reviews geven'"), 0);
-	$number_of_reviews_received = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name ='Aantal reviews krijgen'"), 0);
-	$number_of_manager_reviews_received = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Maximum aantal reviews door (niet eigen) manager'"), 0);
-	$number_of_team_member_reviews_received = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Maximum aantal reviews uit eigen departement'"), 0);
+	$number_of_reviews_given = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Short_name ='Reviews_to_give'"), 0);
+	$number_of_reviews_received = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Short_name ='Reviews_to_receive'"), 0);
+	$number_of_manager_reviews_received = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Short_name = 'Reviews_by_not_teammanager'"), 0);
+	$number_of_team_member_reviews_received = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Short_name = 'Reviews_own_department'"), 0);
 	shuffle($users);
 	foreach ($users as $user) {
 		// X beste reviewee polls en 5 beste reviewer polls kiezen en respectievelijk Ok_reviewee en Ok_reviewer op 1 zetten
