@@ -24,6 +24,7 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Preference',	'Voorkeur'),
 	('Preferences', 'Voorkeuren'),
 	('No_polls_found', 'Geen vragenlijsten gevonden'),
+	('No_batches_found', 'Geen batches gevonden'),
 	('Choose_a', 	'Kies een'),
 	('Select_a',	'Selecteer een'),
 	('View', 		'Bekijk'),

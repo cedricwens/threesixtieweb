@@ -4,7 +4,8 @@ require_once('includes/header.php');
 if(!isset($_SESSION['admin_id'])){
 	header('Location:admin_login.php');
 }
-$error = "";
+$add_user_message = "";
+$add_department_message = "";
 ?>
 <div class="content">
 	<?php
@@ -23,7 +24,7 @@ $error = "";
 						?>
 						<tbody>
 							<tr>
-								<td><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_own_poll'); ?>.</td>
+								<td style="width: 100%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_own_poll'); ?>.</td>
 								<td>
 									<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 										<input type="submit" name="reminder_1" value="<?php echo get_text('Send_reminder'); ?>">
@@ -132,78 +133,81 @@ $error = "";
 
 		<h2><?php echo get_text('List_of_batches'); ?>:</h2>
 		<?php
-			echo get_text('Batches_text');
-			$batches = get_batches();
-		?>
-		<table id="batches">
-			<thead>
-				<tr style="text-align:center;">
-					<th><?php echo get_text('ID'); ?></th>
-					<th><?php echo get_text('Init_date'); ?></th>
-					<th><?php echo get_text('Start_phase_1'); ?></th>
-					<th><?php echo get_text('Start_phase_2'); ?></th>
-					<th><?php echo get_text('Finished_date'); ?></th>
-					<th><?php echo get_text('Status'); ?></th>
-					<th><?php echo get_text('Comment'); ?></th>
-					<th><?php echo get_text('Action'); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php
-			if($batches){
-				foreach ($batches as $batch) {
-					?>
-					<tr>
-						<td><?php echo $batch['ID']; ?></td>
-						<td><?php echo $batch['Init_date']; ?></td>
-						<td>
-							<?php
-							if($batch['Running1_date']){
-								echo $batch['Running1_date'];
-							}else{
-								echo "\\";
-							}
-							?>
-						</td>
-						<td>
-							<?php
-							if($batch['Running2_date']){
-								echo $batch['Running2_date'];
-							}else{
-								echo "\\";
-							}
-							?>
-						</td>
-						<td>
-							<?php
-							if($batch['Finished_date']){
-								echo $batch['Finished_date'];
-							}else{
-								echo "\\";
-							}
-							?>
-						</td>
-						<td><?php echo get_batch_status_name($batch['Status']); ?></td>
-						<td>
-							<?php
-							if($batch['Comment']){
-								echo $batch['Comment'];
-							}else{
-								echo "\\";
-							}
-							?>
-						</td>
-						<td>
-							<?php include('includes/form/change_batch_status.php'); ?>
-						</td>
-					</tr>
-					<?php
-				}
-			}
+		echo get_text('Batches_text');
+		$batches = get_batches();
+		
+		if($batches){
 			?>
-			</tbody>
-		</table>
-		<?php
+			<table class="users">
+				<thead>
+					<tr>
+						<th><?php echo get_text('ID'); ?></th>
+						<th><?php echo get_text('Init_date'); ?></th>
+						<th><?php echo get_text('Start_phase_1'); ?></th>
+						<th><?php echo get_text('Start_phase_2'); ?></th>
+						<th><?php echo get_text('Finished_date'); ?></th>
+						<th><?php echo get_text('Status'); ?></th>
+						<th><?php echo get_text('Comment'); ?></th>
+						<th><?php echo get_text('Action'); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					foreach ($batches as $batch) {
+							?>
+							<tr>
+								<td><?php echo $batch['ID']; ?></td>
+								<td><?php echo $batch['Init_date']; ?></td>
+								<td>
+									<?php
+									if($batch['Running1_date']){
+										echo $batch['Running1_date'];
+									}else{
+										echo "\\";
+									}
+									?>
+								</td>
+								<td>
+									<?php
+									if($batch['Running2_date']){
+										echo $batch['Running2_date'];
+									}else{
+										echo "\\";
+									}
+									?>
+								</td>
+								<td>
+									<?php
+									if($batch['Finished_date']){
+										echo $batch['Finished_date'];
+									}else{
+										echo "\\";
+									}
+									?>
+								</td>
+								<td><?php echo get_batch_status_name($batch['Status']); ?></td>
+								<td>
+									<?php
+									if($batch['Comment']){
+										echo $batch['Comment'];
+									}else{
+										echo "\\";
+									}
+									?>
+								</td>
+								<td>
+									<?php include('includes/form/change_batch_status.php'); ?>
+								</td>
+							</tr>
+							<?php
+					}
+					?>
+				</tbody>
+			</table>
+			<?php
+		}else{
+			echo '<br />'.get_text('No_batches_found');
+		}
 		if(isset($_POST['add_batch'])){
 			add_batch();
 		}
@@ -220,7 +224,7 @@ $error = "";
 			<?php
 			if(isset($_POST['edit'])){
 				?>
-				<div id="questions" class="users">
+				<div id="questions">
 					<?php
 					$categories = get_categories();
 					if($categories){
@@ -237,14 +241,14 @@ $error = "";
 							foreach ($questions as $key=>$question) {
 								if($question['Category'] == $category['ID']){
 									?>
-									<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="questions_list">
+									<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="questions_list" name="save_question">
 										<table>
 											<tbody>
 												<tr>
 													<?php
 														if($question['ID'] == $_POST['question_id']){
 															?>
-															<td><textarea class="comment" id="question"><?php echo $question['Question']; ?></textarea></td>
+															<td style="width: 100%;"><textarea class="comment" name="question_text" id="question_text"><?php echo $question['Question']; ?></textarea></td>
 															<?php
 														}else{
 															?>
@@ -258,11 +262,7 @@ $error = "";
 														<?php
 														if($question['ID'] == $_POST['question_id']){
 															?>
-															<script>
-															var question = document.getElementById('question');
-															var question_id = document.getElementById('question_id');
-															</script>
-															<input type="submit" name="save" onclick="save_question(question_id.value, question.value)" value="<?php echo get_text('Save'); ?>" />
+															<input type="submit" name="save" value="<?php echo get_text('Save'); ?>" />
 															<?php
 														}else{
 															?>
@@ -286,6 +286,10 @@ $error = "";
 				?>
 				</div>
 				<?php
+			}else if(isset($_POST['save'])){
+				$question = $_POST['question_text'];
+				$id = $_POST['question_id'];
+				save_question($id, $question);
 			}else if(isset($_POST['delete'])){
 				delete_question($_POST['question_id']);
 			}else if(isset($_POST['add']) && !empty($_POST['question'])){
@@ -357,98 +361,6 @@ $error = "";
 		<?php
 	}
 	?>
-	<!--<div class="bottomContent">
-		<h2><?php echo get_text('Polls'); ?>:</h2>				
-		<?php
-		if($polls){
-			?>
-			<table style="text-align:center;">
-				<tr>
-					<th><?php echo get_text('ID'); ?></th>
-					<th><?php echo get_text('Reviewer'); ?></th>
-					<th><?php echo get_text('Reviewee'); ?></th>
-					<th><?php echo get_text('Time_Created'); ?></th>
-					<th><?php echo get_text('View').' '.strtolower(get_text('Answers')); ?></th>
-				</tr>
-				<?php
-				foreach ($polls as $poll) {
-					$reviewer = get_user_by_id($poll['Reviewer']);
-					$reviewee = get_user_by_id($poll['Reviewee']);
-					?>
-					<tr>
-						<td><?php echo $poll['ID']; ?></td>
-						<td><?php echo $reviewer[0]; ?></td>
-						<td><?php echo $reviewee[0]; ?></td>
-						<td><?php echo $poll['Last_Update']; ?></td>
-						<td><a href="?view_answer=<?php echo $poll['ID']; ?>">Bekijk</a></td>
-					</tr>
-					<?php
-				}
-			}else{
-				echo get_text('No_polls_found');
-				echo "<br /><br /><br /><br />";
-			}
-			?>
-		</table>
-		<br />
-		<?php
-		if(isset($_GET['view_answer'])){
-			$poll = $_GET['view_answer'];
-			$answers = get_answers($poll);
-			if(!$answers){
-				echo 'Er zijn nog geen vragen beantwoord in deze poll.';
-			}else{
-				?>
-				<table style="text-align:center;">
-					<tr>
-						<th>ID</th>
-						<th>Poll ID</th>
-						<th>Vraag</th>
-						<th>Antwoord</th>
-						<th>Tijd</th>
-						<th>Gemiddelde score</th>
-					</tr>
-					<?php
-					foreach($answers as $answer){
-						$question = $answer['Question'];
-						$average_score = get_average_score_poll($poll, $question);
-						?>
-						<tr>
-							<td><?php echo $answer['ID']; ?></td>
-							<td><?php echo $answer['Poll']; ?></td>
-							<td><?php echo $answer['Question']; ?></td>
-							<td><?php echo $answer['Answer']; ?></td>
-							<td><?php echo $answer['Last_Update']; ?></td>
-							<td>
-								<?php 
-									if($average_score == ""){
-										echo "Er is geen gemiddelde score bekend voor deze vraag";
-									}else{
-										echo $average_score;
-									} 
-								?>
-							</td>
-						</tr>
-						<?php
-					}
-
-					?>
-					<h2>Gemiddelde score (alle vragenlijsten samen):
-						<?php
-							
-							if($average_score == ""){
-								echo "Er is geen gemiddelde score bekend voor deze vraag";
-							}else{
-								echo $average_score;
-							}
-						?>
-					</h2>
-				</table>
-				<?php
-			}
-		}
-		?>
-	</div>-->
 	
 </div>
 <?php
@@ -469,10 +381,14 @@ $error = "";
 			}else{
 				$error = add_user($firstname,$lastname,$department,$email,NULL);
 			}
+		}else if(isset($_GET['AddUser'])){
+			$add_user_message = "Gebruiker toegevoegd";
 		}else if(isset($_POST['add_department'])){
 			$department = $_POST['department'];
 			$manager = $_POST['manager'];
 			add_department($department, $manager);
+		}else if(isset($_GET['AddDepartment'])){
+			$add_department_message = "Department toegevoegd";
 		}
 	?>
 	<aside class="topSidebar">
@@ -494,7 +410,7 @@ $error = "";
 			<label for="job_title"><?php echo get_text('Job_title'); ?>: </label><br /><input type="text" id="job_title" name="job_title" /><br />
 			<input type="submit" value="<?php echo get_text('Add_user'); ?>" name="add_user" />
 		</form>
-		<?php echo $error; ?>
+		<?php echo $add_user_message; ?>
 	</aside>
 	<aside class="middleSidebar">
 		<h2><?php echo get_text('Add_department'); ?></h2>
@@ -520,7 +436,7 @@ $error = "";
 			</select><br />
 			<input type="submit" value="<?php echo get_text('Add_department'); ?>" name="add_department" />
 		</form>
-		<?php echo $error; ?>
+		<?php echo $add_department_message; ?>
 	</aside>
 	<!--<aside class="topSidebar">
 		<h2><?php echo get_text('Add_poll'); ?></h2>

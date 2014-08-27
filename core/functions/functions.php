@@ -20,6 +20,8 @@ function add_department($name, $manager){
 	$name = sanitize($name);
 	$manager = (int) $manager;
 	mysql_query("INSERT INTO department (Name, Manager) VALUES ('$name', $manager) ON DUPLICATE KEY UPDATE Name = '$name', Manager = $manager");
+	header('Location: '.$_SERVER['PHP_SELF'].'?AddDepartment');
+	exit();
 }
 function add_poll_comment($poll, $comment){
 	$poll = (int) $poll;
@@ -46,7 +48,7 @@ function add_user($firstname, $lastname, $department, $email, $job_title){
 	$id = mysql_insert_id();
 	mysql_query("INSERT INTO user_department (User, Department) VALUES ((SELECT ID FROM user WHERE Username = '$username'), (SELECT ID FROM Department WHERE Name = '$department')) ON DUPLICATE KEY UPDATE User = (SELECT ID FROM user WHERE Username = '$username'), Department = (SELECT ID FROM Department WHERE Name = '$department')");
 	mysql_error();
-	header('Location: '.$_SERVER['PHP_SELF']);
+	header('Location: '.$_SERVER['PHP_SELF'].'?AddUser');
 	exit();
 }
 function create_date(){
@@ -904,6 +906,7 @@ function save_question($id, $question){
 	$id = (int) $id;
 	$question = sanitize($question);
 	mysql_query("UPDATE question SET Question = '$question' WHERE ID = $id");
+	header('Location: '.$_SERVER['PHP_SELF']);
 }
 function save_user($id, $firstname, $lastname, $email, $department){
 	$id = (int) $id;
@@ -989,30 +992,29 @@ function calculate_couples($id){
 	$success = 0;
 	$iteration = 0;
 	$users = get_users_order_by_id();
-	if ($success == 0) {		
+	while ($success == 0) {		
+		//echo "Nieuwe berekening starten<br />";
 		calculate_possible_polls($users);
 		$success = 1;
 		foreach ($users as $user) {
 			if(get_number_of_candidate_reviews_given($user['ID']) < mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'"),0)){
 				$success = 0;
-				echo mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews geven'"),0);
-				echo '='.get_number_of_reviews_given($user['ID']);
-				echo "Oorzaak: if te weinig reviews geven, user: ".$user['ID'].'<br />';
+				//echo "Oorzaak: if te weinig reviews geven, user: ".$user['ID'].'<br />';
 				break;
 			}
 			if(get_number_of_candidate_reviews_received($user['ID']) < mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Aantal reviews krijgen'"),0)){
 				$success = 0;
-				echo "Oorzaak: if te weinig reviews krijgen, user: ".$user['ID'].'<br />';
+				//echo "Oorzaak: if te weinig reviews krijgen, user: ".$user['ID'].'<br />';
 				break;
 			}
-			if(get_number_of_candidate_poll_managers($user['ID']) > mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Maximum aantal reviews door (niet eigen) manager'"),0)){
+			/*if(get_number_of_candidate_poll_managers($user['ID']) > mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Maximum aantal reviews door (niet eigen) manager'"),0)){
 				$success = 0;
-				echo "Oorzaak: if Maximum aantal reviews door (niet eigen) manager, user: ".$user['ID'].'<br />';
+				//echo "Oorzaak: if Maximum aantal reviews door (niet eigen) manager, user: ".$user['ID'].'<br />';
 				break;
-			}
+			}*/
 			if(get_number_of_candidate_poll_team_members($user['ID']) > mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name = 'Maximum aantal reviews uit eigen departement'"),0)){
 				$success = 0;
-				echo "Oorzaak: if Maximum aantal reviews uit eigen departement, user: ".$user['ID'].'<br />';
+				//echo "Oorzaak: if Maximum aantal reviews uit eigen departement, user: ".$user['ID'].'<br />';
 				break;
 			}
 		}
@@ -2072,7 +2074,6 @@ foreach ($users as $user) {
 if(isset($_GET['user'])){
 	get_candidate_user_info($_GET['user']);
 }
-$number_of_polls= -1000000;
 
 function check($users){
 	$number_of_reviews_given = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name ='Aantal reviews geven'"), 0);
@@ -2307,7 +2308,7 @@ function check($users){
 			}
 		}
 	}
-	global $number_of_polls;
+	$number_of_polls= -1000000;
 	$counter = 0;
 	while((!empty($too_few_given) && !empty($too_few_received)) && $counter != 10) {
 		if($number_of_polls == get_overall_ok_polls()){
@@ -2315,7 +2316,8 @@ function check($users){
 		}else{
 			$counter = 0;
 		}
-		/*echo "number_of_polls:".$number_of_polls;
+		/*echo "counter : $counter<br />";
+		echo "number_of_polls:".$number_of_polls;
 		echo "<br />too_few_given:";
 		foreach ($too_few_given as $too_few_give) {
 			echo $too_few_give['Reviewer'].',';
@@ -2425,6 +2427,7 @@ function check($users){
 			foreach($too_few_received as $too_few_reviewee){
 				//echo "eerste reviewer: ".$too_few_reviewer['Reviewer'];
 				//echo "eerste reviewee: ".$too_few_reviewee['Reviewee'];
+				//echo "test";
 				$poll = get_candidate_poll($too_few_reviewer['Reviewer'], $too_few_reviewee['Reviewee']);
 				//echo "poll:";
 				//print_r($poll);
@@ -2436,26 +2439,28 @@ function check($users){
 				}
 			}
 		}
-		//echo "polls:"; print_r($polls);echo "<br/><br><br >";
+		if(empty($polls)){
+			break;
+		}
 		$score = 0;
 		$poll = 0;
 
-		//$key = array_rand($polls, 1);
-		//$poll = $polls[$key];
+		$key = array_rand($polls, 1);
+		$poll = $polls[$key];
 		
-		foreach ($polls as $candidate_poll) {
+		/*foreach ($polls as $candidate_poll) {
 			if($score <= $candidate_poll['Score']){
 				$score = $candidate_poll['Score'];
 				$poll = $candidate_poll;
 			}
-		}
+		}*/
 		//echo "gekozen poll:".$poll['ID'];
 		$reviewer = get_candidate_poll_reviewer($poll['ID']);
 		$reviewee = get_candidate_poll_reviewee($poll['ID']);
 
 
 		$id = $poll['ID'];
-		mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id");
+		mysql_query("INSERT INTO candidate_poll (Reviewer, Reviewee, Score, Ok_reviewee, Ok_reviewer, Ok_overall) VALUES ($reviewer, $reviewee, 0, 0, 0, 1) ON DUPLICATE KEY UPDATE Ok_overall = 1");
 
 
 

@@ -61,22 +61,6 @@ require('core/init.php');
 	  	}	
 		xmlhttp.send();
 	}
-	function save_question(question_id, question){
-		if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
-	  		xmlhttp=new XMLHttpRequest();
-	  	}
-		else{// code for IE6, IE5
-	  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	  	}
-	  	xmlhttp.open("GET","save_question.php?id="+question_id+"&question="+question,true);
-		xmlhttp.onreadystatechange=function(){
-	  		if (xmlhttp.readyState==4 && xmlhttp.status==200){
-	    			document.getElementById("questions").innerHTML=xmlhttp.responseText;
-	    			location.reload();
-	   		}
-	  	}	
-		xmlhttp.send();
-	}
 	</script>
 	<script>
 		$(window).scroll(function() {
