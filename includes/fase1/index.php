@@ -74,7 +74,7 @@ if(isset($_GET['Start'])){
 					<div class="topContent">
 						<p><?php echo get_text('End_phase1_text'); ?></p>
 						<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=3"><?php echo get_text('Back'); ?></a></h3>
-						<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>"><?php echo get_text('Exit'); ?></a></h3>
+						<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF'];?>?Exit"><?php echo get_text('Exit'); ?></a></h3>
 					</div>
 					<?php
 				}
@@ -105,6 +105,9 @@ if(isset($_GET['Start'])){
 	</div>
 <?php
 }else{
+	if (isset($_GET['Exit'])){
+		header('Location: logout.php');
+	}
 	?>
 	<div class="topContent">
 		<?php echo get_text('Phase1_text'); ?>
