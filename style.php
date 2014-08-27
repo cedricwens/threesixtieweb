@@ -282,6 +282,9 @@ table tr th{
 table tr:nth-child(even){
 	background-color: #e8f2f7;
 }
+.users form:nth-child(even){
+	background-color: #e8f2f7;
+}
 .users td{
 	text-align: center;
 }

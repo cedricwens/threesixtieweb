@@ -989,6 +989,10 @@ function start_batch($batch){
 	}
 }
 function calculate_couples($id){
+	$polls = get_polls();
+	foreach ($polls as $poll) {
+		mysql_query("UPDATE poll SET Status = (SELECT ID FROM poll_status WHERE Name = 'Ingestuurd') WHERE Status = (SELECT ID FROM poll_status WHERE Name = 'Opgeslagen')");
+	}
 	//init($users);
 	$id = (int) $id;
 	$success = 0;

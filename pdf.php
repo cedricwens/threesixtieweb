@@ -77,8 +77,8 @@ class PDF extends FPDF{
 	    }
 	}
 }
-if(isset($_GET['id']) && $_GET['id'] == $_SESSION['user_id']){
-	$id 					= $_SESSION['user_id'];
+if(isset($_GET['id']) && $_GET['id'] == $_SESSION['user_id'] || isset($_SESSION['admin_id'])){
+	$id 					= $_GET['id'];
 	$user 					= get_user_by_id($id);
 	$reviews_given 			= get_number_of_reviews_given($id);
 	$reviews_received 		= get_number_of_reviews_received($id);

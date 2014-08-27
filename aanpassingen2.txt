@@ -1,37 +1,8 @@
 TODO:
 
 Privileges instelling in connect.php
-X - Preferred user opslaan / doorsturen. Doorsturen is voldoende.
-X - Init batch, batch toevoegen in admin panel, batch verwijderen. Batch verwijderen is bijzaak, dit kan nog niet
-X - Vragen toevoegen via admin panel
-X - Calculate polls mag pas zodra elke gebruiker zijn eigen vragenlijst heeft ingevuld.
-X - Inloggen uitschakelen tijdens Calculate Polls. Wordt terug geactiveerd zodra fase 2 wordt gestart.
-X - Gebruikersnaam en wachtwoord doorsturen via mail.
-X - Batch toevoegen aan views
-X _ Mogelijkheid om toch poll te bekijken van gebruiker die al ingevuld is
-X - Vrij tekst veld. Niet toegevoegd bij eigen poll
-X - Vorige en volgende knop naast elkaar zetten, niet onder elkaar
-X - Gebruiker kan zijn eigen resulaten/pdf zien zodra een batch op published staat
-X - Probleem met vragen en batch. Misschien toch nog een koppeling van poll en batch
-X - My results enkel beschikbaar als een batch op published staat
-X - Parameters aanpassen in adminpanel
-X - Gebruikers via mail op de hoogte brengen als running1, running2 en published state beginnen.
-X - Herinnering mail sturen tijdens fase2
-X - wachtwoord vergeten
 Mail functionaliteit testen
 Wat is de vertaling van 'Batch'?
-X - Mogelijkheid om commentaar te schrijven over iemand waar je geen review van mag geven
 Mogelijkheid om bij 'gebruiker toevoegen' ook een admin in te stellen
 
-
-X - Waar moet de extra commentaar van de enquete worden weergegeven?
-
-Hoeveel gebruikers moeten fase1 nog invullen? Dit hebben we al, maar enkel 'Niet ingevuld; wat met 'Opgeslagen'?
-	Voorstel: Opgeslagen mag, maar zodra dat iedereen heeft ingestuurd of opgeslagen, word de status van alle 'opgeslagen' vragenlijsten 		
-		omgezet naar "ingestuurd". Zodat met fase2 kan begonnen worden. Op deze manier moeten de gebruikers niet onnodig worden lastiggevallen. Een andere mogelijkheid is natuurlijk om deze gebruikers toch op de hoogte te brengen, want het staat weldegelijk in de inleiding vermeld, dat de vragenlijsten ingestuurd moeten worden, en niet opgeslagen.
-Hoeveel gebruikers moeten fase2 nog invullen?
-	Voorstel; Identiek aan fase1
-
-
-
-Het is niet mogelijk om te zeggen dat iedereen minstens x van zijn preferred reviews moet krijgen. Want het is ook mogelijk dat een gebruiker geen preferred reviews aanduid.
+Kleine lettertjes onderaan pdf aanpassen
