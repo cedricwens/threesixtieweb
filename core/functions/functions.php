@@ -257,13 +257,6 @@ function get_department_by_id($id){
 		echo mysql_error();
 		return false;
 	}else{
-		/*while ($row = mysql_fetch_assoc($query)) {
-			$department[] = array(
-				'ID' => $row['ID'],
-				stripslashes('Name') => $row['Name'],
-				'Manager' => $row['Manager']
-				);
-		}*/
 		return mysql_fetch_assoc($query);
 	}
 }
@@ -2151,7 +2144,7 @@ function check($users){
 	}
 
 
-		$users = get_users();
+		/*$users = get_users();
 		echo "Reviewee wordt gereviewed door {Reviewer}: ";
 		foreach($users as $user){
 			$reviewee = $user['ID'];
@@ -2180,7 +2173,7 @@ function check($users){
 			}
 			echo "}<br />";
 		}
-		echo "----------------------------------------<br/>";
+		echo "----------------------------------------<br/>";*/
 
 
 	$reviews_given = get_reviews_given();
@@ -2322,7 +2315,7 @@ function check($users){
 		}else{
 			$counter = 0;
 		}
-		echo "number_of_polls:".$number_of_polls;
+		/*echo "number_of_polls:".$number_of_polls;
 		echo "<br />too_few_given:";
 		foreach ($too_few_given as $too_few_give) {
 			echo $too_few_give['Reviewer'].',';
@@ -2330,7 +2323,7 @@ function check($users){
 		echo "<br />too_few_received:";
 		foreach ($too_few_received as $too_few_receive) {
 			echo $too_few_receive['Reviewee'].',';
-		}
+		}*/
 		//echo "number_of_polls: $number_of_polls";
 		//print_r($too_few_given);
 		$number_of_polls = get_overall_ok_polls();
@@ -2363,7 +2356,7 @@ function check($users){
 				$poll = $candidate_poll;
 			}
 		}*/
-		echo "gekozen poll:".$poll['ID'];
+		//echo "gekozen poll:".$poll['ID'];
 		$reviewer = get_candidate_poll_reviewer($poll['ID']);
 		$reviewee = get_candidate_poll_reviewee($poll['ID']);
 		/*echo "ID:$poll";
@@ -2381,11 +2374,11 @@ function check($users){
 		if(!is_manager($reviewee) && is_manager($reviewer) && (get_manager_reviews_received_reviewee($reviewee) < $number_of_manager_reviews_received)){
 			$id = $poll['ID'];
 			mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id");
-			echo "toegevoegd optie 1 wer:$reviewer-wee:$reviewee<br />";
+			//echo "toegevoegd optie 1 wer:$reviewer-wee:$reviewee<br />";
 		}else if(!is_manager($reviewer) || is_manager($reviewee)){
 			$id = $poll['ID'];
 			mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id");
-			echo "toegevoegd optie 2 wer:$reviewer-wee:$reviewee<br />";
+			//echo "toegevoegd optie 2 wer:$reviewer-wee:$reviewee<br />";
 		}
 		$reviews_given = get_reviews_given();
 		$too_few_given = array();
@@ -2417,14 +2410,14 @@ function check($users){
 				}
 			}
 		}
-		echo "<br />too_few_given:";
+		/*echo "<br />too_few_given:";
 		foreach ($too_few_given as $too_few_give) {
 			echo $too_few_give['Reviewer'].',';
 		}
 		echo "<br />too_few_received:";
 		foreach ($too_few_received as $too_few_receive) {
 			echo $too_few_receive['Reviewee'].',';
-		}
+		}*/
 	}
 	while((!empty($too_few_given) && !empty($too_few_received))) {
 		$polls = array();
@@ -2456,7 +2449,7 @@ function check($users){
 				$poll = $candidate_poll;
 			}
 		}
-		echo "gekozen poll:".$poll['ID'];
+		//echo "gekozen poll:".$poll['ID'];
 		$reviewer = get_candidate_poll_reviewer($poll['ID']);
 		$reviewee = get_candidate_poll_reviewee($poll['ID']);
 
@@ -2496,18 +2489,18 @@ function check($users){
 				}
 			}
 		}
-		echo "<br />too_few_given:";
+		/*echo "<br />too_few_given:";
 		foreach ($too_few_given as $too_few_give) {
 			echo $too_few_give['Reviewer'].',';
 		}
 		echo "<br />too_few_received:";
 		foreach ($too_few_received as $too_few_receive) {
 			echo $too_few_receive['Reviewee'].',';
-		}
+		}*/
 	}
 
 	// Hier moet nog extra controle komen: Alle gebruikers die te weinig reviews hebben, de hoogste review laten uitvoeren
-	echo "overall_poll: ".get_overall_ok_polls();
+	/*echo "overall_poll: ".get_overall_ok_polls();
 	$users = get_users();
 	foreach($users as $user){
 		echo "Reviewee wordt gereviewed door {Reviewer}: ";
@@ -2536,40 +2529,6 @@ function check($users){
 		}
 		echo "}<br />";
 	}
-	echo "----------------------------------------<br/>";
-}
-function get_reviews_given_received(){
-	$number_of_reviews_given = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name ='Aantal reviews geven'"), 0);
-	$number_of_reviews_received = mysql_result(mysql_query("SELECT Value FROM parameter WHERE Name ='Aantal reviews krijgen'"), 0);
-	$reviews_given = get_reviews_given();
-	$too_few_given = array();
-	$too_many_given = array();
-	$exact_given = array();
-	if($reviews_given){
-		foreach ($reviews_given as $reviews_per_reviewer) { 				// Alle gebruikers die reviews geven
-			if($reviews_per_reviewer['Aantal_reviews'] < $number_of_reviews_given){				// Alle gebruikers die minder dan 5 reviews geven
-				$too_few_given[] = $reviews_per_reviewer;
-			}else if($reviews_per_reviewer['Aantal_reviews'] > $number_of_reviews_given){			// Alle gebruikers die meer dan 5 reviews geven
-				$too_many_given[] = $reviews_per_reviewer;
-			}else if($reviews_per_reviewer['Aantal_reviews'] == $number_of_reviews_given){			// Alle gebruikers die 5 reviews geven
-				$exact_given[] = $reviews_per_reviewer;
-			}
-		}
-	}
-	$reviews_received = get_reviews_received();
-	$too_few_received = array();
-	$too_many_received = array();
-	$exact_received = array();
-	if($reviews_received){
-		foreach ($reviews_received as $reviews_per_reviewee) { 				// Alle gebruikers die reviews krijgen
-			if($reviews_per_reviewee['Aantal_reviews'] < $number_of_reviews_received){				// Alle gebruikers die minder dan 5 reviews krijgen
-				$too_few_received[] = $reviews_per_reviewee;
-			}else if($reviews_per_reviewee['Aantal_reviews'] > $number_of_reviews_received){			// Alle gebruikers die meer dan 5 reviews krijgen
-				$too_many_received[] = $reviews_per_reviewee;
-			}else if($reviews_per_reviewee['Aantal_reviews'] == $number_of_reviews_received){			// Alle gebruikers die 5 reviews krijgen
-				$exact_received[] = $reviews_per_reviewee;
-			}
-		}
-	}
+	echo "----------------------------------------<br/>";*/
 }
 ?>
