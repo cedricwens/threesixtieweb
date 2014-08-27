@@ -5,9 +5,10 @@ require('core/init.php');
 <html>
 <head>
 	<title>ThreeSixtyWeb</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="style.php">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!--<link rel="stylesheet" type="text/css" href="main.css">-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script type="text/javascript">
 		function moveItem(a, b){
 			var fromBox = document.getElementById(a),
@@ -77,10 +78,23 @@ require('core/init.php');
 		xmlhttp.send();
 	}
 	</script>
+	<script>
+		$(window).scroll(function() {
+			if($(this).scrollTop() > 106){
+				document.getElementById('menu').className = "menu_fixed";
+				document.getElementById('mainContent').style.paddingTop = "118px";
+			}
+			else{
+				document.getElementById('mainContent').style.paddingTop = "";
+			 	document.getElementById('menu').className = "";
+			}		
+		});
+	</script>
 </head>
 <body class="body">
 	<header class="mainHeader" <?php if(isset($_SESSION['admin_id'])){ echo 'id="mainHeader"';} ?>>
 		<img src="img/logo.png" />
+	</header>
 		<nav id="menu">
 			<ul>
 				<?php
@@ -111,6 +125,7 @@ require('core/init.php');
 					}
 				?>
 			</ul>
+			<div class="handle">Menu<span class="icon"></span></div>
 		</nav>
 	</header>
-	<div class="mainContent">
+	<div id="mainContent">

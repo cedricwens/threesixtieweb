@@ -1,3 +1,8 @@
+<?php
+	require('core/init.php');
+    header("Content-type: text/css; charset: UTF-8");
+?>
+
 body{
 	background-image: url('img/bg.png');
 	color: #000305;
@@ -21,6 +26,32 @@ a:link, a:visited{
 a:hover, a:active{
 	color: #005FAB;
 }
+#menu{
+	opacity: 0.93;
+}
+#menu ul{
+	background-color: #666666;
+	overflow: hidden;
+	color: white;
+	padding: 0;
+	text-align: center;
+	margin: 0;
+	-webkit-transition: max-height 0.4s;
+	-ms-transition: max-height 0.4s;
+	-moz-transition: max-height 0.4s;
+	-o-transition: max-height 0.4s;
+	transition: max-height 0.4s;
+}
+#menu ul li{
+	background-color: #666666;
+	transition: background-color .25s ease-in-out;
+  	-moz-transition: background-color .25s ease-in-out;
+   	-webkit-transition: background-color .25s ease-in-out;
+}
+#menu ul li:hover{
+	background-color: #009EE3;
+}
+
 .body{
 	margin: 0 auto;
 	width: 70%;
@@ -40,7 +71,7 @@ a:hover, a:active{
 	max-height: 90px;
 	margin: 2% 0;
 }
-.mainHeader nav{
+/*.mainHeader nav{
 	background-color: #666;
 	height: 40px;
 	border-radius: 5px;
@@ -73,7 +104,7 @@ a:hover, a:active{
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-}
+}*/
 
 
 .mainContent{
@@ -241,25 +272,59 @@ td#batches, th#batches{
 	background-color: #e8f2f7;
 	/*background-color: #bbbbbb;*/
 }
-.users table tr th{
-	border-bottom: 2px solid #e8f2f7;
-	/*border-bottom: 2px solid #bbbbbb;*/
-}
 .users table{
 	width: 100%;
 	border-collapse: collapse;
 }
-.users table tr th:not(:first-child), .users tr td:not(:first-child){
-	width: 19%;
-}
-.users table tr th:first-child, .users tr td:first-child{
-	width: 5%;
+.users table tr th{
+	border-bottom: 2px solid #e8f2f7;
+	/*border-bottom: 2px solid #bbbbbb;*/
 }
 .users table tr:nth-child(even){
 	background-color: gray;
 }
-
-@media only screen and (min-width: 150px) and (max-width: 600px){
+.users td{
+	text-align: center;
+}
+.questions_list table tr td{
+	width: 100%;
+}
+.handle{
+	width: 100%;
+	background: #009EE3;
+	text-align: left;
+	box-sizing: border-box;
+	padding: 15px 10px;
+	cursor: pointer;
+	color: white;
+	display: none;
+}
+@media screen and (min-width: 675px){
+	#menu ul li{
+		display: inline-block;
+		text-align: center;
+	}
+	#menu ul li a{
+		padding: 20px;
+		display: block;
+		color: white;
+	}
+	.menu_fixed{
+		position: fixed;
+		top:0;
+		display: block;
+		width: 70%;
+		opacity: 0.93;
+		z-index: 9999999;
+	}
+	.users table tr th:not(:first-child), .users tr td:not(:first-child){
+		width: 19%;
+	}
+	.users table tr th:first-child, .users tr td:first-child{
+		width: 5%;
+	}
+}
+@media only screen and (min-width: 150px) and (max-width: 950px){
 	.body{
 		width: 90%;
 		font-size: 95%;
@@ -268,7 +333,7 @@ td#batches, th#batches{
 		width: 100%;
 	}
 	.mainHeader nav{
-		height: 120px;
+		height: 150px;
 	}
 	.mainHeader nav ul{
 		padding-left: 0;
@@ -309,5 +374,106 @@ td#batches, th#batches{
 		width: 94%;
 		margin: 2% 0 2% 0;
 		padding: 2% 3%;
+	}
+	.menu_fixed{
+		position: fixed;
+		top:0;
+		display: block;
+		width: 90%;
+		opacity: 0.93;
+		z-index: 9999999;
+	}
+}
+@media screen and (max-width: 675px){
+	nav ul{
+		max-height: 0;
+	}
+	.showing{
+		max-height: 30em;
+	}
+	#menu ul li{
+		border-sizing: border-box;
+		display: inline-block;
+		width: 100%;
+		text-align: left;
+	}
+	#menu ul li a{
+		padding: 20px;
+		display: block;
+		color: white;
+	}
+	.handle{
+		display: block;
+	}
+	.icon:after{
+		float:right;
+		content: "";
+		background: url('img/nav-icon.png') no-repeat;
+		width: 30px;
+		height: 30px;
+		display: inline-block;
+		right: 15px;
+		top: 175px;
+	}
+}
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 675px), (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, th, td, tr { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	tr { border: 1px solid #ccc; }
+	
+	td{ 
+		/* Behave  like a "row" */
+		padding-left: 50%; 
+	}
+	td{
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+	}
+	
+	td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	
+	/*
+	Label the data
+	*/
+	#users td:nth-of-type(1):before { content: "<?php echo get_text('ID'); ?>"; }
+	#users td:nth-of-type(2):before { content: "<?php echo get_text('Name'); ?>"; }
+	#users td:nth-of-type(3):before { content: "<?php echo get_text('Firstname'); ?>"; }
+	#users td:nth-of-type(4):before { content: "<?php echo get_text('Lastname'); ?>"; }
+	#users td:nth-of-type(5):before { content: "<?php echo get_text('Email'); ?>"; }
+	#users td:nth-of-type(6):before { content: "<?php echo get_text('Action'); ?>"; }
+
+	#departments td:nth-of-type(1):before { content: "<?php echo get_text('ID'); ?>"; }
+	#departments td:nth-of-type(2):before { content: "<?php echo get_text('Name'); ?>"; }
+	#departments td:nth-of-type(3):before { content: "<?php echo get_text('Manager'); ?>"; }
+	#departments td:nth-of-type(4):before { content: "<?php echo get_text('Action'); ?>"; }
+
+	.departments table tr th, .users tr td{
+		width: 50%;
 	}
 }

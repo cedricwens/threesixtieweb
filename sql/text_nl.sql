@@ -175,4 +175,6 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Extra_comment',		'Extra commentaar'),
 	('No_managers_found',	'Geen managers gevonden'),
 	('Edit_or_delete_users', 'Wijzig of verwijder gebruikers'),
-	('Departments',			'Departementen');
+	('Departments',			'Departementen'),
+	('Name',				'Naam'),
+	('Edit_or_delete_departments', 'Wijzig of verwijder departementen');

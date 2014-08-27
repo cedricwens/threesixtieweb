@@ -3,7 +3,8 @@ ob_start();
 function add_batch(){
 	$date = create_date();
 	mysql_query("INSERT INTO batch (Init_date, Running1_date, Running2_date, Finished_date, Status) VALUES ('$date', NULL, NULL, NULL, (SELECT ID FROM batch_status WHERE Name = 'Init'))");
-	header('Location: admin.php');
+	header('Location: '.$_SERVER['PHP_SELF']);
+	exit();
 }
 function add_comment($reviewee, $comment){
 	$reviewee = (int) $reviewee;
@@ -18,7 +19,7 @@ function add_comment($reviewee, $comment){
 function add_department($name, $manager){
 	$name = sanitize($name);
 	$manager = (int) $manager;
-	mysql_query("INSERT INTO department (Name, Manager) VALUES ($name, $manager)");
+	mysql_query("INSERT INTO department (Name, Manager) VALUES ('$name', $manager) ON DUPLICATE KEY UPDATE Name = '$name', Manager = $manager");
 }
 function add_poll_comment($poll, $comment){
 	$poll = (int) $poll;
@@ -30,7 +31,8 @@ function add_question($question, $category){
 	$category = sanitize($category);
 	mysql_query("INSERT INTO question (Category, Question) VALUES ((SELECT ID FROM category WHERE Name = '$category'), '$question')");
 	echo mysql_error();
-	header('Location: admin.php');
+	header('Location: '.$_SERVER['PHP_SELF']);
+	exit();
 }
 function add_user($firstname, $lastname, $department, $email, $job_title){
 	$firstname = sanitize($firstname);
@@ -44,7 +46,7 @@ function add_user($firstname, $lastname, $department, $email, $job_title){
 	$id = mysql_insert_id();
 	mysql_query("INSERT INTO user_department (User, Department) VALUES ((SELECT ID FROM user WHERE Username = '$username'), (SELECT ID FROM Department WHERE Name = '$department')) ON DUPLICATE KEY UPDATE User = (SELECT ID FROM user WHERE Username = '$username'), Department = (SELECT ID FROM Department WHERE Name = '$department')");
 	mysql_error();
-	header('Location: admin.php');
+	header('Location: '.$_SERVER['PHP_SELF']);
 	exit();
 }
 function create_date(){
@@ -57,6 +59,13 @@ function delete_comment($id){
 	$reviewer = (int)$_SESSION['user_id'];
 	mysql_query("DELETE FROM poll WHERE ID = $id and Reviewer = $reviewer");
 	header('Location: index.php?Start');
+	exit();
+}
+function delete_department($id){
+	$id = (int) $id;
+	mysql_query("DELETE FROM department WHERE ID = $id");
+	header('Location: '.$_SERVER['PHP_SELF']);
+	exit();
 }
 function delete_preferred_reviewer($user){
 	$user = sanitize($user);
@@ -75,13 +84,15 @@ function delete_question($id){
 	mysql_query("DELETE FROM answer WHERE Question = $id");
 	mysql_query("DELETE FROM question WHERE ID = $id");
 	echo mysql_error();
-	header('Location: admin.php');
+	header('Location: '.$_SERVER['PHP_SELF']);
+	exit();
 }
 function delete_user($id){
 	$id = (int) $id;
 	mysql_query("DELETE FROM user_department WHERE User = $id");
 	mysql_query("DELETE FROM user WHERE ID = $id");
-	header('Location: users.php');
+	header('Location: '.$_SERVER['PHP_SELF']);
+	exit();
 }
 function edit_parameter($parameter, $value){
 	$parameter = (int) $parameter;
@@ -237,6 +248,23 @@ function get_comment($poll){
 		return false;
 	}else{
 		return mysql_result($query,0);
+	}
+}
+function get_department_by_id($id){
+	$id = (int) $id;
+	$query = mysql_query("SELECT * FROM department WHERE ID = $id");
+	if(!$query || mysql_num_rows($query) <=0) {
+		echo mysql_error();
+		return false;
+	}else{
+		/*while ($row = mysql_fetch_assoc($query)) {
+			$department[] = array(
+				'ID' => $row['ID'],
+				stripslashes('Name') => $row['Name'],
+				'Manager' => $row['Manager']
+				);
+		}*/
+		return mysql_fetch_assoc($query);
 	}
 }
 function get_department_name($id){
@@ -871,6 +899,14 @@ function resend_admin_password($admin){
 	mysql_query("UPDATE admin SET Password = '$hashed_password' WHERE ID = $id");
 	return get_text('New_password_send');
 }
+function save_department($id, $name, $manager){
+	$id = (int) $id;
+	$name = sanitize($name);
+	$manager = (int) $manager;
+	mysql_query("UPDATE department SET Name = '$name', Manager = $manager WHERE ID = $id");
+	header('Location: '.$_SERVER['PHP_SELF']);
+	exit();
+}
 function save_question($id, $question){
 	$id = (int) $id;
 	$question = sanitize($question);
@@ -885,7 +921,8 @@ function save_user($id, $firstname, $lastname, $email, $department){
 	mysql_query("UPDATE user SET Firstname = '$firstname', Lastname = '$lastname', Email = '$email' WHERE ID = $id");
 	mysql_query("UPDATE user_department SET Department = (SELECT ID FROM department WHERE Name = '$department') WHERE User = $id");
 	echo mysql_error();
-	header('Location: users.php');
+	header('Location: '.$_SERVER['PHP_SELF']);
+	exit();
 }
 
 function create_poll($reviewer, $reviewee, $status){

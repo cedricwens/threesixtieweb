@@ -10,7 +10,7 @@ $error = "";
 	<?php
 	if(get_running1_batch_id() || get_running2_batch_id()){
 		?>
-		<div class="topContent">
+		<div class="topContent" class="questions_list">
 			<table>
 			<?php
 				if(get_running1_batch_id()){
@@ -22,7 +22,7 @@ $error = "";
 						}
 						?>
 						<tr>
-							<td style="width: 80%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_own_poll'); ?>.</td>
+							<td><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_own_poll'); ?>.</td>
 							<td>
 								<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 									<input type="submit" name="reminder_1" value="<?php echo get_text('Send_reminder'); ?>">
@@ -54,7 +54,7 @@ $error = "";
 						}
 						?>
 						<tr>
-							<td style="width: 80%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_other_poll'); ?>.</td>
+							<td><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_other_poll'); ?>.</td>
 							<td>
 								<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 									<input type="submit" name="reminder_2" value="<?php echo get_text('Send_reminder'); ?>">
@@ -191,17 +191,17 @@ $error = "";
 							foreach ($questions as $key=>$question) {
 								if($question['Category'] == $category['ID']){
 									?>
-									<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+									<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="questions_list">
 										<table>
 											<tr>
 												<?php
 													if($question['ID'] == $_POST['question_id']){
 														?>
-														<td width="90%"><textarea class="comment" id="question"><?php echo $question['Question']; ?></textarea></td>
+														<td><textarea class="comment" id="question"><?php echo $question['Question']; ?></textarea></td>
 														<?php
 													}else{
 														?>
-														<td width="90%"><?php echo $key+1; echo ". ".$question['Question']; ?></td>
+														<td><?php echo $key+1; echo ". ".$question['Question']; ?></td>
 														<?php
 													}
 												?>
@@ -258,10 +258,10 @@ $error = "";
 							foreach ($questions as $key=>$question) {
 								if($question['Category'] == $category['ID']){
 									?>
-									<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+									<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="questions_list">
 										<table>
 											<tr>
-												<td width="90%"><?php echo $key+1; echo '. '.$question['Question']; ?></td>
+												<td><?php echo $key+1; echo '. '.$question['Question']; ?></td>
 												<td>
 													<input type="hidden" name="question_id" value="<?php echo $question['ID']; ?>" />
 													<input type="submit" name="edit" value="<?php echo get_text('Edit'); ?>" />
