@@ -159,6 +159,10 @@ INSERT INTO poll_status (Name) VALUES
 	('Commentaar');
 
 /* Parameters toevoegen aan database */
+/*gebruik hier ook een short-name kolom */
+/* Hoe worden parameters door php opgehaald ? via ID  of via beschrijving ? */
+/* een ID (numeriek is weinig zeggend voor de lezer*/
+/*short name column needs to be unique */
 INSERT INTO parameter (Name, Value) VALUES
 	('Aantal reviews geven', 5),
 	('Aantal reviews krijgen', 5),
