@@ -268,26 +268,22 @@ td#batches, th#batches{
 .users input[type="text"]{
 	text-align: center;
 }
-.users form:nth-child(odd){
+/*form:nth-child(odd){
 	background-color: #e8f2f7;
-	/*background-color: #bbbbbb;*/
-}
+}*/
 .users table{
 	width: 100%;
 	border-collapse: collapse;
 }
-.users table tr th{
+table tr th{
 	border-bottom: 2px solid #e8f2f7;
 	/*border-bottom: 2px solid #bbbbbb;*/
 }
-.users table tr:nth-child(even){
-	background-color: gray;
+table tr:nth-child(even){
+	background-color: #e8f2f7;
 }
 .users td{
 	text-align: center;
-}
-.questions_list table tr td{
-	width: 100%;
 }
 .handle{
 	width: 100%;
@@ -322,6 +318,9 @@ td#batches, th#batches{
 	}
 	.users table tr th:first-child, .users tr td:first-child{
 		width: 5%;
+	}
+	.questions_list table tr td:not(:first-child){
+		width: 100%;
 	}
 }
 @media only screen and (min-width: 150px) and (max-width: 950px){
@@ -473,7 +472,24 @@ and also iPads specifically.
 	#departments td:nth-of-type(3):before { content: "<?php echo get_text('Manager'); ?>"; }
 	#departments td:nth-of-type(4):before { content: "<?php echo get_text('Action'); ?>"; }
 
-	.departments table tr th, .users tr td{
+	#questions td:nth-of-type(1):before { content: "<?php echo get_text('ID'); ?>"; }
+	#questions td:nth-of-type(2):before { content: "<?php echo get_text('Question'); ?>"; }
+	#questions td:nth-of-type(3):before { content: "<?php echo get_text('Action'); ?>"; }
+	
+	#parameters td:nth-of-type(1):before { content: "<?php echo get_text('ID'); ?>"; }
+	#parameters td:nth-of-type(2):before { content: "<?php echo get_text('Value'); ?>"; }
+	#parameters td:nth-of-type(3):before { content: "<?php echo get_text('Action'); ?>"; }
+
+	#batches td:nth-of-type(1):before { content: "<?php echo get_text('ID'); ?>"; }
+	#batches td:nth-of-type(2):before { content: "<?php echo get_text('Init_date'); ?>"; }
+	#batches td:nth-of-type(3):before { content: "<?php echo get_text('Start_phase_1'); ?>"; }
+	#batches td:nth-of-type(4):before { content: "<?php echo get_text('Start_phase_2'); ?>"; }
+	#batches td:nth-of-type(5):before { content: "<?php echo get_text('Finished_date'); ?>"; }
+	#batches td:nth-of-type(6):before { content: "<?php echo get_text('Status'); ?>"; }
+	#batches td:nth-of-type(7):before { content: "<?php echo get_text('Comment'); ?>"; }
+	#batches td:nth-of-type(8):before { content: "<?php echo get_text('Action'); ?>"; }
+
+	.departments table tr th, .users tr td, .questions_list table tr td{
 		width: 50%;
 	}
 }

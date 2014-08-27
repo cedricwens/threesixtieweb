@@ -177,4 +177,6 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Edit_or_delete_users', 'Wijzig of verwijder gebruikers'),
 	('Departments',			'Departementen'),
 	('Name',				'Naam'),
-	('Edit_or_delete_departments', 'Wijzig of verwijder departementen');
+	('Edit_or_delete_departments', 'Wijzig of verwijder departementen'),
+	('Parameter',			'Parameter'),
+	('Value',				'Waarde');
