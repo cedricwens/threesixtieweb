@@ -17,16 +17,16 @@ class PDF extends FPDF{
 		    $this->SetFont('Arial','B',10);
 		    // Title
 		    $this->Cell(150);
-		    $this->Cell(80,10,'Philipssite 5 bus 13',0,0);
+		    $this->Cell(80,10,get_text('Adress_street'),0,0);
 		    $this->Ln(5);
 		    $this->Cell(150);
-		    $this->Cell(10,10,'3001 Leuven Belgium',0,0);
+		    $this->Cell(10,10,get_text('Adress_city'),0,0);
 		    $this->Ln(5);
 		    $this->Cell(150);
-		    $this->Cell(10,10,'Tel.: +32 16 28 49 70',0,0);
+		    $this->Cell(10,10,get_text('Tel'),0,0);
 		    $this->Ln(5);
 		    $this->Cell(150);
-		    $this->Cell(10,10,'Website : www.dns.be',0,0);
+		    $this->Cell(10,10,get_text('Website'),0,0);
 		    // Line break
 		    $this->Ln(15);
 		    $this->Line(10,40,200,40);
@@ -44,7 +44,7 @@ class PDF extends FPDF{
 	    // Arial italic 8
 	    $this->SetFont('Arial','I',8);
 	    // Page number
-	    $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
+	    $this->Cell(0,10,get_text('Page').' '.$this->PageNo().'/{nb}',0,0,'C');
 	}
 
 	function SetCol($col)
@@ -99,25 +99,25 @@ if(isset($_GET['id']) && $_GET['id'] == $_SESSION['user_id'] || isset($_SESSION[
 	$pdf->Ln(15);
 
 	$pdf->SetFont('Arial','',12);
-	$pdf->Cell(10,10,"Heeft $reviews_given review(s) geschreven",0,0);
+	$pdf->Cell(10,10,get_text('Reviews_written').": $reviews_given",0,0);
 	$pdf->Ln(5);
-	$pdf->Cell(10,10,"Heeft $reviews_received review(s) gekregen",0,0);
+	$pdf->Cell(10,10,get_text('Reviews_received').": $reviews_received",0,0);
 	$pdf->Ln(5);
-	$pdf->Cell(10,10,"Krijgt review(s) van $teammember_reviews teamleden",0,0);
+	$pdf->Cell(10,10,get_text('Reviews_from_teammember').": $teammember_reviews",0,0);
 	$pdf->Ln(5);
-	$pdf->Cell(10,10,"Krijgt review(s) van $notteammember_reviews niet-teamleden",0,0);
+	$pdf->Cell(10,10,get_text('Reviews_from_not_teammember').": $notteammember_reviews",0,0);
 	$pdf->Ln(5);
-	$pdf->Cell(10,10,"Krijgt $teammanager_reviews review(s) van zijn teammanager.",0,0);
+	$pdf->Cell(10,10,get_text('Reviews_from_teammanager').": $teammanager_reviews",0,0);
 	$pdf->Ln(5);
-	$pdf->Cell(10,10,"Krijgt $notteammanager_reviews review(s) van andere teammanagers.",0,0);
+	$pdf->Cell(10,10,get_text('Reviews_from_not_teammanager').": $notteammanager_reviews",0,0);
 	$pdf->Ln(5);
-	$pdf->Cell(10,10,"$preferred_reviewers van de gebruikers die $user[0] aangaf, mogen ook effectief de vragenlijst over $user[0] invullen.",0,0);
+	$pdf->Cell(10,10,get_text('Reviews_from_preferred_reviewer').": $preferred_reviewers",0,0);
 	$pdf->Ln(5);
-	$pdf->Cell(10,10,"$user[0] mag van $preferred_reviewees gebruikers die zijn had gekozen, ook effectief de vragenlijst invullen.",0,0);
+	$pdf->Cell(10,10,get_text('Reviews_given_to_preferred_reviewee').": $preferred_reviewees",0,0);
 	$pdf->Ln(10);
 
 	$pdf->SetFont('Arial','B',12);
-	$pdf->Cell(175,10,"Vraag",0,'C');
+	$pdf->Cell(175,10,get_text('Question'),0,'C');
 	$pdf->Ln(10);
 	foreach ($questions as $key => $question) {
 		$pdf->SetFont('Arial','',12);
@@ -125,7 +125,7 @@ if(isset($_GET['id']) && $_GET['id'] == $_SESSION['user_id'] || isset($_SESSION[
 		$pdf->MultiCell(175,5,$question['Question'],0,'L');
 		$pdf->SetFont('Arial','B',12);
 		$pdf->Cell(10);
-		$pdf->Cell(5,10,"Gemiddelde score: ".get_average_score($id, $question['ID']),0,0);
+		$pdf->Cell(5,10,get_text('Average_score').': '.get_average_score($id, $question['ID']),0,0);
 		$pdf->Ln(10);
 		if($pdf->GetY()>250){
 			$pdf->AddPage();
@@ -134,7 +134,7 @@ if(isset($_GET['id']) && $_GET['id'] == $_SESSION['user_id'] || isset($_SESSION[
 	if($comments){
 		$pdf->Ln(5);
 		$pdf->SetFont('Arial','B',12);
-		$pdf->Cell(175,10,"Extra commentaar",0,'C');
+		$pdf->Cell(175,10,get_text('Extra').' '.get_text('Comment'),0,'C');
 		$pdf->Ln(10);
 		foreach ($comments as $comment) {
 			$pdf->SetFont('Arial','',12);
@@ -148,7 +148,7 @@ if(isset($_GET['id']) && $_GET['id'] == $_SESSION['user_id'] || isset($_SESSION[
 	}
 	$pdf->Ln(5);
 	$pdf->SetFont('Arial','',8);
-	$pdf->MultiCell(173,10, 'Indien u graag meer informatie wil over uw resultaten, of deze resultaten graag met iemand bespreekt, dan kan dit.', 0, 'L');
+	$pdf->MultiCell(173,10, get_text('Want_extra_info'), 0, 'L');
 	$pdf->Ln(5);
 	$pdf->Output();
 }		

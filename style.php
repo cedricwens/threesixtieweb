@@ -274,11 +274,7 @@ td#batches, th#batches{
 .users table{
 	width: 100%;
 	border-collapse: collapse;
-}
-table tr th{
-	border-bottom: 2px solid #e8f2f7;
-	/*border-bottom: 2px solid #bbbbbb;*/
-}
+} 
 table tr:nth-child(even){
 	background-color: #e8f2f7;
 }

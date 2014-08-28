@@ -1,4 +1,4 @@
-<h3>Welke medewerkers mogen de vragenlijst over jouw invullen?</h3>
+<h3><?php echo get_text('Who_may_answer_your_poll'); ?></h3>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=2" method="post">
 	<?php
 	foreach ($users as $user){

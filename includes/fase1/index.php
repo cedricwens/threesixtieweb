@@ -31,8 +31,8 @@ if(isset($_GET['Start'])){
 				?>
 				<div class="topContent">
 					<?php echo $result; ?>
-					<p>Klik op volgende om gebruikers te selecteren die de vragenlijst over jou mogen invullen.</p>
-					<p>Klik op vorige om terug naar de vragenlijst te gaan.</p>
+					<p><?php echo get_text('Click_next_to_select_preferred_reviewers'); ?></p>
+					<p><?php echo get_text('Click_back_to_return_to_poll'); ?></p>
 					<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1"><?php echo get_text('Back'); ?></a></h3>
 					<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=2"><?php echo get_text('Next'); ?></a></h3>
 				</div>
@@ -53,8 +53,8 @@ if(isset($_GET['Start'])){
 				}
 				?>
 				<div class="topContent">
-					<p>Klik op volgende om gebruikers te selecteren over wie jij de vragenlijst wil invullen.</p>
-					<p>Klik op vorige om terug te gaan naar jouw keuzes.</p>
+					<p><?php echo get_text('Click_next_to_select_preferred_reviewees'); ?></p>
+					<p><?php echo get_text('Click_back_to_return_to_choices'); ?></p>
 					<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=2"><?php echo get_text('Back'); ?></a></h3>
 					<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=3"><?php echo get_text('Next'); ?></a></h3>
 				</div>

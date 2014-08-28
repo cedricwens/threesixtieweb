@@ -1,4 +1,4 @@
-<h3>Van welke medewerkers wil jij de vragenlijst invullen?</h3>
+<h3><?php echo get_text('Answer_poll_about_who'); ?></h3>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=3" method="post">
 	<?php
 	foreach ($users as $user){

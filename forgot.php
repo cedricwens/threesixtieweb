@@ -15,8 +15,10 @@ $error = "";
 		$error = resend_password($username);
 		?>
 		<div class="centerContent">
-			<?php echo $error; ?>
-			Klik <a href="login.php">hier</a> om je aan te melden.
+			<?php
+			echo $error;
+			echo get_text('Click_here_to_log_in');
+			?>
 		</div>
 		<?php
 	}else{

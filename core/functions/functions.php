@@ -1505,7 +1505,6 @@ function get_reviews_given(){
 }
 function get_reviewer_reviews_given($reviewer){
 	$reviewer = (int) $reviewer;
-	//echo "<$reviewer>";
 	$query = mysql_query("SELECT count(*) FROM candidate_poll WHERE Ok_overall = 1 AND Reviewer = $reviewer");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
@@ -1764,20 +1763,12 @@ function calculate_possible_polls($users){
 		foreach ($users as $reviewer) {
 			$reviewer_id = (int) $reviewer['ID'];
 			$reviewee_id = (int) $reviewee['ID'];
-			//echo $reviewee_id.'-'.$reviewer_id.': ';
 			if($reviewer_id == $reviewee_id){
-			//	echo "skipping zichzelf<br />";
 			} else if($reviewer_id == get_team_manager($reviewee_id)){
-			//	echo "skipping manager<br />";
 				// Enkel rijen toevegen waarbij de reviewer en reviewee verschillen of waarbij de reviewer niet te teammanager is van de reviewee.
-			}else{
-			//	echo "toevoegen";	
+			}else{	
 				mysql_query("INSERT INTO candidate_poll (Reviewer, Reviewee, Score, Ok_reviewee, Ok_reviewer, Ok_overall) VALUES ($reviewer_id, $reviewee_id, 0, 0, 0, 0)");
-			//	echo "<br /><br />";
-			}/*else{
-				echo "$reviewer_id=$reviewee_id<br />";
-				echo "$reviewer_id = ".get_team_manager($reviewee_id)."<br />";
-			}*/
+			}
 		}
 	}
 	calculate($users);
@@ -2019,8 +2010,7 @@ function get_manager_reviews_received(){
 			return 0;
 		}else{
 			return mysql_result($query,0);	
-		}
-		
+		}	
 	}
 }
 function get_team_member_reviews_received(){
@@ -2115,7 +2105,6 @@ function check($users){
 		}
 	}
 	if(!empty($too_many_manager_received)){
-		//print_r($too_many_manager_received);
 		// De slechtste review met een reviewer (=manager) verwijderen
 		foreach ($too_many_manager_received as $too_many_manager) {
 			$polls = get_worst_manager_polls($too_many_manager['Reviewee']);	
@@ -2138,7 +2127,6 @@ function check($users){
 		}
 	}
 	if(!empty($too_many_manager_received)){
-		//print_r($too_many_manager_received);
 		// De slechtste review met een reviewer (=manager) verwijderen
 		foreach ($too_many_manager_received as $too_many_manager) {
 			$polls = get_worst_manager_polls($too_many_manager['Reviewee']);	
@@ -2150,39 +2138,6 @@ function check($users){
 			}	
 		}
 	}
-
-
-		/*$users = get_users();
-		echo "Reviewee wordt gereviewed door {Reviewer}: ";
-		foreach($users as $user){
-			$reviewee = $user['ID'];
-			echo $reviewee." {";
-			$polls = get_candidate_polls_by_reviewee($reviewee);
-			if($polls){
-				foreach($polls as $poll){
-					echo $poll['Reviewer'].",";
-				}
-			}
-			echo "}<br />";
-		}
-		echo "----------------------------------------<br/>";
-		echo "----------------------------------------<br/>";
-
-			$users = get_users();
-		foreach($users as $user){
-			echo "Reviewer reviewt {Reviewee}: ";
-			$reviewer = $user['ID'];
-			echo $reviewer." {";
-			$polls = get_candidate_polls_by_reviewer($reviewer);
-			if($polls){
-				foreach($polls as $poll){
-					echo $poll['Reviewee'].",";
-				}
-			}
-			echo "}<br />";
-		}
-		echo "----------------------------------------<br/>";*/
-
 
 	$reviews_given = get_reviews_given();
 	$too_few_given = array();
@@ -2214,12 +2169,6 @@ function check($users){
 			}
 		}
 	}
-	/*echo '<b>Te weinig gegeven:</b>';print_r($too_few_given); echo "<br />";
-	echo '<b>Te veel gegeven:</b>';print_r($too_many_given); echo "<br />";
-	echo '<b>Genoeg gegeven:</b>';print_r($exact_given); echo "<br />";
-	echo '<b>Te weinig gekregen:</b>';print_r($too_few_received); echo "<br />";
-	echo '<b>Te veel gekregen:</b>';print_r($too_many_received); echo "<br />";
-	echo '<b>Genoeg gekregen:</b>';print_r($exact_received); echo "<br />";*/
 	while(!empty($too_many_given) && !empty($too_many_received)){
 		$polls = array();
 		foreach($too_many_given as $too_many_reviewer){
@@ -2274,7 +2223,6 @@ function check($users){
 	}
 	
 	while(!empty($too_many_given)){
-		//print_r($too_many_given);
 		foreach($too_many_given as $too_many_reviewer){
 			$polls = get_not_top_5_best_polls($too_many_reviewer['Reviewer']);
 			foreach ($polls as $poll) {
@@ -2323,71 +2271,33 @@ function check($users){
 		}else{
 			$counter = 0;
 		}
-		/*echo "counter : $counter<br />";
-		echo "number_of_polls:".$number_of_polls;
-		echo "<br />too_few_given:";
-		foreach ($too_few_given as $too_few_give) {
-			echo $too_few_give['Reviewer'].',';
-		}
-		echo "<br />too_few_received:";
-		foreach ($too_few_received as $too_few_receive) {
-			echo $too_few_receive['Reviewee'].',';
-		}*/
-		//echo "number_of_polls: $number_of_polls";
-		//print_r($too_few_given);
 		$number_of_polls = get_overall_ok_polls();
 		$polls = array();
 		foreach($too_few_given as $too_few_reviewer){
 			foreach($too_few_received as $too_few_reviewee){
-				//echo "eerste reviewer: ".$too_few_reviewer['Reviewer'];
-				//echo "eerste reviewee: ".$too_few_reviewee['Reviewee'];
 				$poll = get_candidate_poll($too_few_reviewer['Reviewer'], $too_few_reviewee['Reviewee']);
-				//echo "poll:";
-				//print_r($poll);
 				if($poll){
 					if($poll[0]['Ok_overall'] == 0){
 						$polls[] = $poll[0];
-						//print_r($poll[0]);
 					}
 				}
 			}
 		}
-		//echo "polls:"; print_r($polls);echo "<br/><br><br >";
 		$score = 0;
 		$poll = 0;
 
 		$key = array_rand($polls, 1);
 		$poll = $polls[$key];
 		
-		/*foreach ($polls as $candidate_poll) {
-			if($score < $candidate_poll['Score']){
-				$score = $candidate_poll['Score'];
-				$poll = $candidate_poll;
-			}
-		}*/
-		//echo "gekozen poll:".$poll['ID'];
 		$reviewer = get_candidate_poll_reviewer($poll['ID']);
 		$reviewee = get_candidate_poll_reviewee($poll['ID']);
-		/*echo "ID:$poll";
-		echo "poll:$poll";
 		
-		echo "reviewer:$reviewer";
-		
-		echo "reviewee:$reviewee";
-		echo "ik probeer reviewer:$reviewer en reviewee:$reviewee toe te voegen <br />";
-		echo 'is_manager(reviewee):'.is_manager($reviewee).'<br />';
-		echo 'is_manager(reviewer):'.is_manager($reviewer).'<br />';
-		echo 'get_manager_reviews_received_reviewee(reviewee):';*/
-		//print_r(get_manager_reviews_received_reviewee($reviewee)).'<br />';
-		//echo 'number:'.$number_of_manager_reviews_received.'<br />';
 		if(!is_manager($reviewee) && is_manager($reviewer) && (get_manager_reviews_received_reviewee($reviewee) < $number_of_manager_reviews_received)){
 			$id = $poll['ID'];
 			mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id");
-			//echo "toegevoegd optie 1 wer:$reviewer-wee:$reviewee<br />";
 		}else if(!is_manager($reviewer) || is_manager($reviewee)){
 			$id = $poll['ID'];
 			mysql_query("UPDATE candidate_poll SET Ok_overall = 1 WHERE ID = $id");
-			//echo "toegevoegd optie 2 wer:$reviewer-wee:$reviewee<br />";
 		}
 		$reviews_given = get_reviews_given();
 		$too_few_given = array();
@@ -2419,29 +2329,15 @@ function check($users){
 				}
 			}
 		}
-		/*echo "<br />too_few_given:";
-		foreach ($too_few_given as $too_few_give) {
-			echo $too_few_give['Reviewer'].',';
-		}
-		echo "<br />too_few_received:";
-		foreach ($too_few_received as $too_few_receive) {
-			echo $too_few_receive['Reviewee'].',';
-		}*/
 	}
 	while((!empty($too_few_given) && !empty($too_few_received))) {
 		$polls = array();
 		foreach($too_few_given as $too_few_reviewer){
 			foreach($too_few_received as $too_few_reviewee){
-				//echo "eerste reviewer: ".$too_few_reviewer['Reviewer'];
-				//echo "eerste reviewee: ".$too_few_reviewee['Reviewee'];
-				//echo "test";
 				$poll = get_candidate_poll($too_few_reviewer['Reviewer'], $too_few_reviewee['Reviewee']);
-				//echo "poll:";
-				//print_r($poll);
 				if($poll){
 					if($poll[0]['Ok_overall'] == 0){
 						$polls[] = $poll[0];
-						//print_r($poll[0]);
 					}
 				}
 			}
@@ -2455,21 +2351,11 @@ function check($users){
 		$key = array_rand($polls, 1);
 		$poll = $polls[$key];
 		
-		/*foreach ($polls as $candidate_poll) {
-			if($score <= $candidate_poll['Score']){
-				$score = $candidate_poll['Score'];
-				$poll = $candidate_poll;
-			}
-		}*/
-		//echo "gekozen poll:".$poll['ID'];
 		$reviewer = get_candidate_poll_reviewer($poll['ID']);
 		$reviewee = get_candidate_poll_reviewee($poll['ID']);
 
-
 		$id = $poll['ID'];
 		mysql_query("INSERT INTO candidate_poll (Reviewer, Reviewee, Score, Ok_reviewee, Ok_reviewer, Ok_overall) VALUES ($reviewer, $reviewee, 0, 0, 0, 1) ON DUPLICATE KEY UPDATE Ok_overall = 1");
-
-
 
 		$reviews_given = get_reviews_given();
 		$too_few_given = array();
@@ -2501,46 +2387,6 @@ function check($users){
 				}
 			}
 		}
-		/*echo "<br />too_few_given:";
-		foreach ($too_few_given as $too_few_give) {
-			echo $too_few_give['Reviewer'].',';
-		}
-		echo "<br />too_few_received:";
-		foreach ($too_few_received as $too_few_receive) {
-			echo $too_few_receive['Reviewee'].',';
-		}*/
 	}
-
-	// Hier moet nog extra controle komen: Alle gebruikers die te weinig reviews hebben, de hoogste review laten uitvoeren
-	/*echo "overall_poll: ".get_overall_ok_polls();
-	$users = get_users();
-	foreach($users as $user){
-		echo "Reviewee wordt gereviewed door {Reviewer}: ";
-		$reviewee = $user['ID'];
-		echo $reviewee." {";
-		$polls = get_candidate_polls_by_reviewee($reviewee);
-		if($polls){
-			foreach($polls as $poll){
-				echo $poll['Reviewer'].",";
-			}
-		}
-		echo "}<br />";
-	}
-	echo "----------------------------------------<br/>";
-	echo "----------------------------------------<br/>";
-	$users = get_users();
-	foreach($users as $user){
-		echo "Reviewer reviewt {Reviewee}: ";
-		$reviewer = $user['ID'];
-		echo $reviewer." {";
-		$polls = get_candidate_polls_by_reviewer($reviewer);
-		if($polls){
-			foreach($polls as $poll){
-				echo $poll['Reviewee'].",";
-			}
-		}
-		echo "}<br />";
-	}
-	echo "----------------------------------------<br/>";*/
 }
 ?>

@@ -20,8 +20,8 @@ $error = "";
 	if(isset($_SESSION['admin_id'])){
 		?>
 		<div class="topContent">
-			<p>U dient aan te melden als reguliere gebruiker om deze pagina te zien.</p>
-			<p>Klik <a href="logout.php">hier</a> om u af te melden</p>
+			<p><?php echo get_text('Normal_user_login_required'); ?></p>
+			<p><?php echo get_text('Click_here_to_log_out'); ?></p>
 			<?php echo $error; ?>
 		</div>
 		<?php

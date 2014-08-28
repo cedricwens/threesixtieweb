@@ -67,7 +67,7 @@ $add_department_message = "";
 						<tr>
 							<td colspan="2">
 								<?php
-								if(isset($_POST['reminder2'])){
+								if(isset($_POST['reminder_2'])){
 									foreach ($users as $user) {
 										send_reminder_phase2($user['Firstname'], $user['Email']);
 									}

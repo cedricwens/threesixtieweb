@@ -4,30 +4,11 @@ require('core/init.php');
 <!DOCTYPE html>
 <html>
 <head>
-	<title>ThreeSixtyWeb</title>
+	<title><?php echo get_text('Title'); ?></title>
 	<link rel="stylesheet" type="text/css" href="style.php">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!--<link rel="stylesheet" type="text/css" href="main.css">-->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script type="text/javascript">
-		function moveItem(a, b){
-			var fromBox = document.getElementById(a),
-		    	toBox = document.getElementById(b);
-
-		  	for(var i=0, opts = fromBox.options; opts[i]; i++){
-		    	if(opts[i].selected)
-		    	{
-		      		toBox.value = opts[i].value;
-
-		      		if(toBox.selectedIndex == -1 || (opts[i].text != toBox.options[toBox.selectedIndex].text)){
-		        		toBox.options.add(new Option(opts[i].text, opts[i].value));
-		        		opts.remove(i);
-		        		i--;
-		      		}
-		    	}
-		  	}
-		}
-	</script>
 	<script>
 	function change_batchstatus(batch, action){
 		if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -99,7 +80,7 @@ require('core/init.php');
 						<li <?php if($selected_page == 'Admin'){ echo 'class="active"';} ?>><a href="admin.php"><?php echo get_text('Admin'); ?></a></li>
 						<li <?php if($selected_page == 'Users'){ echo 'class="active"';} ?>><a href="users.php"><?php echo get_text('Users'); ?></a></li>
 						<li <?php if($selected_page == 'Departments'){ echo 'class="active"';} ?>><a href="departments.php"><?php echo get_text('Departments'); ?></a></li>
-						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php"><?php echo get_text('User_results'); ?></a></li>
+						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php"><?php echo get_text('Results'); ?></a></li>
 						<?php
 					}
 					if(logged_in() || isset($_SESSION['admin_id'])){
@@ -109,7 +90,7 @@ require('core/init.php');
 					}
 				?>
 			</ul>
-			<div class="handle">Menu<span class="icon"></span></div>
+			<div class="handle"><?php echo get_text('Menu'); ?><span class="icon"></span></div>
 		</nav>
 	</header>
 	<div id="mainContent">

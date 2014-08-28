@@ -18,7 +18,7 @@ if(isset($_GET['Start'])){
 			}
 			?>
 			<div class="topContent">
-				<h3>Selecteer een vragenlijst om de vragen te beantwoorden.</h3>
+				<h3><?php echo get_text('Select_poll_to_answer'); ?></h3>
 				<?php
 					$polls = get_polls_by_reviewer($_SESSION['user_id'], get_running2_batch_id());
 					if($polls){
@@ -33,7 +33,7 @@ if(isset($_GET['Start'])){
 										<td style="width: 75%;"><?php echo $user[0].' '.$user[1]; ?></td>
 										<td>
 											<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-												<input type="hidden" name="Start" value="start" />
+												<input type="hidden" name="Start" value="<?php echo get_text('Start'); ?>" />
 												<input type="hidden" name="Poll" value="<?php echo $poll['ID']; ?>" />
 												<?php
 													if($poll['Status'] == get_poll_status_id('Ingestuurd')){
@@ -61,7 +61,7 @@ if(isset($_GET['Start'])){
 				?>
 			</div>
 			<div class="middleContent">
-				<h3>Over deze gebruikers hebt u extra commentaar ingevuld</h3>
+				<h3><?php echo get_text('Written_extra_comment_about'); ?>:</h3>
 				<?php
 					$polls = get_only_comment_polls($_SESSION['user_id'], get_running2_batch_id());
 					if($polls){
@@ -76,7 +76,7 @@ if(isset($_GET['Start'])){
 										<td style="width: 50%;"><?php echo $user[0].' '.$user[1]; ?></td>
 										<td>
 											<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-												<input type="hidden" name="Start" value="start" />
+												<input type="hidden" name="Start" value="<?php echo get_text('Start'); ?>" />
 												<input type="hidden" name="Poll" value="<?php echo $poll['ID']; ?>" />
 												<?php
 													if($poll['Status'] == get_poll_status_id('Ingestuurd')){
@@ -105,7 +105,7 @@ if(isset($_GET['Start'])){
 				?>
 			</div>
 			<div class="bottomContent">
-				<h3>Extra commentaar over gebruiker</h3>
+				<h3><?php echo get_text('Extra_comment_about_user'); ?></h3>
 				<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
 					<label for="user"><?php echo get_text('User'); ?>: </label>
 					<select name="user">
@@ -169,8 +169,8 @@ if(isset($_GET['Start'])){
 				?>
 				<div class="topContent">
 					<?php echo $result; ?>
-					<p>Klik op volgende om een nieuwe vragenlijst te selecteren.</p>
-					<p>Klik op vorige om terug naar de vragenlijst te gaan.</p>
+					<p><?php echo get_text('Click_next_to_select_new_poll'); ?></p>
+					<p><?php echo get_text('Click_back_to_return_to_poll'); ?></p>
 					<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&amp;Poll=<?php echo $poll; ?>"><?php echo get_text('Back'); ?></a></h3>
 					<h3 class="next"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start"><?php echo get_text('Next'); ?></a></h3>
 				</div>
@@ -179,7 +179,7 @@ if(isset($_GET['Start'])){
 			}else{
 				?>
 				<div class="topContent">
-					<h3>Vragenlijst over: <?php echo $reviewee[0].' '.$reviewee[1]; ?></h3>
+					<h3><?php echo get_text('Poll_about'); ?>: <?php echo $reviewee[0].' '.$reviewee[1]; ?></h3>
 					<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&amp;Poll=<?php echo $poll; ?>">
 					<?php
 					if($poll_status != get_poll_status_id('Commentaar')){ 
@@ -242,8 +242,8 @@ if(isset($_GET['Start'])){
 						<?php
 					}
 					?>
-					<p><b>Als je nog extra opmerking hebt, kan je deze hieronder invullen:</b></p>
-					<textarea class="comment" <?php if($poll_status == get_poll_status_id('Ingestuurd')){echo "disabled";} ?> name="comment"><?php /*if(get_comment($poll)){ */echo get_comment($poll);/* } */?></textarea>
+					<p><b><?php echo get_text('Add_extra_comment_here'); ?>:</b></p>
+					<textarea class="comment" <?php if($poll_status == get_poll_status_id('Ingestuurd')){echo "disabled";} ?> name="comment"></textarea>
 					<br />
 					<?php
 					if($poll_status == get_poll_status_id('Ingestuurd')){

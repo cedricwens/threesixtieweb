@@ -25,9 +25,7 @@
 			delete_department($id);
 		}else if(isset($_POST['edit'])){
 			$id = $_POST['department_id'];
-			//echo "id:$id";
 			$department = get_department_by_id($id);
-			//print_r($department);
 			$managers = get_managers_info();
 			?>
 			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
@@ -40,7 +38,6 @@
 								<select id="manager" name="manager">
 									<?php
 									foreach ($managers as $manager) {
-										//print_r($manager);
 										if($manager['ID'] == $department['Manager']){		
 											?>
 											<option value="<?php echo $manager['ID']; ?>" selected><?php echo $manager['Firstname'].' '.$manager['Lastname']; ?></option>

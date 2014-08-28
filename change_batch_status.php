@@ -33,14 +33,14 @@
 			echo mysql_error();
 			?>
 			<tr>
-				<th>ID</th>
-				<th>Init Date</th>
-				<th>Phase 1</th>
-				<th>Phase 2</th>
-				<th>Finished Date</th>
-				<th>Status</th>
-				<th>Comment</th>
-				<th>Action</th>
+				<th><?php echo get_text('ID'); ?></th>
+				<th><?php echo get_text('Init_date'); ?></th>
+				<th><?php echo get_text('Start_phase_1'); ?></th>
+				<th><?php echo get_text('Start_phase_2'); ?></th>
+				<th><?php echo get_text('Finished_date'); ?></th>
+				<th><?php echo get_text('Status'); ?></th>
+				<th><?php echo get_text('Comment'); ?></th>
+				<th><?php echo get_text('Action'); ?></th>
 			</tr>
 			<?php
 			foreach ($batches as $batch) {
@@ -63,14 +63,10 @@
 			<tr>
 				<td colspan="8">
 					<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-						<input type="submit" name="add_batch" onclick="add_new_batch();" value="Batch toevoegen" />
+						<input type="submit" name="add_batch" onclick="add_new_batch();" value="<?php echo get_text('Add_batch'); ?>" />
 					</form>
 				</td>
 			</tr>
-			<?php
-		}else{
-			?>
-			redirect
 			<?php
 		}
 	}

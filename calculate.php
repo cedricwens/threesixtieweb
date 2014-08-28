@@ -9,7 +9,7 @@
  * 		JA=	 [0;	-10]
  * 		NEE= [10; 	20]
  **/
-set_time_limit(10);
+set_time_limit(30);
 $selected_page = "Home";
 require('includes/header.php');
 $users = get_users_order_by_id();
@@ -33,8 +33,8 @@ if(isset($_GET['id'])){
 	<aside class="topSidebar">
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $_GET['id']; ?>" method="post">
 			<input type="hidden" name="batch_id" value="<?php echo $_GET['id']; ?>" />
-			<input type="submit" name="recalculate" value="Herberekenen" />
-			<input type="submit" name="accept" value="Aanvaarden" />
+			<input type="submit" name="recalculate" value="<?php echo get_text('Recalculate'); ?>" />
+			<input type="submit" name="accept" value="<?php echo get_text('Accept'); ?>" />
 		</form>
 	</aside>
 	<?php

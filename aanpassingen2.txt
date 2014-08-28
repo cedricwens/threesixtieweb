@@ -6,3 +6,4 @@ Wat is de vertaling van 'Batch'?
 Mogelijkheid om bij 'gebruiker toevoegen' ook een admin in te stellen
 
 Kleine lettertjes onderaan pdf aanpassen
+Bij forms controleren ofdat alle verplichte informatie wel wordt ingevuld.

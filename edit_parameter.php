@@ -7,9 +7,9 @@ if(isset($_GET['parameter']) && isset($_GET['value'])){
 	?>
 	<table>
 		<tr style="text-align:center;">
-			<th>Parameter</th>
-			<th>Waarde</th>
-			<th>Actie</th>
+			<th><?php echo get_text('Parameter'); ?></th>
+			<th><?php echo get_text('Value'); ?></th>
+			<th><?php echo get_text('Action'); ?></th>
 		</tr>
 	<?php
 	foreach ($parameters as $parameter) {

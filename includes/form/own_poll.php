@@ -3,7 +3,7 @@
 		<?php 
 		$user = get_user_by_id($_SESSION['user_id']);
 		?>
-		<h3>Vragenlijst over: <?php echo $user[0].' '.$user[1]; ?></h3>
+		<h3><?php echo get_text('Poll_about').': '.$user[0].' '.$user[1]; ?></h3>
 		<?php
 		$number = 1;
 		foreach ($categories as $category) {
@@ -72,9 +72,10 @@
 		<input type="submit" value="<?php echo get_text('Send'); ?>" name="answer_own_questions" />
 		<input type="submit" value="<?php echo get_text('Save'); ?>" name="save_own_questions" />
 		<br />
-		Versturen: Uw antwoorden worden definitief verzonden. U kan ze later niet meer wijzigen.<br />
-		Opslaan: U kan later uw antwoorden nog wijzigen.
 		<?php
+		echo get_text('Submit_explanation');
+		echo "<br />";
+		echo get_text('Save_explanation');
 	}
 	?>
 </form>

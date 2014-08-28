@@ -1,6 +1,6 @@
 		</div>
 		<footer class="mainFooter">
-			<p><a href="#">ThreeSixtyWeb</a> &copy; 2014</p>
+			<p><a href="#"><?php echo get_text('Title'); ?></a> &copy; 2014</p>
 		</footer>
 		<script>
 		$('.handle').on('click', function(){
