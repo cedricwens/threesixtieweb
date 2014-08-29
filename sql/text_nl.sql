@@ -200,7 +200,7 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Click_next_to_select_preferred_reviewees', 'Klik op volgende om gebruikers te selecteren over wie jij de vragenlijst wil invullen.'),
 	('Click_back_to_return_to_choices',			 'Klik op vorige om terug te gaan naar jouw keuzes.'),
 	('Click_here_to_log_out',	'Klik <a href="logout.php">hier</a> om u af te melden'),
-	('Click_here_to_log_in',	'Klik <a href="login.php">hier</a> om je aan te melden.')
+	('Click_here_to_log_in',	'Klik <a href="login.php">hier</a> om je aan te melden.'),
 	('Normal_user_login_required', 'U dient aan te melden als reguliere gebruiker om deze pagina te zien.'),
 	('Adress_street',		'Philipssite 5 bus 13'),
 	('Adress_city',			'3001 Leuven Belgie'),

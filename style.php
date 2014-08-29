@@ -174,7 +174,7 @@ a:hover, a:active{
 }
 .middleSidebar{
 	width: 21%;
-	float: left;
+	float: right;
 	background-color: #FFF;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -185,7 +185,7 @@ a:hover, a:active{
 }
 .bottomSidebar{
 	width: 21%;
-	float: left;
+	float: right;
 	background-color: #FFF;
 	border-radius: 5px;
 	-moz-border-radius: 5px;

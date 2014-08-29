@@ -121,7 +121,7 @@ $add_department_message = "";
 			</table>
 		</div>
 		<?php
-	}else{
+	}else if(!get_published_batch_id() && !get_stopped_batch_id() && !get_calculating_batch_id()){
 		?>
 		<div class="topContent">
 			<?php echo get_text('Admin_intro'); ?>

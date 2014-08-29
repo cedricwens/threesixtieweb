@@ -2,6 +2,9 @@
 	$selected_page = "Home";
 	require('includes/header.php');
 	protect_page();
+	if(get_published_batch_id()){
+		header('Location: user.php');
+	}
 ?>
 
 <?php 

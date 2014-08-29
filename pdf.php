@@ -136,17 +136,20 @@ if(isset($_GET['id']) && $_GET['id'] == $_SESSION['user_id'] || isset($_SESSION[
 		$pdf->SetFont('Arial','B',12);
 		$pdf->Cell(175,10,get_text('Extra').' '.get_text('Comment'),0,'C');
 		$pdf->Ln(10);
+		$pdf->Line(10,$pdf->GetY(),200,$pdf->GetY());
+		$pdf->Ln(5);
 		foreach ($comments as $comment) {
 			$pdf->SetFont('Arial','',12);
 			$pdf->SetMargins(10,10,10,10);
-			$pdf->MultiCell(175,5,$comment['Comment'],1,'L');
-			$pdf->Ln(10);
+			$pdf->MultiCell(175,5,$comment['Comment'],0,'L');
 			if($pdf->GetY()>250){
 				$pdf->AddPage();
-			}	
+			}
+
 		}
 	}
-	$pdf->Ln(5);
+	$pdf->Ln(10);
+	$pdf->Line(10,$pdf->GetY(),200,$pdf->GetY());
 	$pdf->SetFont('Arial','',8);
 	$pdf->MultiCell(173,10, get_text('Want_extra_info'), 0, 'L');
 	$pdf->Ln(5);
