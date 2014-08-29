@@ -198,9 +198,29 @@ function get_batch($status){
 		return mysql_result($query,0);
 	}
 }
+function get_batch_status($id){
+	$id = (int) $id;
+	$query = mysql_query("SELECT Status FROM batch WHERE ID = $id");
+	if(!$query || mysql_num_rows($query) <=0){
+		echo mysql_error();
+		return false;
+	}else{
+		return mysql_result($query,0);
+	}
+}
+function get_batch_status_id($status){
+	$status = (int) $status;
+	$query = mysql_query("SELECT ID FROM batch_status WHERE Name = '$status'");
+	if(!$query || mysql_num_rows($query) <=0){
+		echo mysql_error();
+		return false;
+	}else{
+		return mysql_result($query,0);
+	}
+}
 function get_batch_status_name($status_id){
 	$status_id = (int) $status_id;
-	$query = mysql_query("SELECT Name FROM batch_status WHERE Id = $status_id");
+	$query = mysql_query("SELECT Name FROM batch_status WHERE ID = $status_id");
 	if(!$query || mysql_num_rows($query) <=0){
 		echo mysql_error();
 		return false;

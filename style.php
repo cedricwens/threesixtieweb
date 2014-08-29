@@ -257,10 +257,7 @@ textarea.comment{
 	border-collapse: collapse;
 	width: 100%;
 }
-td#batches, th#batches{
-	border: 1px solid #bbbbbb;
-	padding: 5px;
-}
+
 .users{
 	width: 100%;
 	text-align: center;
@@ -275,6 +272,7 @@ td#batches, th#batches{
 	width: 100%;
 	border-collapse: collapse;
 } 
+
 table tr:nth-child(even){
 	background-color: #e8f2f7;
 }
@@ -283,6 +281,9 @@ table tr:nth-child(even){
 }
 .users td{
 	text-align: center;
+}
+.users td, .users th{
+	padding: 5px;
 }
 .handle{
 	width: 100%;
@@ -308,7 +309,7 @@ table tr:nth-child(even){
 		position: fixed;
 		top:0;
 		display: block;
-		width: 70%;
+		width: 90%;
 		opacity: 0.93;
 		z-index: 9999999;
 	}
@@ -414,6 +415,19 @@ table tr:nth-child(even){
 		top: 175px;
 	}
 }
+@media screen and (min-width: 676px){
+	#batches td, #batches th{
+		padding: 5px;
+	}
+	#parameters td, #parameters th{
+		padding: 5px;
+	}
+}
+@media screen and (min-width: 1351px){
+	.menu_fixed{
+		width: 70%;
+	}
+}
 /* 
 Max width before this PARTICULAR table gets nasty
 This query will take effect for any screen smaller than 760px
@@ -485,8 +499,8 @@ and also iPads specifically.
 	#batches td:nth-of-type(4):before { content: "<?php echo get_text('Start_phase_2'); ?>"; }
 	#batches td:nth-of-type(5):before { content: "<?php echo get_text('Finished_date'); ?>"; }
 	#batches td:nth-of-type(6):before { content: "<?php echo get_text('Status'); ?>"; }
-	#batches td:nth-of-type(7):before { content: "<?php echo get_text('Comment'); ?>"; }
-	#batches td:nth-of-type(8):before { content: "<?php echo get_text('Action'); ?>"; }
+	/*#batches td:nth-of-type(7):before { content: "<?php echo get_text('Comment'); ?>"; }*/
+	#batches td:nth-of-type(7):before { content: "<?php echo get_text('Action'); ?>"; }
 
 	.departments table tr th, .users tr td, .questions_list table tr td{
 		width: 50%;

@@ -138,7 +138,7 @@ $add_department_message = "";
 		
 		if($batches){
 			?>
-			<table class="users">
+			<table class="" id="batches">
 				<thead>
 					<tr>
 						<th><?php echo get_text('ID'); ?></th>
@@ -147,59 +147,65 @@ $add_department_message = "";
 						<th><?php echo get_text('Start_phase_2'); ?></th>
 						<th><?php echo get_text('Finished_date'); ?></th>
 						<th><?php echo get_text('Status'); ?></th>
-						<th><?php echo get_text('Comment'); ?></th>
+						<!--<th><?php echo get_text('Comment'); ?></th>-->
 						<th><?php echo get_text('Action'); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php
 					foreach ($batches as $batch) {
-							?>
-							<tr>
-								<td><?php echo $batch['ID']; ?></td>
-								<td><?php echo $batch['Init_date']; ?></td>
-								<td>
-									<?php
-									if($batch['Running1_date']){
-										echo $batch['Running1_date'];
-									}else{
-										echo "\\";
-									}
-									?>
-								</td>
-								<td>
-									<?php
-									if($batch['Running2_date']){
-										echo $batch['Running2_date'];
-									}else{
-										echo "\\";
-									}
-									?>
-								</td>
-								<td>
-									<?php
-									if($batch['Finished_date']){
-										echo $batch['Finished_date'];
-									}else{
-										echo "\\";
-									}
-									?>
-								</td>
-								<td><?php echo get_batch_status_name($batch['Status']); ?></td>
-								<td>
-									<?php
-									if($batch['Comment']){
-										echo $batch['Comment'];
-									}else{
-										echo "\\";
-									}
-									?>
-								</td>
+						?>
+						<tr>
+							<td><?php echo $batch['ID']; ?></td>
+							<td><?php echo $batch['Init_date']; ?></td>
+							<td>
+								<?php
+								if($batch['Running1_date']){
+									echo $batch['Running1_date'];
+								}else{
+									echo "\\";
+								}
+								?>
+							</td>
+							<td>
+								<?php
+								if($batch['Running2_date']){
+									echo $batch['Running2_date'];
+								}else{
+									echo "\\";
+								}
+								?>
+							</td>
+							<td>
+								<?php
+								if($batch['Finished_date']){
+									echo $batch['Finished_date'];
+								}else{
+									echo "\\";
+								}
+								?>
+							</td>
+							<td><?php echo get_batch_status_name($batch['Status']); ?></td>
+							<!--<td>
+								<?php
+								if($batch['Comment']){
+									echo $batch['Comment'];
+								}else{
+									echo "\\";
+								}
+								?>
+							</td>-->
+							<?php 
+							if((get_batch_status($batch['ID']) != get_batch_status_id('Finished')) && (get_batch_status($batch['ID']) != get_batch_status_id('Published'))){
+								?>
 								<td>
 									<?php include('includes/form/change_batch_status.php'); ?>
 								</td>
-							</tr>
-							<?php
+								<?php
+							}
+							?>
+						</tr>
+						<?php
 					}
 					?>
 				</tbody>

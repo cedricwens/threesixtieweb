@@ -7,7 +7,6 @@ if(isset($_SESSION['user_id'])){
 }
 $error = "";
 ?>
-
 <?php
 	if(isset($_POST['reset_password'])){
 
