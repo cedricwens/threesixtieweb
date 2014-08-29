@@ -10,8 +10,7 @@ CREATE OR REPLACE VIEW reviews_given_view AS
 SELECT *
 FROM poll p
 WHERE
-        p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd')
-GROUP BY p.Reviewer;
+        p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd');
 
 CREATE OR REPLACE VIEW reviews_received_view AS
 SELECT *

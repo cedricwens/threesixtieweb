@@ -12,7 +12,7 @@ if(get_batch_status_name($batch['Status']) == 'Calculate'){
 		<?php
 		if(get_batch_status_name($batch['Status']) == 'Init'){
 			?>
-			<input type="submit" name="change_batch_status" onclick="change_batchstatus(<?php echo $batch['ID']; ?>, 'Start')" value="<?php echo get_text('Start_phase_1'); ?>" <?php if(get_running1_batch_id() || get_running2_batch_id()){echo 'disabled="disabled"';}?>/>
+			<input type="submit" name="change_batch_status" onclick="change_batchstatus(<?php echo $batch['ID']; ?>, 'Start')" value="<?php echo get_text('Start_phase_1'); ?>" <?php if(get_running1_batch_id() || get_running2_batch_id() || get_calculating_batch_id() || get_accepted_batch_id()){echo 'disabled="disabled"';}?>/>
 			<?php
 		}else if(get_batch_status_name($batch['Status']) == 'Running1'){
 			?>

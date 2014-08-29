@@ -154,12 +154,22 @@ if(isset($_GET['Start'])){
 					if(isset($_POST['answer_questions'])){
 						change_poll_status($poll, 'Ingestuurd');
 						$result = "<p>".get_text('Poll_send_successfully')."</p>";
+						if(isset($_POST['comment'])){
+							$comment = $_POST['comment'];
+							add_poll_comment($poll,$comment);
+							$result = "<p>".get_text('Comment_added_successfully')."</p>";
+						}
 					}else if(isset($_POST['save_questions'])){
 						change_poll_status($poll, 'Opgeslagen');
+						if(isset($_POST['comment'])){
+							$comment = $_POST['comment'];
+							add_poll_comment($poll,$comment);
+							$result = "<p>".get_text('Comment_added_successfully')."</p>";
+						}
 						$result = "<p>".get_text('Poll_send_successfully')."</p>";
 					}
 				}else{
-					add_comment($reviewee_id, get_running2_batch_id());
+					add_comment($reviewee_id, $_POST['add_comment']);
 				}
 				if(isset($_POST['comment'])){
 					$comment = $_POST['comment'];
@@ -243,7 +253,7 @@ if(isset($_GET['Start'])){
 					}
 					?>
 					<p><b><?php echo get_text('Add_extra_comment_here'); ?>:</b></p>
-					<textarea class="comment" <?php if($poll_status == get_poll_status_id('Ingestuurd')){echo "disabled";} ?> name="comment"></textarea>
+					<textarea class="comment" <?php if($poll_status == get_poll_status_id('Ingestuurd')){echo "disabled";} ?> id="comment" name="comment"></textarea>
 					<br />
 					<?php
 					if($poll_status == get_poll_status_id('Ingestuurd')){

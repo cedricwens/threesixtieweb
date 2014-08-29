@@ -117,6 +117,15 @@ function get_all_poll_statuses(){
 		return $statuses;
 	}
 }
+function get_accepted_batch_id(){
+	$query = mysql_query("SELECT ID FROM batch WHERE Status = (SELECT ID FROM batch_status WHERE Name = 'Accepted')");
+	if(!$query || mysql_num_rows($query) <=0){
+		echo mysql_error();
+		return false;
+	}else{
+		return mysql_result($query,0);
+	}
+}
 function get_answer($poll, $question){
 	$poll = (int) $poll;
 	$question = (int) $question;
