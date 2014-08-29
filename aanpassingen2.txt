@@ -3,6 +3,7 @@ TODO:
 Privileges instelling in connect.php
 Mail functionaliteit testen
 Wat is de vertaling van 'Batch'?
+Info bij opslaan en verstuur knop
 
 Kleine lettertjes onderaan pdf aanpassen
 Bij forms controleren ofdat alle verplichte informatie wel wordt ingevuld.

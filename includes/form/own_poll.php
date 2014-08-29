@@ -73,9 +73,9 @@
 		<input type="submit" value="<?php echo get_text('Save'); ?>" name="save_own_questions" />
 		<br />
 		<?php
-		echo get_text('Submit_explanation');
-		echo "<br />";
 		echo get_text('Save_explanation');
+		echo "<br />";
+		echo get_text('Submit_explanation');
 	}
 	?>
 </form>

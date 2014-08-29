@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 ob_start();
 function add_batch(){
 	$date = create_date();
@@ -1278,8 +1278,9 @@ function get_user_info($id,$batch){
 	}
 }
 function get_number_of_reviews_given($id){
+	$batch = get_published_batch_id();
 	$id = (int) $id;
- 	$query = mysql_query("SELECT count(*) FROM reviews_given_view WHERE Reviewer = $id");
+ 	$query = mysql_query("SELECT count(*) FROM reviews_given_view WHERE Reviewer = $id AND Batch = $batch");
 	if(!$query || mysql_num_rows($query) <0) {
 		echo mysql_error();
 		return false;
@@ -1291,8 +1292,9 @@ function get_number_of_reviews_given($id){
 	}
 }
 function get_number_of_reviews_received($id){
+	$batch = get_published_batch_id();
 	$id = (int) $id;
-	$query = mysql_query("SELECT count(*) AS Aantal_Reviews FROM reviews_received_view WHERE Reviewee = $id");
+	$query = mysql_query("SELECT count(*) AS Aantal_Reviews FROM reviews_received_view WHERE Reviewee = $id AND Batch = $batch");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
 		return false;
@@ -1304,8 +1306,9 @@ function get_number_of_reviews_received($id){
 	}
 }
 function get_number_of_poll_team_members($id){
+	$batch = get_published_batch_id();
 	$id = (int) $id;
-	$query = mysql_query("SELECT count(*) AS Aantal_TeamLeden FROM teammember_view WHERE Reviewee = $id");
+	$query = mysql_query("SELECT count(*) AS Aantal_TeamLeden FROM teammember_view WHERE Reviewee = $id AND Batch = $batch");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
 		return false;
@@ -1317,8 +1320,9 @@ function get_number_of_poll_team_members($id){
 	}
 }
 function get_number_of_poll_not_team_members($id){
+	$batch = get_published_batch_id();
 	$id = (int) $id;
-	$query = mysql_query("SELECT count(*) AS Aantal_NietTeamLeden FROM notteammember_view WHERE Reviewee = $id");
+	$query = mysql_query("SELECT count(*) AS Aantal_NietTeamLeden FROM notteammember_view WHERE Reviewee = $id AND Batch = $batch");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
 		return false;
@@ -1330,8 +1334,9 @@ function get_number_of_poll_not_team_members($id){
 	}
 }
 function get_number_of_poll_team_manager($id){
+	$batch = get_published_batch_id();
 	$id = (int) $id;
-	$query = mysql_query("SELECT count(*) AS Aantal_TeamManagers FROM teammanager_view WHERE Reviewee = $id");
+	$query = mysql_query("SELECT count(*) AS Aantal_TeamManagers FROM teammanager_view WHERE Reviewee = $id AND Batch = $batch");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
 		return false;
@@ -1343,8 +1348,9 @@ function get_number_of_poll_team_manager($id){
 	}
 }
 function get_number_of_poll_not_team_manager($id){
+	$batch = get_published_batch_id();
 	$id = (int) $id;
-	$query = mysql_query("SELECT count(*) AS Aantal_NietTeamManagers FROM notteammanager_view WHERE Reviewee = $id");
+	$query = mysql_query("SELECT count(*) AS Aantal_NietTeamManagers FROM notteammanager_view WHERE Reviewee = $id AND Batch = $batch");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
 		return false;
@@ -1356,8 +1362,9 @@ function get_number_of_poll_not_team_manager($id){
 	}
 }
 function get_number_of_preferred_reviewers($id){
+	$batch = get_published_batch_id();
 	$id = (int) $id;
-	$query = mysql_query("SELECT count(*) AS Aantal_Preferred_Reviewers FROM preferred_reviewers_view WHERE Reviewee = $id");
+	$query = mysql_query("SELECT count(*) AS Aantal_Preferred_Reviewers FROM preferred_reviewers_view WHERE Reviewee = $id AND Batch = $batch");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
 		return false;
@@ -1369,8 +1376,9 @@ function get_number_of_preferred_reviewers($id){
 	}
 }
 function get_number_of_preferred_reviewees($id){
+	$batch = get_published_batch_id();
 	$id = (int) $id;
-	$query = mysql_query("SELECT count(*) AS Aantal_Preferred_Reviewees FROM preferred_reviewees_view WHERE Reviewer = $id");
+	$query = mysql_query("SELECT count(*) AS Aantal_Preferred_Reviewees FROM preferred_reviewees_view WHERE Reviewer = $id AND Batch = $batch");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
 		return false;
@@ -1382,8 +1390,9 @@ function get_number_of_preferred_reviewees($id){
 	}
 }
 function get_comments($id){
+	$batch = get_published_batch_id();
 	$id = (int) $id;
-	$query = mysql_query("SELECT Comment FROM poll WHERE Reviewee = $id AND Comment != 'NULL'");
+	$query = mysql_query("SELECT Comment FROM poll WHERE Reviewee = $id AND Comment != 'NULL' AND Batch = $batch");
 	if(!$query || mysql_num_rows($query) <=0) {
 		echo mysql_error();
 		return false;
@@ -1397,9 +1406,10 @@ function get_comments($id){
 	}
 }
 function get_average_score($user, $question){
+	$batch = get_published_batch_id();
 	$user = (int) $user;
 	$question = (int) $question;
-	$query = mysql_query("SELECT Average_Score FROM average_score_view WHERE Reviewee = $user AND Question = $question");
+	$query = mysql_query("SELECT Average_Score FROM average_score_view WHERE Reviewee = $user AND Question = $question AND Batch = $batch");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
 		return false;
@@ -1409,9 +1419,6 @@ function get_average_score($user, $question){
 		}
 		return mysql_result($query, 0);
 	}
-}
-function get_total_reviews_to_give($id){
-	return (get_number_of_poll_team_members($id)+get_number_of_poll_not_team_members($id)+get_number_of_poll_team_manager($id)+get_number_of_poll_not_team_manager($id));
 }
 function get_team_manager($user){
 	$user = (int) $user;
