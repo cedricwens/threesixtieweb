@@ -1,4 +1,5 @@
 <?php
+require_once 'libs/PHPMailer/PHPMailerAutoload.php';
 //error_reporting(0);
 ob_start();
 function add_batch(){
@@ -46,9 +47,9 @@ function add_user($firstname, $lastname, $department, $email, $job_title){
 	$email = sanitize($email);
 	$job_title = sanitize($job_title);
 	mysql_query("INSERT INTO user (Firstname, Lastname, Username, Password, Email, Job_Title) VALUES ('$firstname', '$lastname', '$username', '$password', '$email', '$job_title') ON DUPLICATE KEY UPDATE Firstname = '$firstname', Lastname = '$lastname', Username = '$username', Password = '$password', Email = '$email', Job_Title = '$job_title'");
-	$id = mysql_insert_id();
-	mysql_query("INSERT INTO user_department (User, Department) VALUES ((SELECT ID FROM user WHERE Username = '$username'), (SELECT ID FROM Department WHERE Name = '$department')) ON DUPLICATE KEY UPDATE User = (SELECT ID FROM user WHERE Username = '$username'), Department = (SELECT ID FROM Department WHERE Name = '$department')");
-	mysql_error();
+	echo mysql_error();
+	mysql_query("INSERT INTO user_department (User, Department) VALUES ((SELECT ID FROM user WHERE Username = '$username'), (SELECT ID FROM department WHERE Name = '$department')) ON DUPLICATE KEY UPDATE User = (SELECT ID FROM user WHERE Username = '$username'), Department = (SELECT ID FROM department WHERE Name = '$department')");
+	echo mysql_error();
 	header('Location: '.$_SERVER['PHP_SELF'].'?AddUser');
 	exit();
 }
@@ -92,10 +93,15 @@ function delete_question($id){
 }
 function delete_user($id){
 	$id = (int) $id;
-	mysql_query("DELETE FROM user_department WHERE User = $id");
-	mysql_query("DELETE FROM user WHERE ID = $id");
-	header('Location: '.$_SERVER['PHP_SELF']);
-	exit();
+	$query = mysql_query("SELECT ID FROM department WHERE Manager = $id");
+	if($query && mysql_num_rows($query) > 0){
+		echo '<span style="color:red;">'. get_text('Cant_delete_manager') .'</span>';
+	}else{
+		mysql_query("DELETE FROM user_department WHERE User = $id");
+		mysql_query("DELETE FROM user WHERE ID = $id");
+		header('Location: '.$_SERVER['PHP_SELF']);
+		exit();
+	}
 }
 function edit_parameter($parameter, $value){
 	$parameter = (int) $parameter;
@@ -1165,7 +1171,30 @@ function send_reminder_phase1($user, $email){
 	$subject = get_text('Reminder');
 	$message = get_text('Dear').' '.$user.","
 	.get_text('Reminder_own_poll').get_text('Mail_footer');
-	mail($to, $subject, $message);
+	//mail($to, $subject, $message);*/
+	$m = new PHPMailer;
+	
+	$m->isSMTP();
+	$m->SMTPAuth = true;
+
+	$m->Host = 'smtp.gmail.com';
+	$m->Username = 'threesixtyweb.stage@gmail.com';
+	$m->Password = 'Stage@DNS.be';
+	$m->SMTPSecure = 'ssl';
+	$m->Port = 465;
+
+	$m->From = 'threesixtyweb.stage@gmail.com';
+	$m->FromName = 'Threesixtyweb';
+	$m->addAddress($to, $user);
+
+	$m->isHTML(true);
+
+	$m->Subject = $subject;
+	$m->Body = $message;
+
+	$m->send();
+
+
 }
 function send_reminder_phase2($user, $email){
 	$user = sanitize($user);

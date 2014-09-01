@@ -207,4 +207,5 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Tel',					'Tel.: +32 16 28 49 70'),
 	('Webiste',				'Website : www.dns.be'),
 	('Recalculate',			'Herberekenen'),
-	('Accept',				'Aanvaarden');
+	('Accept',				'Aanvaarden'),
+	('Cant_delete_manager',	'Deze gebruiker is een manager. U dient het departement te verwijderen of een andere manager toe te wijzen');

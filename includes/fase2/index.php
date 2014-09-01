@@ -1,5 +1,6 @@
 <?php
 if(isset($_GET['Start'])){
+	$result = "";
 	?>
 	<div class="content">
 		<?php
@@ -174,7 +175,7 @@ if(isset($_GET['Start'])){
 		
 				?>
 				<div class="topContent">
-					<?php echo $result; ?>
+					<?php if($result){echo $result;} ?>
 					<p><?php echo get_text('Click_next_to_select_new_poll'); ?></p>
 					<p><?php echo get_text('Click_back_to_return_to_poll'); ?></p>
 					<h3 class="back"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?Start=start&amp;Poll=<?php echo $poll; ?>"><?php echo get_text('Back'); ?></a></h3>

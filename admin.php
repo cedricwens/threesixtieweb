@@ -11,44 +11,31 @@ $add_department_message = "";
 	<?php
 	if(get_running1_batch_id() || get_running2_batch_id()){
 		?>
-		<div class="topContent questions_list" id="parameters">
-			<table>
+		<div class="topContent">
 			<?php
-				if(get_running1_batch_id()){
-					$users = get_users_not_answered_own_questions();
-					if($users){
-						$number = 0;
-						foreach ($users as $user) {
-							$number++;
-						}
-						?>
-						<tbody>
-							<tr>
-								<td style="width: 100%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_own_poll'); ?>.</td>
-								<td>
-									<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-										<input type="submit" name="reminder_1" value="<?php echo get_text('Send_reminder'); ?>">
-									</form>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<?php
-									if(isset($_POST['reminder_1'])){
-										foreach ($users as $user) {
-											send_reminder_phase1($user['Firstname'], $user['Email']);
-										}
-										echo get_text('Reminder_send').'.';
-									}
-									?>
-								</td>
-							</tr>
-						</tbody>
-						<?php
-					}else{
-						echo get_text('Every_user_has_answered_own_poll_can_start_phase_2');
+			if(get_running1_batch_id()){
+				$users = get_users_not_answered_own_questions();
+				if($users){
+					$number = 0;
+					foreach ($users as $user) {
+						$number++;
 					}
-				}else if(get_running2_batch_id()){
+					?>
+					<p style="width: 100%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_own_poll'); ?>.</p>
+					<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+						<input type="submit" name="reminder_1" value="<?php echo get_text('Send_reminder'); ?>">
+					</form>
+					<?php
+					if(isset($_POST['reminder_1'])){
+						foreach ($users as $user) {
+							send_reminder_phase1($user['Firstname'], $user['Email']);
+						}
+						echo '<p>'.get_text('Reminder_send').'.</p>';
+					}
+				}else{
+					echo get_text('Every_user_has_answered_own_poll_can_start_phase_2');
+				}
+			}else if(get_running2_batch_id()){
 					$users = get_users_not_answered_other_questions();
 					if($users){
 						$number = 0;
@@ -56,39 +43,37 @@ $add_department_message = "";
 							$number++;
 						}
 						?>
-						<tr>
-							<td style="width: 100%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_other_poll'); ?>.</td>
-							<td>
+						
+							<p style="width: 100%;"><b><?php echo $number; ?></b> <?php echo get_text('Users_have_not_filled_in_other_poll'); ?>.</p>
+							
 								<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 									<input type="submit" name="reminder_2" value="<?php echo get_text('Send_reminder'); ?>">
 								</form>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="2">
-								<?php
-								if(isset($_POST['reminder_2'])){
+							
+						<?php 
+						if(isset($_POST['reminder_2'])){
+							?>
+							
+									<?php
 									foreach ($users as $user) {
 										send_reminder_phase2($user['Firstname'], $user['Email']);
 									}
 									echo get_text('Reminder_send').'.';
-								}
-								?>
-							</td>
-						</tr>
-						<?php
+									?>
+								
+							<?php
+						}
 					}else{
 						echo get_text('Every_user_has_answered_other_poll_can_start_publish_results');
 					}
-				}
-
+			}
 			?>
-			</table>
+			
 		</div>
 		<?php
-	}else if(get_init_batch_id()){
+	}else if(get_init_batch_id() && !get_calculating_batch_id() && !get_accepted_batch_id()){
 		?>
-		<div class="topContent" id="parameters">
+		<div class="topContent questions_list" id="parameters">
 			<?php
 			$parameters = get_parameters();
 			?>
@@ -121,7 +106,7 @@ $add_department_message = "";
 			</table>
 		</div>
 		<?php
-	}else if(!get_published_batch_id() && !get_stopped_batch_id() && !get_calculating_batch_id()){
+	}else if(!get_published_batch_id() && !get_stopped_batch_id() && !get_calculating_batch_id() && !get_accepted_batch_id()){
 		?>
 		<div class="topContent">
 			<?php echo get_text('Admin_intro'); ?>
@@ -212,7 +197,7 @@ $add_department_message = "";
 			</table>
 			<?php
 		}else{
-			echo '<br />'.get_text('No_batches_found');
+			echo '<p>'.get_text('No_batches_found').'</p>';
 		}
 		if(isset($_POST['add_batch'])){
 			add_batch();
@@ -442,7 +427,7 @@ $add_department_message = "";
 			</select><br />
 			<input type="submit" value="<?php echo get_text('Add_department'); ?>" name="add_department" />
 		</form>
-		<?php echo $add_department_message; ?>
+		<?php echo '<br />'.$add_department_message; ?>
 	</aside>
 	<!--<aside class="topSidebar">
 		<h2><?php echo get_text('Add_poll'); ?></h2>

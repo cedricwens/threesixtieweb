@@ -4,6 +4,17 @@ require('includes/header.php');
 if(!isset($_SESSION['user_id']) && !isset($_SESSION['admin_id'])){
 	header('Location: login.php');
 }
+if(!get_running1_batch_id() && !get_running2_batch_id() && !get_published_batch_id() && isset($_SESSION['user_id'])){
+	// destroy session
+	session_destroy();
+
+	//unset cookies
+	setcookie("username", "", time()-7200);
+	header('Location: login.php');
+}
+if(isset($_SESSION['admin_id']) && !get_published_batch_id()){
+	header('Location: admin.php');
+}
 ?>
 <div class="content">
 	<?php if(isset($_SESSION['admin_id'])){ ?>

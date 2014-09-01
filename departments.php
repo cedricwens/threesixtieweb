@@ -1,15 +1,15 @@
 <?php 
-	$selected_page = 'Departments';
-	require_once('includes/header.php');
-	if(!isset($_SESSION['admin_id'])){
-		header('Location:admin_login.php');
-	}
+$selected_page = 'Departments';
+require_once('includes/header.php');
+if(!isset($_SESSION['admin_id'])){
+	header('Location:admin_login.php');
+}
 ?>
 
 <div class="topContent">
 	<h2><?php echo get_text('Edit_or_delete_departments'); ?></h2>
-	<div class="users" id="departments">
-		<table>
+	<div id="departments" class="user_list">
+		<table class="users">
 			<thead>
 				<tr>
 					<th><?php echo get_text('ID'); ?></th>
@@ -28,7 +28,7 @@
 			$department = get_department_by_id($id);
 			$managers = get_managers_info();
 			?>
-			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="users">
 				<table>
 					<tbody>
 						<tr>
@@ -70,7 +70,7 @@
 		foreach ($departments as $department) {
 			$manager = get_user_by_id($department['Manager']);
 			?>
-			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="users">
 				<table>
 					<tbody>
 						<tr>

@@ -8,8 +8,8 @@ if(!isset($_SESSION['admin_id'])){
 
 <div class="topContent">
 	<h2><?php echo get_text('Edit_or_delete_users'); ?></h2>
-	<div class="users" id="users">
-		<table>
+	<div id="users" class="user_list">
+		<table class="users">
 			<thead>
 				<tr>
 					<th><?php echo get_text('ID'); ?></th>
@@ -31,7 +31,7 @@ if(!isset($_SESSION['admin_id'])){
 			$email = get_user_email_by_id($id);
 			$department = get_department_name(get_user_department($id));
 			?>
-			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="users">
 				<table>
 					<tbody>
 						<tr>
@@ -79,7 +79,7 @@ if(!isset($_SESSION['admin_id'])){
 			$email = get_user_email_by_id($user['ID']);
 			$department = get_department_name(get_user_department($user['ID']));
 			?>
-			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="users">
 				<table>
 					<tbdoy>
 						<tr>

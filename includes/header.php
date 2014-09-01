@@ -80,8 +80,12 @@ require('core/init.php');
 						<li <?php if($selected_page == 'Admin'){ echo 'class="active"';} ?>><a href="admin.php"><?php echo get_text('Admin'); ?></a></li>
 						<li <?php if($selected_page == 'Users'){ echo 'class="active"';} ?>><a href="users.php"><?php echo get_text('Users'); ?></a></li>
 						<li <?php if($selected_page == 'Departments'){ echo 'class="active"';} ?>><a href="departments.php"><?php echo get_text('Departments'); ?></a></li>
-						<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php"><?php echo get_text('Results'); ?></a></li>
 						<?php
+						if(get_published_batch_id()){?>
+							<li <?php if($selected_page == 'User'){ echo 'class="active"';} ?>><a href="user.php"><?php echo get_text('Results'); ?></a></li>
+						<?php
+						}
+
 					}
 					if(logged_in() || isset($_SESSION['admin_id'])){
 						?>
@@ -92,5 +96,4 @@ require('core/init.php');
 			</ul>
 			<div class="handle"><?php echo get_text('Menu'); ?><span class="icon"></span></div>
 		</nav>
-	</header>
 	<div id="mainContent">

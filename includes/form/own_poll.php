@@ -69,8 +69,8 @@
 		<?php
 	}else{
 		?>
-		<input type="submit" value="<?php echo get_text('Send'); ?>" name="answer_own_questions" />
 		<input type="submit" value="<?php echo get_text('Save'); ?>" name="save_own_questions" />
+		<input type="submit" value="<?php echo get_text('Send'); ?>" name="answer_own_questions" />
 		<br />
 		<?php
 		echo get_text('Save_explanation');

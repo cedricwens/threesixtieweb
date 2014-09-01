@@ -48,7 +48,9 @@ a:hover, a:active{
   	-moz-transition: background-color .25s ease-in-out;
    	-webkit-transition: background-color .25s ease-in-out;
 }
-#menu ul li:hover{
+#menu ul li:hover,
+.active a:link,
+.active a:visited{
 	background-color: #009EE3;
 }
 
@@ -245,6 +247,9 @@ a:hover, a:active{
 .questions tr td:first-child{
 	width: 45%;
 }
+.questions tr th{
+	text-align: center;
+}
 .spacer{
 	height:  50px;
 }
@@ -257,34 +262,10 @@ textarea.comment{
 	border-collapse: collapse;
 	width: 100%;
 }
-
-.users{
-	width: 100%;
-	text-align: center;
-}
-.users input[type="text"]{
-	text-align: center;
-}
-/*form:nth-child(odd){
-	background-color: #e8f2f7;
-}*/
-.users table{
-	width: 100%;
-	border-collapse: collapse;
-} 
-
 table tr:nth-child(even){
 	background-color: #e8f2f7;
 }
-.users form:nth-child(even){
-	background-color: #e8f2f7;
-}
-.users td{
-	text-align: center;
-}
-.users td, .users th{
-	padding: 5px;
-}
+
 .handle{
 	width: 100%;
 	background: #009EE3;
@@ -313,15 +294,42 @@ table tr:nth-child(even){
 		opacity: 0.93;
 		z-index: 9999999;
 	}
-	.users table tr th:not(:first-child), .users tr td:not(:first-child){
+	.users{
+		width: 100%;
+		text-align: center;
+	}
+	.users input[type="text"]{
+		text-align: center;
+	}
+	/*form:nth-child(odd){
+		background-color: #e8f2f7;
+	}*/
+	.users table{
+		width: 100%;
+		border-collapse: collapse;
+	} 
+	.users form{
+		text-align: center;
+	}
+	.user_list form:nth-child(even){
+		background-color: #e8f2f7;
+	}
+	.users td{
+		text-align: center;
+	}
+	.users td, .users th{
+		padding: 5px;
+	}
+	.users tr th:not(:first-child), .users tr td:not(:first-child){
 		width: 19%;
 	}
-	.users table tr th:first-child, .users tr td:first-child{
+	.users tr th:first-child, .users tr td:first-child{
 		width: 5%;
 	}
 	.questions_list table tr td:not(:first-child){
 		width: 100%;
 	}
+
 }
 @media only screen and (min-width: 150px) and (max-width: 1350px){
 	.body{
@@ -330,25 +338,6 @@ table tr:nth-child(even){
 	}
 	.mainHeader img{
 		width: 100%;
-	}
-	.mainHeader nav{
-		height: 150px;
-	}
-	.mainHeader nav ul{
-		padding-left: 0;
-	}
-	.mainHeader nav ul li{
-		width: 100%;
-		text-align: center;
-	}
-	.mainHeader nav a:link,
-	.mainHeader nav a:visited{
-		padding: 10px 25px;
-		height: 20px;
-		display: block;
-	}
-	#mainHeader nav{
-		height: 160px;
 	}
 	.content{
 		width: 100%;
