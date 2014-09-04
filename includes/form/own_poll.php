@@ -1,28 +1,31 @@
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>?Start&amp;Step=1">
+	<?php 
+	$user = get_user_by_id($_SESSION['user_id']);
+	?>
+	<h3><?php echo get_text('Poll_about').': '.$user[0].' '.$user[1]; ?></h3>
 	<table class="questions">
-		<?php 
-		$user = get_user_by_id($_SESSION['user_id']);
-		?>
-		<h3><?php echo get_text('Poll_about').': '.$user[0].' '.$user[1]; ?></h3>
 		<?php
 		$number = 1;
 		foreach ($categories as $category) {
 			?>
-			<tr style="margin-top: 25px;">
-				<th><?php echo $category['Name']; ?></th>
-				<?php
-				for ($value=1; $value < 7; $value++) { 
-					?>
-					<th style="font-size: 12px;"><?php echo get_answer_name($value); ?></th>
+			<thead>
+				<tr style="margin-top: 25px;">
+					<th><?php echo $category['Name']; ?></th>
 					<?php
-				}
-				?>
-			</tr>
+					for ($value=1; $value < 7; $value++) { 
+						?>
+						<th style="font-size: 12px;"><?php echo get_answer_name($value); ?></th>
+						<?php
+					}
+					?>
+				</tr>
+			</thead>
+			<tbody>
 			<?php
 			foreach ($questions as $question) {
 				if($category['ID'] == $question['Category']){
 					?>
-					<tr>
+					<tr id="poll">
 						<td><?php echo $number.'. '.$question['Question']; ?></td>
 						<?php
 						if($poll_status == get_poll_status_id('Niet ingevuld')){
@@ -61,6 +64,7 @@
 			<?php
 		}
 		?>
+		</tbody>
 	</table>
 	<?php
 	if($poll_status == get_poll_status_id('Ingestuurd')){

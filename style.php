@@ -481,7 +481,7 @@ and also iPads specifically.
 	#poll td:nth-of-type(1):before { content: "<?php echo get_text('Question'); ?>"; }
 	<?php
 	for ($value=1; $value < 7; $value++) { 
-		echo '#poll td:nth-of-type('.($value+1).'):before { content: "'.get_answer_name($value).'"; text-align: left;}';
+		echo '#poll td:nth-of-type('.($value+1).'):before { content: "'.get_answer_name($value).'"; text-align: left;:}';
 	}
 	?>
 	#parameters td:nth-of-type(1):before { content: "<?php echo get_text('ID'); ?>"; }
@@ -496,6 +496,10 @@ and also iPads specifically.
 	#batches td:nth-of-type(6):before { content: "<?php echo get_text('Status'); ?>"; }
 	/*#batches td:nth-of-type(7):before { content: "<?php echo get_text('Comment'); ?>"; }*/
 	#batches td:nth-of-type(7):before { content: "<?php echo get_text('Action'); ?>"; }
+
+	#phase2 td:nth-of-type(1):before { content: "<?php echo get_text('Name'); ?>"; }
+	#phase2 td:nth-of-type(2):before { content: "<?php echo get_text('Action'); ?>"; }
+
 
 	.departments table tr th, .users tr td, .questions_list table tr td{
 		width: 50%;
