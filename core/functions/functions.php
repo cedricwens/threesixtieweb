@@ -1,4 +1,5 @@
 <?php
+set_time_limit(120);
 require_once 'libs/PHPMailer/PHPMailerAutoload.php';
 //error_reporting(0);
 ob_start();
@@ -765,6 +766,7 @@ function get_users(){
 				stripslashes('Firstname') => $row['Firstname'],
 				stripslashes('Lastname') => $row['Lastname'],
 				stripslashes('Username') => $row['Username'],
+				stripslashes('Email') => $row['Email'],
 				stripslashes('Job_Title') => $row['Job_Title']
 				);
 		}
@@ -903,7 +905,28 @@ function resend_password($user){
 			<br />
 			" . get_text('Password') . ": ".$password."
 		</p>". get_text('Mail_footer');
-	mail($to, $subject, $message);
+	//mail($to, $subject, $message);
+	$m = new PHPMailer;
+	
+	$m->isSMTP();
+	$m->SMTPAuth = true;
+
+	$m->Host = 'smtp.gmail.com';
+	$m->Username = 'threesixtyweb.stage@gmail.com';
+	$m->Password = 'Stage@DNS.be';
+	$m->SMTPSecure = 'ssl';
+	$m->Port = 465;
+
+	$m->From = 'threesixtyweb.stage@gmail.com';
+	$m->FromName = 'Threesixtyweb';
+	$m->addAddress($to, $user[0].' '.$user[1]);
+
+	$m->isHTML(true);
+
+	$m->Subject = $subject;
+	$m->Body = $message;
+
+	$m->send();
 	$hashed_password = password_hash($password,PASSWORD_DEFAULT);
 	mysql_query("UPDATE user SET Password = '$hashed_password' WHERE ID = $id");
 	return get_text('New_password_send');
@@ -926,7 +949,28 @@ function resend_admin_password($admin){
 			<br />
 			" . get_text('Password') . ": ".$password."
 		</p>".get_text('Mail_footer');
-	mail($to, $subject, $message);
+	//mail($to, $subject, $message);
+	$m = new PHPMailer;
+	
+	$m->isSMTP();
+	$m->SMTPAuth = true;
+
+	$m->Host = 'smtp.gmail.com';
+	$m->Username = 'threesixtyweb.stage@gmail.com';
+	$m->Password = 'Stage@DNS.be';
+	$m->SMTPSecure = 'ssl';
+	$m->Port = 465;
+
+	$m->From = 'threesixtyweb.stage@gmail.com';
+	$m->FromName = 'Threesixtyweb';
+	$m->addAddress($to, $admin[0].' '.$admin[1]);
+
+	$m->isHTML(true);
+
+	$m->Subject = $subject;
+	$m->Body = $message;
+
+	$m->send();
 	$hashed_password = password_hash($password,PASSWORD_DEFAULT);
 	mysql_query("UPDATE admin SET Password = '$hashed_password' WHERE ID = $id");
 	return get_text('New_password_send');
@@ -1006,22 +1050,47 @@ function start_batch($batch){
 	$date = create_date();
 	$batch = (int) $batch;
 	foreach ($users as $user) {
-		$password = password_hash(randomPassword(),PASSWORD_DEFAULT);
+		$password = randomPassword();
+		$hashed_password = password_hash($password,PASSWORD_DEFAULT);
 		$id = (int) $user['ID'];
-		mysql_query("UPDATE user SET Password = '$password' WHERE ID = $id");
+		mysql_query("UPDATE user SET Password = '$hashed_password' WHERE ID = $id");
 		$reviewer = (int) $user['ID'];
 		$reviewee = (int) $user['ID'];
 		mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created, Last_Update, Batch) VALUES ($reviewer, $reviewee , (SELECT ID FROM poll_status WHERE Name = 'Niet Ingevuld'), '$date', '$date', $batch)");
-	}
-	mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'), Running1_date = '$date' WHERE ID = $batch");
-	foreach ($users as $user) {
+		echo mysql_error();
 		$to = $user['Email'];
 		$subject = get_text('Start_phase_1');
 		$message = 
 			get_text('Dear').' '.$user['Firstname'].",".
-			get_text('Mail_phase_1').get_text('Mail_footer');
-		mail($to, $subject, $message);
+			get_text('Mail_phase_1') . get_text('Username') . ": ".$user['Lastname'].".".$user['Firstname']."
+			<br />
+			" . get_text('Password') . ": ".$password.get_text('Mail_footer');
+		//mail($to, $subject, $message);
+		$m = new PHPMailer;
+	
+		$m->isSMTP();
+		$m->SMTPAuth = true;
+
+		$m->Host = 'smtp.gmail.com';
+		$m->Username = 'threesixtyweb.stage@gmail.com';
+		$m->Password = 'Stage@DNS.be';
+		$m->SMTPSecure = 'ssl';
+		$m->Port = 465;
+
+		$m->From = 'threesixtyweb.stage@gmail.com';
+		$m->FromName = 'Threesixtyweb';
+		$m->addAddress($to, $user['Firstname'].' '.$user['Lastname']);
+
+		$m->isHTML(true);
+
+		$m->Subject = $subject;
+		$m->Body = $message;
+
+		$m->send();
 	}
+	mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'), Running1_date = '$date' WHERE ID = $batch");
+	echo mysql_error();
+	header('Location: admin.php');
 }
 function calculate_couples($id){
 	$polls = get_polls();
@@ -1090,8 +1159,30 @@ function run_batch($id){
 		$message = 
 			get_text('Dear').' '.$user['Firstname'].","
 			.get_text('Mail_phase_2').get_text('Mail_footer');
-		mail($to, $subject, $message);
+		//mail($to, $subject, $message);
+		$m = new PHPMailer;
+	
+		$m->isSMTP();
+		$m->SMTPAuth = true;
+
+		$m->Host = 'smtp.gmail.com';
+		$m->Username = 'threesixtyweb.stage@gmail.com';
+		$m->Password = 'Stage@DNS.be';
+		$m->SMTPSecure = 'ssl';
+		$m->Port = 465;
+
+		$m->From = 'threesixtyweb.stage@gmail.com';
+		$m->FromName = 'Threesixtyweb';
+		$m->addAddress($to, $user['Firstname'].' '.$user['Lastname']);
+
+		$m->isHTML(true);
+
+		$m->Subject = $subject;
+		$m->Body = $message;
+
+		$m->send();
 	}
+	header('Location: admin.php');
 }
 function publish_batch($id){
 	$id = (int) $id;
@@ -1104,7 +1195,28 @@ function publish_batch($id){
 		$message = 
 			get_text('Dear').' '.$user['Firstname'].","
 			.get_text('Mail_results_available').get_text('Mail_footer');
-		mail($to, $subject, $message);
+		//mail($to, $subject, $message);
+		$m = new PHPMailer;
+	
+		$m->isSMTP();
+		$m->SMTPAuth = true;
+
+		$m->Host = 'smtp.gmail.com';
+		$m->Username = 'threesixtyweb.stage@gmail.com';
+		$m->Password = 'Stage@DNS.be';
+		$m->SMTPSecure = 'ssl';
+		$m->Port = 465;
+
+		$m->From = 'threesixtyweb.stage@gmail.com';
+		$m->FromName = 'Threesixtyweb';
+		$m->addAddress($to, $user['Firstname'].' '.$user['Lastname']);
+
+		$m->isHTML(true);
+
+		$m->Subject = $subject;
+		$m->Body = $message;
+
+		$m->send();
 	}
 
 }
@@ -1203,7 +1315,28 @@ function send_reminder_phase2($user, $email){
 	$subject = get_text('Reminder');
 	$message = get_text('Dear').' '.$user.",".
 		get_text('Reminder_other_polls').get_text('Mail_footer');
-	mail($to, $subject, $message);
+	//mail($to, $subject, $message);
+	$m = new PHPMailer;
+	
+	$m->isSMTP();
+	$m->SMTPAuth = true;
+
+	$m->Host = 'smtp.gmail.com';
+	$m->Username = 'threesixtyweb.stage@gmail.com';
+	$m->Password = 'Stage@DNS.be';
+	$m->SMTPSecure = 'ssl';
+	$m->Port = 465;
+
+	$m->From = 'threesixtyweb.stage@gmail.com';
+	$m->FromName = 'Threesixtyweb';
+	$m->addAddress($to, $user);
+
+	$m->isHTML(true);
+
+	$m->Subject = $subject;
+	$m->Body = $message;
+
+	$m->send();
 }
 
 
@@ -1471,7 +1604,7 @@ function get_average_score($user, $question){
 }
 function get_team_manager($user){
 	$user = (int) $user;
-	$query = mysql_query("SELECT * FROM user u INNER JOIN Department d On u.ID = d.Manager WHERE d.ID = (SELECT Department FROM user_department WHERE User = $user);");
+	$query = mysql_query("SELECT * FROM user u INNER JOIN department d On u.ID = d.Manager WHERE d.ID = (SELECT Department FROM user_department WHERE User = $user);");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
 		return false;
@@ -1849,26 +1982,23 @@ function calculate($users){
 		if(get_department($poll['Reviewer']) == get_department($poll['Reviewee'])){
 			// Reviewer en reviewee zijn teamleden
 			if ($preferred_by_reviewee && $preferred_by_reviewer) {
-				// Reviewer en reviewee zijn geen teamleden
 				$score = rand(60,69);		
 			}else if($preferred_by_reviewee){
 				$score = rand(40,49);
 			}else if($preferred_by_reviewer){
 				$score = rand(20,29);
 			}else{
-				// Reviewer en reviewee zijn geen teamleden
 				$score = rand(0,9);
 			}
 		}else{
-			if ($preferred_by_reviewee && $preferred_by_reviewer) {
 			// Reviewer en reviewee zijn geen teamleden
+			if ($preferred_by_reviewee && $preferred_by_reviewer) {
 				$score = rand(70,79);
 			}else if ($preferred_by_reviewee){
 				$score = rand(50,59);
 			}else if ($preferred_by_reviewer){
 				$score = rand(30,39);
 			}else{
-				// Reviewer en reviewee zijn geen teamleden
 				$score = rand(10,19);
 			}
 		}
@@ -2192,7 +2322,7 @@ function check($users){
 		}
 	}
 	if(!empty($too_many_manager_received)){
-		// De slechtste review met een reviewer (=manager) verwijderen
+		// De slechtste review met een reviewer (=teamlid) verwijderen
 		foreach ($too_many_manager_received as $too_many_manager) {
 			$polls = get_worst_manager_polls($too_many_manager['Reviewee']);	
 			if($polls){
@@ -2420,8 +2550,9 @@ function check($users){
 		$reviewee = get_candidate_poll_reviewee($poll['ID']);
 
 		$id = $poll['ID'];
-		mysql_query("INSERT INTO candidate_poll (Reviewer, Reviewee, Score, Ok_reviewee, Ok_reviewer, Ok_overall) VALUES ($reviewer, $reviewee, 0, 0, 0, 1) ON DUPLICATE KEY UPDATE Ok_overall = 1");
-
+		if($reviewer != get_team_manager($reviewee)){
+			mysql_query("INSERT INTO candidate_poll (Reviewer, Reviewee, Score, Ok_reviewee, Ok_reviewer, Ok_overall) VALUES ($reviewer, $reviewee, 0, 0, 0, 1) ON DUPLICATE KEY UPDATE Ok_overall = 1");
+		}
 		$reviews_given = get_reviews_given();
 		$too_few_given = array();
 		$too_many_given = array();

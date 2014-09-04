@@ -477,7 +477,13 @@ and also iPads specifically.
 	#questions td:nth-of-type(1):before { content: "<?php echo get_text('ID'); ?>"; }
 	#questions td:nth-of-type(2):before { content: "<?php echo get_text('Question'); ?>"; }
 	#questions td:nth-of-type(3):before { content: "<?php echo get_text('Action'); ?>"; }
-	
+
+	#poll td:nth-of-type(1):before { content: "<?php echo get_text('Question'); ?>"; }
+	<?php
+	for ($value=1; $value < 7; $value++) { 
+		echo '#poll td:nth-of-type('.($value+1).'):before { content: "'.get_answer_name($value).'"; text-align: left;}';
+	}
+	?>
 	#parameters td:nth-of-type(1):before { content: "<?php echo get_text('ID'); ?>"; }
 	#parameters td:nth-of-type(2):before { content: "<?php echo get_text('Value'); ?>"; }
 	#parameters td:nth-of-type(3):before { content: "<?php echo get_text('Action'); ?>"; }

@@ -75,7 +75,8 @@ WHERE
             WHERE ID = p.Reviewee
         )
     )
-GROUP BY Reviewee;
+    AND
+    Ok_overall = 1;
 
 CREATE OR REPLACE VIEW candidate_notteammanager_view AS
 SELECT *

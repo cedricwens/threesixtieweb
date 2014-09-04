@@ -192,6 +192,7 @@ if(isset($_GET['Start'])){
 					if($poll_status != get_poll_status_id('Commentaar')){ 
 						?>
 						<table class="questions">
+							<thead>
 								<tr>
 									<th><?php get_text('Question'); ?></th>
 									<?php
@@ -202,6 +203,8 @@ if(isset($_GET['Start'])){
 									}
 									?>
 								</tr>
+							</thead>
+							<tbody>
 								<?php
 								foreach ($categories as $category) {
 									?>
@@ -210,7 +213,7 @@ if(isset($_GET['Start'])){
 									foreach ($questions as $key=>$question) {
 										if($category['ID'] == $question['Category']){
 											?>
-											<tr>
+											<tr id="poll">
 												<td><?php echo ($key+1).'. '.$question['Question']; ?></td>
 												<?php
 												if($poll_status == get_poll_status_id('Niet ingevuld')){
@@ -245,6 +248,7 @@ if(isset($_GET['Start'])){
 									}
 								}
 								?>
+							</tbody>
 						</table>
 						<?php
 					}

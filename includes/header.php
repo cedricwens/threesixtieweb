@@ -11,6 +11,7 @@ require('core/init.php');
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script>
 	function change_batchstatus(batch, action){
+		//alert('batch:'+batch+'action:'+action);
 		if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 	  		xmlhttp=new XMLHttpRequest();
 	  	}
@@ -22,12 +23,17 @@ require('core/init.php');
 			console.log ('xmlhttp : ' + xmlhttp.readyState + ', ' + xmlhttp.status);
 	  		if (xmlhttp.readyState==4 && xmlhttp.status==200){
 	    			document.getElementById("batches").innerHTML=xmlhttp.responseText;
-	    			location.reload();
+	    			if(action == 'View'){
+	    				window.location = "calculate.php?id="+batch;
+	    			}else{
+		    			location.reload();
+					}
 	   		}
 	  	}	
 		xmlhttp.send();
 	}
 	function edit_parameter(parameter, value){
+
 		if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 	  		xmlhttp=new XMLHttpRequest();
 	  	}

@@ -1,0 +1,34 @@
+Gebruiker:
+1) Gebruikersnaam en wachtwoord zijn verplicht om aan te melden
+2) Gebruiker kan aanmelden met gebruikersnaam en wachtwoord
+3) Gebruiker kan niet aanmelden met foutief wachtwoord. Hierbij wordt een melding gegenereerd.
+4) Gebruikersnaam is niet hoofdletter gevoelig
+5) Gebruiker kan een nieuw wachtwoord genereren via de forgot pagina
+6) Gebruiker kan enkel de login pagina bekijken als hij niet is aangemeld.
+7) Gebruiker kan zijn eigen vragenlijst invullen
+8) Gebruiker kan zijn eigen vragenlijst opslaan, en deze later bewerken
+9) Gebruiker kan zijn eigen vragenlijst doorsturen, deze kan later niet bewerkt worden
+10) Gebruiker kan preferred reviewers/reviewees aanduiden
+11) Gebruiker kan preferred reviewers/reviewees doorsturen, en deze later bewerken
+12) Preferred reviewers/reviewees worden opgeslagen in de database
+13) Na het invoegen van preferred reviewees, krijgt de gebruiker het afsluit scherm. Door op dit schemr op aflsuiten te klikken, wordt de gebruiker afgemeld en doorgestuurd naar het loginscherm.
+14) Gebruiker kan hierna terug aanmelden, en zijn vragenlijsten en preferred reviewers/reviewees zijn onthouden gebleven
+15) Gebruiker kan zich afmelden
+
+Admin:
+X1) Gebruikernaam en wachtwoord zijn verplicht om aan te melden
+X2) Admin kan aanmelden met gebruikersnaam en wachtwoord
+X3) Admin kan niet aanmelden met een foutief wachtwoord. Hierbij wordt een melding gegenereerd.
+X4) Gebruikersnaam is niet hoofdlettergevoelig
+X5) Admin kan een nieuw wachtwoord aanvragen via de admin_forgot pagina
+X6) Admin kan nieuwe batch starten
+7) Admin kan de parameters van een nieuwe batch wijzigen.
+8) Admin kan bij het toevoegen van een nieuwe batch, de vragen wijzigen en nieuwe vragen toevoegen.
+9) Admin kan status van de batch wijzigen.
+10) Na de bereking van vragenlijsten kan de admin beslissen om deze vragenlijsten te aanvaarden, of om het algortime opnieuw te laten rekenen.
+X11) Admin kan nieuwe gebruikers toevoegen en deze aan een departement koppelen
+X12) Admin kan gebruikers wijzigen/verwijderen
+X13) Admin kan enkel gebruiker verwijderen die geen managers van een departement zijn.
+X14) Admin kan nieuw departement toevoegen, en een manager uit het management departement toevoegen.
+X15) Admin kan departementen wijzigen/verwijderen
+X16) Admin kan zich afmelden.
