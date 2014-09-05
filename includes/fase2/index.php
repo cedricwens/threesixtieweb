@@ -41,6 +41,10 @@ if(isset($_GET['Start'])){
 														?>
 														<input type="submit" value="<?php echo get_text('Poll_already_answered'); ?>" />
 														<?php
+													}else if($poll['Status'] == get_poll_status_id('Opgeslagen')){
+														?>
+														<input type="submit" value="<?php echo get_text('Poll_saved'); ?>" />
+														<?php
 													}else{
 														?>
 														<input type="submit" name="answer_poll" value="<?php echo get_text('Answer_poll'); ?>" />
@@ -162,7 +166,7 @@ if(isset($_GET['Start'])){
 						}
 					}else if(isset($_POST['save_questions'])){
 						change_poll_status($poll, 'Opgeslagen');
-						if(isset($_POST['comment'])){
+						if(isset($_POST['comment']) && !empty($_POST['comment']) && trim($_POST['comment']) != ''){
 							$comment = $_POST['comment'];
 							add_poll_comment($poll,$comment);
 							$result = "<p>".get_text('Comment_added_successfully')."</p>";

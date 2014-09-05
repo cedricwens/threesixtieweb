@@ -195,6 +195,19 @@ function get_average_score_poll($poll, $question){
 		return mysql_result($query,0);
 	}
 }
+function get_average_score_user($user, $question){
+	$user = (int) $user;
+	$question = (int) $question;
+	$batch = get_published_batch_id();
+	$query = mysql_query("SELECT Average_Score FROM average_score_view WHERE Batch = $batch AND Reviewee = $user AND Question = $question");
+	
+	if(!$query || mysql_num_rows($query) <=0){
+		echo mysql_error();
+		return false;
+	}else{
+		return mysql_result($query,0);
+	}
+}
 function get_batch($status){
 	$status = sanitize($status);
 	$query = mysql_query("SELECT ID FROM batch WHERE Name = '$status'");
@@ -654,7 +667,7 @@ function get_text_info($name){
 }
 function get_user_by_id($id){
 	$id = (int) $id;
-	$query = mysql_query("SELECT Firstname, Lastname FROM user WHERE ID = $id");
+	$query = mysql_query("SELECT Firstname, Lastname, Username FROM user WHERE ID = $id");
 	if(!$query || mysql_num_rows($query) <=0){
 		echo mysql_error();
 		return false;
@@ -890,7 +903,6 @@ function randomPassword() {
 function resend_password($user){
 	$user = sanitize($user);
 	$password = randomPassword();
-	echo $password;
 	$email = get_user_email($user);
 	$id = get_user_id($user);
 	$user = get_user_by_id($id);
@@ -901,7 +913,7 @@ function resend_password($user){
 		<p>
 			" . get_text('New_user_credentials') . ":
 			<br />
-			" . get_text('Username') . ": ".$user[0].".".$user[1]."
+			" . get_text('Username') . ": ".$user[2]."
 			<br />
 			" . get_text('Password') . ": ".$password."
 		</p>". get_text('Mail_footer');
@@ -934,7 +946,6 @@ function resend_password($user){
 function resend_admin_password($admin){
 	$admin = sanitize($admin);
 	$password = randomPassword();
-	echo $password;
 	$email = get_admin_email($admin);
 	$id = get_admin_id($admin);
 	$admin = get_admin_by_id($id);
@@ -1062,7 +1073,7 @@ function start_batch($batch){
 		$subject = get_text('Start_phase_1');
 		$message = 
 			get_text('Dear').' '.$user['Firstname'].",".
-			get_text('Mail_phase_1') . get_text('Username') . ": ".$user['Lastname'].".".$user['Firstname']."
+			get_text('Mail_phase_1') . get_text('Username') . ": ".$user['Username']."
 			<br />
 			" . get_text('Password') . ": ".$password.get_text('Mail_footer');
 		//mail($to, $subject, $message);
@@ -1425,12 +1436,64 @@ function get_user_info($id,$batch){
 		get_text('Reviews_given_to_preferred_reviewee').": <b>$preferred_reviewees</b><br />";
 	?>
 	<h3><?php echo get_Text('Average_score'); ?></h3>
-	<table>
-		<tr>
-			<th></th>
-			<th><?php echo get_text('Question'); ?></th>
-			<th><?php echo get_text('Average_score'); ?></th>
-		</tr>
+	<h4><?php echo get_text('Legend'); ?></h4>
+	<p>
+		1-1.5: <?php echo get_answer_name(1); ?><br />
+		1.6-2.5: <?php echo get_answer_name(2); ?><br />
+		2.6-3.5: <?php echo get_answer_name(3); ?><br />
+		3.6-4.5: <?php echo get_answer_name(4); ?><br />
+		4.6-5: <?php echo get_answer_name(5); ?>
+	</p>
+	<table class="questions">
+		<?php
+		$number = 1;
+		$categories = get_categories();
+		foreach ($categories as $category) {
+			?>
+			<thead>
+				<tr style="margin-top: 25px;">
+					<th><?php echo $category['Name']; ?></th>
+					<th><?php echo get_text('Your_score').' - '.get_text('Average_score'); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php
+			foreach ($questions as $question) {
+				if($category['ID'] == $question['Category']){
+					?>
+					<tr id="poll">
+						<td><?php echo $number.'. '.$question['Question']; ?></td>
+						<td style="text-align:center;">
+							<?php
+								if(get_answer(get_poll_by_reviewer_reviewee_batch($id, $id, $batch),$question['ID']) == 0){
+									$your_score = get_answer_name(6);
+								}else{
+									$your_score = get_answer(get_poll_by_reviewer_reviewee_batch($id, $id, $batch),$question['ID']);
+								}
+								echo $your_score;
+								echo " - ".get_average_score_user($id, $question['ID']);
+							?>
+
+						</td>
+					</tr>
+					<?php
+					$number++;
+				}
+			}
+			?>
+			<tr class="spacer"></tr>
+			<?php
+		}
+		?>
+		</tbody>
+			<?php
+		?>
+	</table>
+			<!--<tr>
+				<th></th>
+				<th><?php echo get_text('Question'); ?></th>
+				<th><?php echo get_text('Your_score').'-'.get_text('Average_score'); ?></th>
+			</tr>
 		<?php 
 		foreach ($questions as $key => $question) {
 			?>
@@ -1442,13 +1505,17 @@ function get_user_info($id,$batch){
 					<?php echo $question['Question']; ?>
 				</td>
 				<td style="text-align:center;">
-					<?php echo get_average_score($id, $question['ID']); ?>
+					<?php
+						echo get_answer_name(get_answer(get_poll_by_reviewer_reviewee_batch($id, $id, $batch),$question['ID']));
+						echo " - ".get_average_score($id, $question['ID']);
+					?>
+
 				</td>
 			</tr>
 			<?php
 		}
 		?>
-	</table>
+	</table>-->
 	<?php	
 	if($comments){
 		echo "<h3>".get_text('Extra_comment').":</h3>";
@@ -1591,7 +1658,7 @@ function get_average_score($user, $question){
 	$batch = get_published_batch_id();
 	$user = (int) $user;
 	$question = (int) $question;
-	$query = mysql_query("SELECT Average_Score FROM average_score_view WHERE Reviewee = $user AND Question = $question AND Batch = $batch");
+	$query = mysql_query("SELECT Name FROM answer_enum WHERE ID = (SELECT Average_Score FROM average_score_view WHERE Reviewee = $user AND Question = $question AND Batch = $batch)");
 	if(!$query || mysql_num_rows($query) < 0) {
 		echo mysql_error();
 		return false;

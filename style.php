@@ -417,12 +417,7 @@ table tr:nth-child(even){
 		width: 70%;
 	}
 }
-/* 
-Max width before this PARTICULAR table gets nasty
-This query will take effect for any screen smaller than 760px
-and also iPads specifically.
-*/
-@media only screen and (max-width: 675px), (min-device-width: 768px) and (max-device-width: 1024px)  {
+@media only screen and (max-width: 675px) {
 
 	/* Force table to not be like tables anymore */
 	table, thead, tbody, th, td, tr { 

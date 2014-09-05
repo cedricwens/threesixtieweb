@@ -78,39 +78,36 @@ INSERT INTO admin(Username, Password, Email) VALUES
 	('Admin', '$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'admin@admin.com');
 
 /* Users toevoegen aan database*/
-INSERT INTO user (Firstname, Lastname, Password, Email) VALUES
-	('Maarten',		'Bosteels', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Kathleen',	'Buffels', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Dimitri',		'De Graef',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Leander',		'Dierckx', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Kevin',		'Dillaerts',	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Philip',		'Du Bois', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),	
-	('Ronald',		'Geens',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Kurt',		'Gielen',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Lut',			'Goedhuys', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('David',		'Goelen', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Loesje',		'Hermans', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Johan',		'Heylen', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Kevin',		'Jacquemyn', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Jasper',		'Kesteloot',	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Kristof',		'Konings',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Bert',		'Maleszka',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Stijn',		'Niclaes',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Helga',		'Parijs', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Nico',		'Point',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Veerle',		'Tenier',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Kristof',		'Tuyteleers', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Hilde',		'Van Bree',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Cecile',		'Van der Borght','$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Veronique',	'Van der Borght','$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Sven',		'Van Dyck',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Karen',		'Van Rillaer', 	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Pieter',		'Vandepitte',	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Peter',		'Vergote', 		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
-	('Koen',		'Zagers',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com');
-
-/* Username genereren */
-UPDATE user SET Username = REPLACE(CONCAT_WS('.',Lastname, Firstname), ' ','');
+INSERT INTO user (Firstname, Lastname, Username, Password, Email) VALUES
+	('Maarten',		'Bosteels', 	'MaartenB',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Kathleen',	'Buffels', 		'KathleenB',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Dimitri',		'De Graef',		'DimitriDG',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Leander',		'Dierckx', 		'LeanderD',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Kevin',		'Dillaerts',	'KevinD',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Philip',		'Du Bois', 		'PhilipDB',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),	
+	('Ronald',		'Geens',		'RonaldG',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Kurt',		'Gielen',		'KurtG',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Lut',			'Goedhuys', 	'LutG',				'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('David',		'Goelen', 		'DavidG',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Loesje',		'Hermans', 		'LoesjeH',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Johan',		'Heylen', 		'JohanH',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Kevin',		'Jacquemyn', 	'KevinJ',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Jasper',		'Kesteloot',	'JasperK',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Kristof',		'Konings',		'KristofK',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Bert',		'Maleszka',		'BertM',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Stijn',		'Niclaes',		'StijnN',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Helga',		'Parijs', 		'HelgaP',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Nico',		'Point',		'NicoP',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Veerle',		'Tenier',		'VeerleT',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Kristof',		'Tuyteleers', 	'KristofT',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Hilde',		'Van Bree',		'HildeVB',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Cecile',		'Van der Borght','CecileVDB',		'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Veronique',	'Van der Borght','VeroniqueVDB',	'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Sven',		'Van Dyck',		'SvenVD',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Karen',		'Van Rillaer', 	'KarenVR',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Pieter',		'Vandepitte',	'PieterV',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Peter',		'Vergote', 		'PeterV',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com'),
+	('Koen',		'Zagers',		'KoenZ',			'$2y$10$CQtvXZmXCjMBfC9LePexPeUOeX/ihEzClezWg/bCsFqwXbw0zKRKO', 'wens.cedric@gmail.com');
 
 /* Users koppelen aan departement */
 INSERT INTO user_department (User, Department) VALUES
@@ -167,13 +164,13 @@ INSERT INTO parameter (Short_name, Name, Value) VALUES
 	('Reviews_to_give', 'Aantal reviews geven', 5),
 	('Reviews_to_receive', 'Aantal reviews krijgen', 5),
 	('Reviews_by_not_teammanager', 'Maximum aantal reviews door (niet eigen) manager', 1),
-	('Reviews_selected_reviewees', 'Minimaal aantal reviews dat reviewer geeft aan gebruikers die hij heeft geselecteerd', 3),
-	('Reviews_own_department', 'Maximum aantal reviews uit eigen departement', 2),
-	('Reviews_selected_reviewers', 'Minimaal aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd', 2);
+	/*('Reviews_selected_reviewees', 'Minimaal aantal reviews dat reviewer geeft aan gebruikers die hij heeft geselecteerd', 3),
+	('Reviews_selected_reviewers', 'Minimaal aantal reviews dat reviewee krijgt van gebruikers die hij heeft geselecteerd', 2),*/
+	('Reviews_own_department', 'Maximum aantal reviews uit eigen departement', 2);
 
 /* Antwoord mogelijkheden toevoegen aan database */
 INSERT INTO answer_enum (Name, Description) VALUES
-	('Heel Slecht', 'De gebruiker wordt zeer slecht beoordeeld op dit onderdeel'),
+	('Heel slecht', 'De gebruiker wordt zeer slecht beoordeeld op dit onderdeel'),
 	('Slecht', 'De gebruiker wordt slecht beoordeeld op dit onderdeel'),
 	('Neutraal', 'De gebruiker wordt neutraal beoordeeld op dit onderdeel'),
 	('Goed', 'De gebruiker wordt goed beoordeeld op dit onderdeel'),

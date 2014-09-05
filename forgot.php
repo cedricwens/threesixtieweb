@@ -16,7 +16,7 @@ $error = "";
 		?>
 		<div class="centerContent">
 			<?php
-			echo $error;
+			echo $error.'<br />';
 			echo get_text('Click_here_to_log_in');
 			?>
 		</div>

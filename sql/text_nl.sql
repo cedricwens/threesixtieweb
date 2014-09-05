@@ -71,6 +71,7 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Exit', 'Afsluiten'),
 	('Error_occured_try_again','Er is een fout opgetreden. Probeer later nog eens.'),
 	('Poll_already_answered', 'Deze enquete werd reeds ingevuld'),
+	('Poll_saved',			'Vragenlijst opgeslagen'),
 	('Answer_poll', 'Vragenlijst invullen'),
 	('Send', 'Versturen'),
 	('Save', 'Opslaan'),
@@ -100,7 +101,7 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Stop_and_publish_results', 'Stop en publiceer resultaten'),
 	('Calculate_polls', 	'Vragenlijsten berekenen'),
 	('View_calculated_polls', 'Bekijk berekende vragenlijsten'),
-	('Home', 				'Index'),
+	('Home', 				'Home'),
 	('My_results',			'Mijn resultaten'),
 	('Results',	 		'Resultaten'),
 	('Admin', 				'Beheer'),
@@ -116,6 +117,7 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('End',					'Einde'),
 	('Add_question',		'Vraag toevoegen'),
 	('Average_score',		'Gemiddelde score'),
+	('Your_score',			'Jouw score'),
 	('Add_user',			'Gebruiker toevoegen'),
 	('Add_department',		'Departement toevoegen'),
 	('Firstname',			'Voornaam'),
@@ -208,4 +210,5 @@ INSERT INTO text_nl (Name, Text) VALUES
 	('Webiste',				'Website : www.dns.be'),
 	('Recalculate',			'Herberekenen'),
 	('Accept',				'Aanvaarden'),
-	('Cant_delete_manager',	'Deze gebruiker is een manager. U dient het departement te verwijderen of een andere manager toe te wijzen');
+	('Cant_delete_manager',	'Deze gebruiker is een manager. U dient het departement te verwijderen of een andere manager toe te wijzen'),
+	('Legend',				'Legende');
