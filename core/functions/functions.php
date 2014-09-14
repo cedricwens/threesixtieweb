@@ -16,7 +16,7 @@ function add_comment($reviewee, $comment){
 	$batch = get_running2_batch_id();
 	$date = create_date();
 	$poll_status = mysql_result(mysql_query("SELECT ID FROM poll_status WHERE Name = 'Commentaar'"),0);
-	mysql_query("INSERT INTO Poll (Reviewer, Reviewee, Comment, Status, Time_Created, Last_Update, Batch) VALUES ($reviewer, $reviewee, '$comment', $poll_status, '$date', '$date', $batch) ON DUPLICATE KEY UPDATE Comment = '$comment', Last_Update = '$date'");
+	mysql_query("INSERT INTO poll (Reviewer, Reviewee, Comment, Status, Time_Created, Last_Update, Batch) VALUES ($reviewer, $reviewee, '$comment', $poll_status, '$date', '$date', $batch) ON DUPLICATE KEY UPDATE Comment = '$comment', Last_Update = '$date'");
 	echo mysql_error();
 }
 function add_department($name, $manager){
