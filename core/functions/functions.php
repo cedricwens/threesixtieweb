@@ -1174,13 +1174,17 @@ function run_batch($id){
 		$m = new PHPMailer;
 	
 		$m->isSMTP();
-		$m->SMTPAuth = true;
+	   #added by ldi
+       # $m->SMTPDebug  = 2;
+        $m->SMTPAuth = true;
 
-		$m->Host = 'smtp.gmail.com';
-		$m->Username = 'threesixtyweb.stage@gmail.com';
-		$m->Password = 'Stage@DNS.be';
-		$m->SMTPSecure = 'ssl';
-		$m->Port = 465;
+        $m->Host = 'smtp.gmail.com';
+        $m->Username = 'threesixtyweb.stage@gmail.com';
+        $m->Password = 'Stage@DNS.be';
+        #$m->SMTPSecure = 'ssl';
+        #$m->Port = 465;
+        $m->SMTPSecure = 'tls';
+        $m->Port = 587;
 
 		$m->From = 'threesixtyweb.stage@gmail.com';
 		$m->FromName = 'Threesixtyweb';
