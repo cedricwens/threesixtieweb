@@ -926,8 +926,10 @@ function resend_password($user){
 	$m->Host = 'smtp.gmail.com';
 	$m->Username = 'threesixtyweb.stage@gmail.com';
 	$m->Password = 'Stage@DNS.be';
-	$m->SMTPSecure = 'ssl';
-	$m->Port = 465;
+	#$m->SMTPSecure = 'tls'; #'ssl';
+	#$m->Port = 587; #465;
+	$m->SMTPSecure = 'tls';
+	$m->Port = 587;
 
 	$m->From = 'threesixtyweb.stage@gmail.com';
 	$m->FromName = 'Threesixtyweb';
@@ -969,8 +971,8 @@ function resend_admin_password($admin){
 	$m->Host = 'smtp.gmail.com';
 	$m->Username = 'threesixtyweb.stage@gmail.com';
 	$m->Password = 'Stage@DNS.be';
-	$m->SMTPSecure = 'ssl';
-	$m->Port = 465;
+	$m->SMTPSecure = 'tls'; #'ssl';
+	$m->Port = 587; #465;
 
 	$m->From = 'threesixtyweb.stage@gmail.com';
 	$m->FromName = 'Threesixtyweb';
@@ -1085,8 +1087,8 @@ function start_batch($batch){
 		$m->Host = 'smtp.gmail.com';
 		$m->Username = 'threesixtyweb.stage@gmail.com';
 		$m->Password = 'Stage@DNS.be';
-		$m->SMTPSecure = 'ssl';
-		$m->Port = 465;
+		$m->SMTPSecure = 'tls'; #'ssl';
+		$m->Port = 587; #465;
 
 		$m->From = 'threesixtyweb.stage@gmail.com';
 		$m->FromName = 'Threesixtyweb';
@@ -1181,8 +1183,8 @@ function run_batch($id){
         $m->Host = 'smtp.gmail.com';
         $m->Username = 'threesixtyweb.stage@gmail.com';
         $m->Password = 'Stage@DNS.be';
-        #$m->SMTPSecure = 'ssl';
-        #$m->Port = 465;
+        #$m->SMTPSecure = 'tls'; #'ssl';
+        #$m->Port = 587; #465;
         $m->SMTPSecure = 'tls';
         $m->Port = 587;
 
@@ -1219,8 +1221,8 @@ function publish_batch($id){
 		$m->Host = 'smtp.gmail.com';
 		$m->Username = 'threesixtyweb.stage@gmail.com';
 		$m->Password = 'Stage@DNS.be';
-		$m->SMTPSecure = 'ssl';
-		$m->Port = 465;
+		$m->SMTPSecure = 'tls'; #'ssl';
+		$m->Port = 587; #465;
 
 		$m->From = 'threesixtyweb.stage@gmail.com';
 		$m->FromName = 'Threesixtyweb';
@@ -1307,8 +1309,8 @@ function send_reminder_phase1($user, $email){
 	$m->Host = 'smtp.gmail.com';
 	$m->Username = 'threesixtyweb.stage@gmail.com';
 	$m->Password = 'Stage@DNS.be';
-	$m->SMTPSecure = 'ssl';
-	$m->Port = 465;
+	$m->SMTPSecure = 'tls'; #'ssl';
+	$m->Port = 587; #465;
 
 	$m->From = 'threesixtyweb.stage@gmail.com';
 	$m->FromName = 'Threesixtyweb';
@@ -1339,8 +1341,8 @@ function send_reminder_phase2($user, $email){
 	$m->Host = 'smtp.gmail.com';
 	$m->Username = 'threesixtyweb.stage@gmail.com';
 	$m->Password = 'Stage@DNS.be';
-	$m->SMTPSecure = 'ssl';
-	$m->Port = 465;
+	$m->SMTPSecure = 'tls'; #'ssl';
+	$m->Port = 587; #465;
 
 	$m->From = 'threesixtyweb.stage@gmail.com';
 	$m->FromName = 'Threesixtyweb';
