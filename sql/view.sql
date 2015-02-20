@@ -1,132 +1,163 @@
 CREATE OR REPLACE VIEW average_score_view AS
-SELECT p.Reviewee AS Reviewee, a.Question AS Question, TRUNCATE(AVG(a.Answer), 2) AS Average_Score, p.Batch AS Batch, p.ID AS Poll
-FROM answer a
-JOIN poll p
-ON a.Poll = p.ID
-WHERE Reviewee != Reviewer AND a.Answer != 6
-GROUP BY Question, Reviewee;
+  SELECT
+    p.Reviewee                 AS Reviewee,
+    a.Question                 AS Question,
+    TRUNCATE(AVG(a.Answer), 2) AS Average_Score,
+    p.Batch                    AS Batch,
+    p.ID                       AS Poll
+  FROM answer a
+    JOIN poll p
+      ON a.Poll = p.ID
+  WHERE Reviewee != Reviewer AND a.Answer != 6
+  GROUP BY Question, Reviewee;
 
 CREATE OR REPLACE VIEW reviews_given_view AS
-SELECT *
-FROM poll p
-WHERE
-        p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd')
-        AND
-        p.Reviewer != p.Reviewee;
+  SELECT *
+  FROM poll p
+  WHERE
+    p.Status = (SELECT ID
+                FROM poll_status
+                WHERE Name = 'Ingestuurd')
+    AND
+    p.Reviewer != p.Reviewee;
 
 CREATE OR REPLACE VIEW reviews_received_view AS
-SELECT *
-FROM poll p
-WHERE
-    p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd')
+  SELECT *
+  FROM poll p
+  WHERE
+    p.Status = (SELECT ID
+                FROM poll_status
+                WHERE Name = 'Ingestuurd')
     AND
     p.Reviewee != p.Reviewer;
-	/*the own review is not added here -- this is correct*/
+/*the own review is not added here -- this is correct*/
 
 CREATE OR REPLACE VIEW teammember_view AS
-SELECT *
-FROM poll p
-WHERE
+  SELECT *
+  FROM poll p
+  WHERE
     p.Reviewee != p.Reviewer
     AND
     p.Reviewer NOT IN (
-        SELECT Manager
-        FROM department
-        /*WHERE ID = (
-            SELECT Department
-            FROM user_department
-            WHERE User = p.Reviewee
-        )*/
-        /* this includes managers except your own */
+      SELECT Manager
+      FROM department
+/*WHERE ID = (
+    SELECT Department
+    FROM user_department
+    WHERE User = p.Reviewee
+)*/
+/* this includes managers except your own */
     )
     AND
     p.Reviewer = ANY (
-            SELECT User
-            FROM user_department
-            WHERE Department = (
-                SELECT Department
-                FROM user_department
-                WHERE User = p.Reviewee
-            )
-            /* get reviewers being member of reviewee's department */
+      SELECT User
+      FROM user_department
+      WHERE Department = (
+        SELECT Department
+        FROM user_department
+        WHERE User = p.Reviewee
+      )
+/* get reviewers being member of reviewee's department */
     )
-    AND p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd');
+    AND p.Status = (SELECT ID
+                    FROM poll_status
+                    WHERE Name = 'Ingestuurd');
 
 CREATE OR REPLACE VIEW notteammember_view AS
-SELECT *
-FROM poll p
-WHERE
+  SELECT *
+  FROM poll p
+  WHERE
     p.Reviewee != p.Reviewer
     AND
     p.Reviewer NOT IN (
-        SELECT Manager
-        FROM department
-		/*here you exclude all managers please explain this being complementary to above statement */
+      SELECT Manager
+      FROM department
+/*here you exclude all managers please explain this being complementary to above statement */
     )
     AND
     p.Reviewer NOT IN (
-        SELECT User
+      SELECT User
+      FROM user_department
+      WHERE Department = (
+        SELECT Department
         FROM user_department
-        WHERE Department = (
-            SELECT Department
-            FROM user_department
-            WHERE User = p.Reviewee
-        )
-		/*exclude members of your department regardless them being manager */
+        WHERE User = p.Reviewee
+      )
+/*exclude members of your department regardless them being manager */
     )
-    AND p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd');
+    AND p.Status = (SELECT ID
+                    FROM poll_status
+                    WHERE Name = 'Ingestuurd');
 
 CREATE OR REPLACE VIEW teammanager_view AS
-SELECT *
-FROM poll p
-WHERE
+  SELECT *
+  FROM poll p
+  WHERE
     p.Reviewee != p.Reviewer
     AND
     p.Reviewer = ANY (
-    	SELECT Manager
-        FROM department
-        WHERE ID = (
-            SELECT Department
-            FROM user_department
-            WHERE ID = p.Reviewee
-        )
+      SELECT Manager
+      FROM department
+      WHERE ID = (
+        SELECT Department
+        FROM user_department
+        WHERE ID = p.Reviewee
+      )
     )
-    AND p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd');
+    AND p.Status = (SELECT ID
+                    FROM poll_status
+                    WHERE Name = 'Ingestuurd');
 
 CREATE OR REPLACE VIEW notteammanager_view AS
-SELECT *
-FROM poll p
-WHERE
+  SELECT *
+  FROM poll p
+  WHERE
     p.Reviewee != p.Reviewer
     AND
     p.Reviewer = ANY (
-    	SELECT Manager
-        FROM department
-        WHERE
-        	ID != (
-            	SELECT Department
-           		FROM user_department
-            	WHERE User = p.Reviewee
-        	)
+      SELECT Manager
+      FROM department
+      WHERE
+        ID != (
+          SELECT Department
+          FROM user_department
+          WHERE User = p.Reviewee
+        )
     )
-    AND p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd');
+    AND p.Status = (SELECT ID
+                    FROM poll_status
+                    WHERE Name = 'Ingestuurd');
 
 CREATE OR REPLACE VIEW preferred_reviewers_view AS
-SELECT DISTINCT(p.ID), p.Reviewer, p.Reviewee, p.Status, p.Batch
-FROM poll p
-JOIN preferred_poll pf ON p.Reviewer = pf.Reviewer
-WHERE   p.Reviewer != p.Reviewee
+  SELECT DISTINCT
+    (p.ID),
+    p.Reviewer,
+    p.Reviewee,
+    p.Status,
+    p.Batch
+  FROM poll p
+    JOIN preferred_poll pf ON p.Reviewer = pf.Reviewer
+  WHERE p.Reviewer != p.Reviewee
         AND pf.user = p.Reviewee
-        AND p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd');
+        AND p.Status = (SELECT ID
+                        FROM poll_status
+                        WHERE Name = 'Ingestuurd');
 /* explain why poll table is needed for this query */
 /* First you check what users are preferred. 
  * Then you look in the poll table, to which 'preferred couples' are actually generated by the algorithm (these are stored in the poll table) */
 
 CREATE OR REPLACE VIEW preferred_reviewees_view AS
-SELECT DISTINCT(p.ID), p.Reviewer, p.Reviewee, p.Status, p.Batch
-FROM poll p
-JOIN preferred_poll pf ON p.Reviewee = pf.Reviewee
-WHERE   p.Reviewer != p.Reviewee
+  SELECT DISTINCT
+    (p.ID),
+    p.Reviewer,
+    p.Reviewee,
+    p.Status,
+    p.Batch
+  FROM poll p
+    JOIN preferred_poll pf ON p.Reviewee = pf.Reviewee
+  WHERE p.Reviewer != p.Reviewee
         AND pf.user = p.Reviewer
-        AND p.Status = (SELECT ID FROM poll_status WHERE Name='Ingestuurd');
+        AND p.Status = (SELECT ID
+                        FROM poll_status
+                        WHERE Name = 'Ingestuurd');
 /* explain why poll table is needed for this query */

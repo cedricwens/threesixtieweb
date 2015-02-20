@@ -2,7 +2,7 @@
 create a wrapper script that calls the other sql
 installing all objects
 
-eventually preceeded with user creation in mysql instance db
+eventually preceded with user creation in mysql instance db
 (app user /admin user
 privileges
 security
