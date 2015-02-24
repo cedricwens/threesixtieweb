@@ -38,25 +38,28 @@ if (isset($_SESSION['admin_id']) && !get_published_batch_id()) {
                     <?php
                     get_user_info($user, $batch);
                 }
-            } else if (isset($_POST['user'])) {
-                if (empty($_POST['user'])) {
-                    echo get_text('Please_choose_a_user');
-                } else {
-                    $user = $_POST['user'];
-                    $id = get_user_id($user);
-                    $name = get_user_by_id($id);
-                    $batch = get_published_batch_id();
-                    echo "<h2>" . get_text('Information') . " " . strtolower(get_text('About')) . ": $name[0] $name[1]</h2>";
-                    ?>
-                    <p>
-                        <a href="pdf.php?id=<?php echo $id; ?>"><?php echo get_text('View') . ' ' . get_text('PDF'); ?></a>
-                    </p>
-                    <?php
-                    get_user_info($id, $batch);
+            } else
+                if (isset($_SESSION['admin_id'])) {
+                    if (isset($_POST['user'])) {
+                        if (empty($_POST['user'])) {
+                            echo get_text('Please_choose_a_user');
+                        } else {
+                            $user = $_POST['user'];
+                            $id = get_user_id($user);
+                            $name = get_user_by_id($id);
+                            $batch = get_published_batch_id();
+                            echo "<h2>" . get_text('Information') . " " . strtolower(get_text('About')) . ": $name[0] $name[1]</h2>";
+                            ?>
+                            <p>
+                                <a href="pdf.php?id=<?php echo $id; ?>"><?php echo get_text('View') . ' ' . get_text('PDF'); ?></a>
+                            </p>
+                            <?php
+                            get_user_info($id, $batch);
+                        }
+                    } else {
+                        echo "<p>" . get_text('Please_choose_a_user') . ".</p>";
+                    }
                 }
-            } else {
-                echo "<p>" . get_text('Please_choose_a_user') . ".</p>";
-            }
             ?>
         </div>
     </div>
