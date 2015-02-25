@@ -640,6 +640,31 @@ function get_polls()
     }
 }
 
+function get_polls_by_reviewee($reviewee, $batch)
+{
+    $reviewee = (int)$reviewee;
+    $batch = (int)$batch;
+    $query = mysql_query("SELECT * FROM poll WHERE Reviewee = $reviewee AND Reviewer != $reviewee AND Batch = $batch");
+    if (!$query || mysql_num_rows($query) <= 0) {
+        echo mysql_error();
+        return false;
+    } else {
+        while ($row = mysql_fetch_assoc($query)) {
+            $polls[] = array(
+                'ID' => $row['ID'],
+                'Reviewer' => $row['Reviewer'],
+                'Reviewee' => $row['Reviewee'],
+                'Comment' => $row['Comment'],
+                'Status' => $row['Status'],
+                'Time_Created' => $row['Time_Created'],
+                'Last_Update' => $row['Last_Update'],
+                'Batch' => $row['Batch']
+            );
+        }
+        return $polls;
+    }
+}
+
 function get_polls_by_reviewer($reviewer, $batch)
 {
     $reviewer = (int)$reviewer;

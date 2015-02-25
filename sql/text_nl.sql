@@ -212,4 +212,5 @@ INSERT INTO text_nl (Name, Text) VALUES
   ('Accept', 'Aanvaarden'),
   ('Cant_delete_manager',
    'Deze gebruiker is een manager. U dient het departement te verwijderen of een andere manager toe te wijzen'),
-  ('Legend', 'Legende');
+  ('Legend', 'Legende'),
+  ('Answered_by', 'Ingevuld door');
