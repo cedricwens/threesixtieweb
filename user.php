@@ -132,8 +132,8 @@ if (isset($_SESSION['admin_id']) && !get_published_batch_id()) {
                             <?php
                             }
                         } else {
-                        echo "<p>" . get_text('Please_choose_a_user') . ".</p>";
-                    }
+                            echo "<p>" . get_text('Please_choose_a_user') . ".</p>";
+                        }
                     }
                 }
             ?>
