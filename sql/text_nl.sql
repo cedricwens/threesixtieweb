@@ -207,7 +207,7 @@ INSERT INTO text_nl (Name, Text) VALUES
   ('Adress_street', 'Philipssite 5 bus 13'),
   ('Adress_city', '3001 Leuven Belgie'),
   ('Tel', 'Tel.: +32 16 28 49 70'),
-  ('Webiste', 'Website : www.dns.be'),
+  ('Website', 'Website : www.dns.be'),
   ('Recalculate', 'Herberekenen'),
   ('Accept', 'Aanvaarden'),
   ('Cant_delete_manager',
