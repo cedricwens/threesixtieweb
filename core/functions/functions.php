@@ -1487,7 +1487,7 @@ function send_reminder_phase1($user, $email)
     $user = get_user_by_id($id);
     $to = $email;
     $subject = get_text('Reminder');
-    $message = get_text('Dear') . ' ' . $user[0] . " " . $user[1] . ","
+    $message = get_text('Dear') . ' ' . $user[0] . ","
         . get_text('Reminder_own_poll') . get_text('Mail_footer');
     //mail($to, $subject, $message);*/
     $m = new PHPMailer;
@@ -1523,7 +1523,7 @@ function send_reminder_phase2($user, $email)
     $user = get_user_by_id($id);
     $to = $email;
     $subject = get_text('Reminder');
-    $message = get_text('Dear') . ' ' . $user[0] . " " . $user[1] . "," .
+    $message = get_text('Dear') . ' ' . $user[0] . "," .
         get_text('Reminder_other_polls') . get_text('Mail_footer');
     $m = new PHPMailer;
 
