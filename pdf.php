@@ -129,11 +129,15 @@ if (isset($_GET['id']) || isset($_SESSION['admin_id'])) {
     $pdf->Cell(175, 10, get_text('Legend'), 0, 'C');
     $pdf->SetFont('Arial', '', 12);
     $pdf->Ln(5);
-    $pdf->Cell(40, 10, '1-1.5: ' . get_answer_name(1), 0, 0);
-    $pdf->Cell(40, 10, '1.6-2.5: ' . get_answer_name(2), 0, 0);
-    $pdf->Cell(40, 10, '2.6-3.5: ' . get_answer_name(3), 0, 0);
-    $pdf->Cell(40, 10, '3.6-4.5: ' . get_answer_name(4), 0, 0);
-    $pdf->Cell(40, 10, '4.6-5: ' . get_answer_name(5), 0, 0);
+    $pdf->Cell(40, 10, '1: ' . get_answer_name(1), 0, 0);
+    $pdf->Ln(5);
+    $pdf->Cell(40, 10, '2: ' . get_answer_name(2), 0, 0);
+    $pdf->Ln(5);
+    $pdf->Cell(40, 10, '3: ' . get_answer_name(3), 0, 0);
+    $pdf->Ln(5);
+    $pdf->Cell(40, 10, '4: ' . get_answer_name(4), 0, 0);
+    $pdf->Ln(5);
+    $pdf->Cell(40, 10, '5: ' . get_answer_name(5), 0, 0);
     $pdf->Ln(10);
     $pdf->Ln(10);
     $categories = get_categories();
@@ -149,15 +153,18 @@ if (isset($_GET['id']) || isset($_SESSION['admin_id'])) {
                 $pdf->MultiCell(175, 5, $question['Question'], 0, 'L');
                 $pdf->SetFont('Arial', 'B', 12);
                 $pdf->Cell(10);
-                if (get_answer(get_poll_by_reviewer_reviewee_batch($id, $id, $batch), $question['ID']) == 0) {
-                    $your_score = get_answer_name(6);
-                } else {
-                    $your_score = get_answer(get_poll_by_reviewer_reviewee_batch($id, $id, $batch), $question['ID']);
+                $avg_score = get_average_score_user($id, $question['ID']);
+                if ($avg_score == false) {
+                    $avg_score = get_answer_name(6);
                 }
-                $pdf->Cell(5, 10, get_text('Your_score') . ': ' . $your_score, 0, 0);
+                $pdf->Cell(5, 10, get_text('Average_score') . ': ' . $avg_score, 0, 0);
                 $pdf->Ln(5);
                 $pdf->Cell(10);
-                $pdf->Cell(5, 10, get_text('Average_score') . ': ' . get_average_score_user($id, $question['ID']), 0, 0);
+                $your_score = get_answer(get_poll_by_reviewer_reviewee_batch($id, $id, $batch), $question['ID']);
+                if ($your_score == 6) {
+                    $your_score = get_answer_name(6);
+                }
+                $pdf->Cell(5, 10, get_text('Your_score') . ': ' . $your_score, 0, 0);
                 $pdf->Ln(10);
                 if ($pdf->GetY() > 250) {
                     $pdf->AddPage();
