@@ -66,7 +66,7 @@ INSERT INTO question (Category, Question) VALUES
     WHERE Name = 'Communicatie'), 'Is duidelijk in zijn/haar schriftelijke communicatie'),
   ((SELECT ID
     FROM category
-    WHERE Name = 'Communicatie'), 'Luistert goed en gebruik de informatie op een correcte manier'),
+    WHERE Name = 'Communicatie'), 'Luistert goed en gebruikt de informatie op een correcte manier'),
   ((SELECT ID
     FROM category
     WHERE Name = 'Communicatie'), 'Toont begrip voor anderen'),
