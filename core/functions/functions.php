@@ -1,8 +1,34 @@
 <?php
 set_time_limit(120);
 require_once 'libs/PHPMailer/PHPMailerAutoload.php';
-//error_reporting(0);
 ob_start();
+function mailFromProject($to, $toName, $subject, $message)
+{
+    $appLocation = 'http://' . $_SERVER["SERVER_NAME"];
+    $message = $message . "<p>" . $appLocation . "</p>";
+
+    $m = new PHPMailer;
+
+    $m->isSMTP();
+    $m->SMTPAuth = true;
+
+    $m->Host = 'smtp.gmail.com';
+    $m->Username = 'threesixtyweb.stage@gmail.com';
+    $m->Password = 'Stage@DNS.be';
+    $m->SMTPSecure = 'tls'; #'ssl';
+    $m->Port = 587; #465;
+
+    $m->From = 'threesixtyweb.stage@gmail.com';
+    $m->FromName = get_text('Title');
+    $m->addAddress($to, $toName);
+
+    $m->isHTML(true);
+
+    $m->Subject = $subject;
+    $m->Body = $message;
+
+    $m->send();
+}
 function add_batch()
 {
     $date = create_date();
@@ -1082,7 +1108,8 @@ function resend_password($user)
     $id = get_user_id($user);
     $user = get_user_by_id($id);
     $to = $email;
-    $subject = get_text('New_password');
+    $toName = $user[0] . " " . $user[1];
+    $subject = get_text('Title') . ': ' . get_text('New_password');
     $message =
         get_text('Dear') . ' ' . $user[0] . ",
 		<p>
@@ -1092,30 +1119,9 @@ function resend_password($user)
 			<br />
 			" . get_text('Password') . ": " . $password . "
 		</p>" . get_text('Mail_footer');
-    //mail($to, $subject, $message);
-    $m = new PHPMailer;
 
-    $m->isSMTP();
-    $m->SMTPAuth = true;
+    mailFromProject($to, $toName, $subject, $message);
 
-    $m->Host = 'smtp.gmail.com';
-    $m->Username = 'threesixtyweb.stage@gmail.com';
-    $m->Password = 'Stage@DNS.be';
-    #$m->SMTPSecure = 'tls'; #'ssl';
-    #$m->Port = 587; #465;
-    $m->SMTPSecure = 'tls';
-    $m->Port = 587;
-
-    $m->From = 'threesixtyweb.stage@gmail.com';
-    $m->FromName = 'Threesixtyweb';
-    $m->addAddress($to, $user[0] . ' ' . $user[1]);
-
-    $m->isHTML(true);
-
-    $m->Subject = $subject;
-    $m->Body = $message;
-
-    $m->send();
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     mysql_query("UPDATE user SET Password = '$hashed_password' WHERE ID = $id");
     return get_text('New_password_send');
@@ -1129,7 +1135,8 @@ function resend_admin_password($admin)
     $id = get_admin_id($admin);
     $admin = get_admin_by_id($id);
     $to = $email;
-    $subject = get_text('New_password');
+    $toName = $admin[0] . " " . $admin[1];
+    $subject = get_text('Title') . ': ' . get_text('New_password');
     $message =
         get_text('Dear') . ' ' . $admin[0] . ",
 		<p>
@@ -1139,28 +1146,9 @@ function resend_admin_password($admin)
 			<br />
 			" . get_text('Password') . ": " . $password . "
 		</p>" . get_text('Mail_footer');
-    //mail($to, $subject, $message);
-    $m = new PHPMailer;
 
-    $m->isSMTP();
-    $m->SMTPAuth = true;
+    mailFromProject($to, $toName, $subject, $message);
 
-    $m->Host = 'smtp.gmail.com';
-    $m->Username = 'threesixtyweb.stage@gmail.com';
-    $m->Password = 'Stage@DNS.be';
-    $m->SMTPSecure = 'tls'; #'ssl';
-    $m->Port = 587; #465;
-
-    $m->From = 'threesixtyweb.stage@gmail.com';
-    $m->FromName = 'Threesixtyweb';
-    $m->addAddress($to, $admin[0] . ' ' . $admin[1]);
-
-    $m->isHTML(true);
-
-    $m->Subject = $subject;
-    $m->Body = $message;
-
-    $m->send();
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     mysql_query("UPDATE admin SET Password = '$hashed_password' WHERE ID = $id");
     return get_text('New_password_send');
@@ -1258,34 +1246,16 @@ function start_batch($batch)
         mysql_query("INSERT INTO poll (Reviewer, Reviewee, Status, Time_Created, Last_Update, Batch) VALUES ($reviewer, $reviewee , (SELECT ID FROM poll_status WHERE Name = 'Niet Ingevuld'), '$date', '$date', $batch)");
         echo mysql_error();
         $to = $user['Email'];
-        $subject = get_text('Start_phase_1');
+        $toName = $user['Firstname'] . " " . $user['Lastname'];
+        $subject = get_text('Title') . ': ' . get_text('Start_phase_1');
         $message =
             get_text('Dear') . ' ' . $user['Firstname'] . "," .
             get_text('Mail_phase_1') . get_text('Username') . ": " . $user['Username'] . "
 			<br />
 			" . get_text('Password') . ": " . $password . get_text('Mail_footer');
-        //mail($to, $subject, $message);
-        $m = new PHPMailer;
 
-        $m->isSMTP();
-        $m->SMTPAuth = true;
+        mailFromProject($to, $toName, $subject, $message);
 
-        $m->Host = 'smtp.gmail.com';
-        $m->Username = 'threesixtyweb.stage@gmail.com';
-        $m->Password = 'Stage@DNS.be';
-        $m->SMTPSecure = 'tls'; #'ssl';
-        $m->Port = 587; #465;
-
-        $m->From = 'threesixtyweb.stage@gmail.com';
-        $m->FromName = 'Threesixtyweb';
-        $m->addAddress($to, $user['Firstname'] . ' ' . $user['Lastname']);
-
-        $m->isHTML(true);
-
-        $m->Subject = $subject;
-        $m->Body = $message;
-
-        $m->send();
     }
     mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running1'), Running1_date = '$date' WHERE ID = $batch");
     echo mysql_error();
@@ -1360,36 +1330,13 @@ function run_batch($id)
     mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Running2'), Running2_date = '$date' WHERE ID = $id");
     foreach ($users as $user) {
         $to = $user['Email'];
-        $subject = get_text('Start_phase_2');
+        $toName = $user['Firstname'] . " " . $user['Lastname'];
+        $subject = get_text('Title') . ': ' . get_text('Start_phase_2');
         $message =
             get_text('Dear') . ' ' . $user['Firstname'] . ","
             . get_text('Mail_phase_2') . get_text('Mail_footer');
-        //mail($to, $subject, $message);
-        $m = new PHPMailer;
 
-        $m->isSMTP();
-        #added by ldi
-        # $m->SMTPDebug  = 2;
-        $m->SMTPAuth = true;
-
-        $m->Host = 'smtp.gmail.com';
-        $m->Username = 'threesixtyweb.stage@gmail.com';
-        $m->Password = 'Stage@DNS.be';
-        #$m->SMTPSecure = 'tls'; #'ssl';
-        #$m->Port = 587; #465;
-        $m->SMTPSecure = 'tls';
-        $m->Port = 587;
-
-        $m->From = 'threesixtyweb.stage@gmail.com';
-        $m->FromName = 'Threesixtyweb';
-        $m->addAddress($to, $user['Firstname'] . ' ' . $user['Lastname']);
-
-        $m->isHTML(true);
-
-        $m->Subject = $subject;
-        $m->Body = $message;
-
-        $m->send();
+        mailFromProject($to, $toName, $subject, $message);
     }
     header('Location: admin.php');
 }
@@ -1402,32 +1349,13 @@ function publish_batch($id)
     mysql_query("UPDATE batch SET Status = (SELECT ID FROM batch_status WHERE Name = 'Published'), Finished_date = '$date' WHERE ID = $id");
     foreach ($users as $user) {
         $to = $user['Email'];
-        $subject = get_text('Results_available');
+        $toName = $user['Firstname'] . " " . $user['Lastname'];
+        $subject = get_text('Title') . ': ' . get_text('Results_available');
         $message =
             get_text('Dear') . ' ' . $user['Firstname'] . ","
             . get_text('Mail_results_available') . get_text('Mail_footer');
-        //mail($to, $subject, $message);
-        $m = new PHPMailer;
 
-        $m->isSMTP();
-        $m->SMTPAuth = true;
-
-        $m->Host = 'smtp.gmail.com';
-        $m->Username = 'threesixtyweb.stage@gmail.com';
-        $m->Password = 'Stage@DNS.be';
-        $m->SMTPSecure = 'tls'; #'ssl';
-        $m->Port = 587; #465;
-
-        $m->From = 'threesixtyweb.stage@gmail.com';
-        $m->FromName = 'Threesixtyweb';
-        $m->addAddress($to, $user['Firstname'] . ' ' . $user['Lastname']);
-
-        $m->isHTML(true);
-
-        $m->Subject = $subject;
-        $m->Body = $message;
-
-        $m->send();
+        mailFromProject($to, $toName, $subject, $message);
     }
 
 }
@@ -1481,38 +1409,18 @@ function change_poll_status($poll, $status)
 
 function send_reminder_phase1($user, $email)
 {
+    get_text('Title') . ': ' .
     $user = sanitize($user);
     $email = sanitize($email);
     $id = get_user_id($user);
     $user = get_user_by_id($id);
     $to = $email;
-    $subject = get_text('Reminder');
+    $toName = $user[0] . " " . $user[1];
+    $subject = get_text('Title') . ': ' . get_text('Reminder');
     $message = get_text('Dear') . ' ' . $user[0] . ","
         . get_text('Reminder_own_poll') . get_text('Mail_footer');
-    //mail($to, $subject, $message);*/
-    $m = new PHPMailer;
 
-    $m->isSMTP();
-    $m->SMTPAuth = true;
-
-    $m->Host = 'smtp.gmail.com';
-    $m->Username = 'threesixtyweb.stage@gmail.com';
-    $m->Password = 'Stage@DNS.be';
-    $m->SMTPSecure = 'tls'; #'ssl';
-    $m->Port = 587; #465;
-
-    $m->From = 'threesixtyweb.stage@gmail.com';
-    $m->FromName = 'Threesixtyweb';
-    $m->addAddress($to, $user[0] . " " . $user[1]);
-
-    $m->isHTML(true);
-
-    $m->Subject = $subject;
-    $m->Body = $message;
-
-    $m->send();
-
-
+    mailFromProject($to, $toName, $subject, $message);
 }
 
 function send_reminder_phase2($user, $email)
@@ -1522,30 +1430,12 @@ function send_reminder_phase2($user, $email)
     $id = get_user_id($user);
     $user = get_user_by_id($id);
     $to = $email;
-    $subject = get_text('Reminder');
+    $toName = $user[0] . " " . $user[1];
+    $subject = get_text('Title') . ': ' . get_text('Reminder');
     $message = get_text('Dear') . ' ' . $user[0] . "," .
         get_text('Reminder_other_polls') . get_text('Mail_footer');
-    $m = new PHPMailer;
 
-    $m->isSMTP();
-    $m->SMTPAuth = true;
-
-    $m->Host = 'smtp.gmail.com';
-    $m->Username = 'threesixtyweb.stage@gmail.com';
-    $m->Password = 'Stage@DNS.be';
-    $m->SMTPSecure = 'tls'; #'ssl';
-    $m->Port = 587; #465;
-
-    $m->From = 'threesixtyweb.stage@gmail.com';
-    $m->FromName = 'Threesixtyweb';
-    $m->addAddress($to, $user[0] . " " . $user[1]);
-
-    $m->isHTML(true);
-
-    $m->Subject = $subject;
-    $m->Body = $message;
-
-    $m->send();
+    mailFromProject($to, $toName, $subject, $message);
 }
 
 
@@ -1641,14 +1531,14 @@ function get_user_info($id, $batch)
     $comments = get_comments($id);
     $questions = get_questions();
     echo
-        get_text('Reviews_written') . ": <b>$reviews_given</b><br />" .
+//        get_text('Reviews_written') . ": <b>$reviews_given</b><br />" .
         get_text('Reviews_received') . ": <b>$reviews_received</b><br />" .
         get_text('Reviews_from_teammember') . ": <b>$teammember_reviews</b><br />" .
         get_text('Reviews_from_not_teammember') . ": <b>$notteammember_reviews</b><br />" .
-        get_text('Reviews_from_teammanager') . ": <b>$teammanager_reviews</b><br />" .
-        get_text('Reviews_from_not_teammanager') . ": <b>$notteammanager_reviews</b><br />" .
-        get_text('Reviews_from_preferred_reviewer') . ": <b>$preferred_reviewers</b><br />" .
-        get_text('Reviews_given_to_preferred_reviewee') . ": <b>$preferred_reviewees</b><br />";
+//        get_text('Reviews_from_teammanager') . ": <b>$teammanager_reviews</b><br />" .
+//        get_text('Reviews_from_not_teammanager') . ": <b>$notteammanager_reviews</b><br />" .
+        get_text('Reviews_from_preferred_reviewer') . ": <b>$preferred_reviewers</b><br />";
+//        get_text('Reviews_given_to_preferred_reviewee') . ": <b>$preferred_reviewees</b><br />";
     ?>
     <h3><?php echo get_Text('Average_score'); ?></h3>
     <h4><?php echo get_text('Legend'); ?></h4>

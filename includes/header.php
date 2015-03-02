@@ -94,7 +94,7 @@ require('core/init.php');
             } ?>><a href="admin.php"><?php echo get_text('Admin'); ?></a></li>
             <li <?php if ($selected_page == 'Users') {
                 echo 'class="active"';
-            } ?>><a href="users.php"><?php echo get_text('Users'); ?></a></li>
+            } ?>><a href="users.php"><?php echo get_text('Users_as_participants'); ?></a></li>
             <li <?php if ($selected_page == 'Departments') {
                 echo 'class="active"';
             } ?>><a href="departments.php"><?php echo get_text('Departments'); ?></a></li>

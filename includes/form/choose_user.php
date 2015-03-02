@@ -1,7 +1,8 @@
 <form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
-    <label for="user"><?php echo get_text('Select_a') . ' ' . strtolower(get_text('User')); ?>: </label>
+    <label for="user"><?php echo get_text('Select_a') . ' ' . strtolower(get_text('User_as_participant')); ?>: </label>
     <select name="user">
-        <option value=""><?php echo get_text('Choose_a') . ' ' . strtolower(get_text('User')); ?></option>
+        <option
+            value=""><?php echo get_text('Choose_a') . ' ' . strtolower(get_text('User_as_participant')); ?></option>
         <?php
         foreach ($departments as $department) {
             ?>

@@ -19,7 +19,7 @@ if (isset($_SESSION['admin_id']) && !get_published_batch_id()) {
     <div class="content">
         <?php if (isset($_SESSION['admin_id'])) { ?>
             <aside class="sidebarContent">
-                <h2><?php echo get_text('Information') . ' ' . strtolower(get_text('About')) . ' ' . strtolower(get_text('User')); ?></h2>
+                <h2><?php echo get_text('Information') . ' ' . strtolower(get_text('About')) . ' ' . strtolower(get_text('User_as_participant')); ?></h2>
                 <?php include('includes/form/choose_user.php'); ?>
             </aside>
         <?php } ?>
@@ -141,7 +141,7 @@ if (isset($_SESSION['admin_id']) && !get_published_batch_id()) {
     </div>
 <?php if (isset($_SESSION['admin_id'])) { ?>
     <aside class="topSidebar step">
-        <h2><?php echo get_text('Information') . ' ' . strtolower(get_text('About')) . ' ' . strtolower(get_text('User')); ?></h2>
+        <h2><?php echo get_text('Information') . ' ' . strtolower(get_text('About')) . ' ' . strtolower(get_text('User_as_participant')); ?></h2>
         <?php include('includes/form/choose_user.php'); ?>
         <?php if ((isset($_POST['user']) && !empty($_POST['user'])) || (isset($_POST['poll']) && !empty($_POST['poll']))) { ?>
             <h2><?php

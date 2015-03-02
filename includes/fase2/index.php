@@ -118,10 +118,10 @@ if (isset($_GET['Start'])) {
                 <h3><?php echo get_text('Extra_comment_about_user'); ?></h3>
 
                 <form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
-                    <label for="user"><?php echo get_text('User'); ?>: </label>
+                    <label for="user"><?php echo get_text('User_as_coworker'); ?>: </label>
                     <select name="user">
                         <option
-                            value=""><?php echo get_text('Choose_a') . ' ' . strtolower(get_text('User')); ?></option>
+                            value=""><?php echo get_text('Choose_a') . ' ' . strtolower(get_text('User_as_coworker')); ?></option>
                         <?php
                         foreach ($departments as $department) {
                             ?>

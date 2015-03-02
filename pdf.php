@@ -17,17 +17,17 @@ class PDF extends FPDF
         // Arial bold 15
         $this->SetFont('Arial', 'B', 10);
         // Title
-        $this->Cell(150);
-        $this->Cell(80, 10, get_text('Adress_street'), 0, 0);
-        $this->Ln(5);
-        $this->Cell(150);
-        $this->Cell(10, 10, get_text('Adress_city'), 0, 0);
-        $this->Ln(5);
-        $this->Cell(150);
-        $this->Cell(10, 10, get_text('Tel'), 0, 0);
-        $this->Ln(5);
-        $this->Cell(150);
-        $this->Cell(10, 10, get_text('Website'), 0, 0);
+//        $this->Cell(150);
+//        $this->Cell(80, 10, get_text('Adress_street'), 0, 0);
+//        $this->Ln(5);
+//        $this->Cell(150);
+//        $this->Cell(10, 10, get_text('Adress_city'), 0, 0);
+//        $this->Ln(5);
+//        $this->Cell(150);
+//        $this->Cell(10, 10, get_text('Tel'), 0, 0);
+//        $this->Ln(5);
+//        $this->Cell(150);
+//        $this->Cell(10, 10, get_text('Website'), 0, 0);
         // Line break
         $this->Ln(15);
         $this->Line(10, 40, 200, 40);
@@ -104,22 +104,22 @@ if (isset($_GET['id']) || isset($_SESSION['admin_id'])) {
     $pdf->Ln(15);
 
     $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(10, 10, get_text('Reviews_written') . ": $reviews_given", 0, 0);
-    $pdf->Ln(5);
+//    $pdf->Cell(10, 10, get_text('Reviews_written') . ": $reviews_given", 0, 0);
+//    $pdf->Ln(5);
     $pdf->Cell(10, 10, get_text('Reviews_received') . ": $reviews_received", 0, 0);
     $pdf->Ln(5);
     $pdf->Cell(10, 10, get_text('Reviews_from_teammember') . ": $teammember_reviews", 0, 0);
     $pdf->Ln(5);
-    $pdf->Cell(10, 10, get_text('Reviews_from_not_teammember') . ": $notteammember_reviews", 0, 0);
-    $pdf->Ln(5);
-    $pdf->Cell(10, 10, get_text('Reviews_from_teammanager') . ": $teammanager_reviews", 0, 0);
-    $pdf->Ln(5);
-    $pdf->Cell(10, 10, get_text('Reviews_from_not_teammanager') . ": $notteammanager_reviews", 0, 0);
-    $pdf->Ln(5);
+//    $pdf->Cell(10, 10, get_text('Reviews_from_not_teammember') . ": $notteammember_reviews", 0, 0);
+//    $pdf->Ln(5);
+//    $pdf->Cell(10, 10, get_text('Reviews_from_teammanager') . ": $teammanager_reviews", 0, 0);
+//    $pdf->Ln(5);
+//    $pdf->Cell(10, 10, get_text('Reviews_from_not_teammanager') . ": $notteammanager_reviews", 0, 0);
+//    $pdf->Ln(5);
     $pdf->Cell(10, 10, get_text('Reviews_from_preferred_reviewer') . ": $preferred_reviewers", 0, 0);
     $pdf->Ln(5);
-    $pdf->Cell(10, 10, get_text('Reviews_given_to_preferred_reviewee') . ": $preferred_reviewees", 0, 0);
-    $pdf->Ln(10);
+//    $pdf->Cell(10, 10, get_text('Reviews_given_to_preferred_reviewee') . ": $preferred_reviewees", 0, 0);
+//    $pdf->Ln(10);
 
 
     $pdf->SetFont('Arial', 'B', 16);

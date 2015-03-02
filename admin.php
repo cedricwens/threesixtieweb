@@ -534,7 +534,7 @@ if (isset($_POST['answer_question'])) {
 		<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
 			<label for="me">Ik ben: </label>
 			<select name="me">
-				<option value=""><?php echo get_text('Choose_a') . ' ' . strtolower(get_text('user')); ?></option>
+				<option value=""><?php echo get_text('Choose_a') . ' ' . strtolower(get_text('User_as_participant')); ?></option>
 				<?php
     foreach ($departments as $department) {
         ?>
@@ -557,7 +557,7 @@ if (isset($_POST['answer_question'])) {
 			<br />
 			<label for="reviewer"><?php echo get_text('This_person_may_answer_my_poll'); ?>: </label>
 			<select name="reviewer">
-				<option value=""><?php echo get_text('Choose_a') . ' ' . strtolower(get_text('user')); ?></option>
+				<option value=""><?php echo get_text('Choose_a') . ' ' . strtolower(get_text('User_as_participant')); ?></option>
 				<?php
     foreach ($departments as $department) {
         ?>
@@ -579,7 +579,7 @@ if (isset($_POST['answer_question'])) {
 			<br />
 			<label for="reviewee"><?php echo get_text('I_want_to_answer_poll_about_this_person'); ?>: </label>
 			<select name="reviewee">
-				<option value=""><?php echo get_text('Choose_a') . ' ' . strtolower(get_text('user')); ?></option>
+				<option value=""><?php echo get_text('Choose_a') . ' ' . strtolower(get_text('User_as_participant')); ?></option>
 				<?php
     foreach ($departments as $department) {
         ?>
